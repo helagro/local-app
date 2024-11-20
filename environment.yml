@@ -28,4 +28,8 @@ dependencies:
   - wheel=0.44.0
   - xz=5.4.6
   - zlib=1.2.13
+  - pip:
+      - schedule==1.2.2
+      - typeguard==4.4.1
+      - typing-extensions==4.12.2
 prefix: /opt/anaconda3/envs/env-tracker
