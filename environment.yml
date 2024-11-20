@@ -1,0 +1,31 @@
+name: env-tracker
+channels:
+  - defaults
+dependencies:
+  - brotli-python=1.0.9
+  - bzip2=1.0.8
+  - ca-certificates=2024.9.24
+  - certifi=2024.8.30
+  - charset-normalizer=3.3.2
+  - expat=2.6.3
+  - idna=3.7
+  - libcxx=14.0.6
+  - libffi=3.4.4
+  - libmpdec=4.0.0
+  - ncurses=6.4
+  - openssl=3.0.15
+  - pip=24.2
+  - pysocks=1.7.1
+  - python=3.13.0
+  - python_abi=3.13
+  - readline=8.2
+  - requests=2.32.3
+  - setuptools=75.1.0
+  - sqlite=3.45.3
+  - tk=8.6.14
+  - tzdata=2024b
+  - urllib3=2.2.3
+  - wheel=0.44.0
+  - xz=5.4.6
+  - zlib=1.2.13
+prefix: /opt/anaconda3/envs/env-tracker
