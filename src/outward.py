@@ -1,7 +1,6 @@
 import subprocess
 import os
 import requests
-from datetime import datetime
 
 ROUTINE_ENDPOINT = os.getenv("ROUTINE_ENDPOINT")
 if not ROUTINE_ENDPOINT:
@@ -29,16 +28,24 @@ def a(content: str):
     print("Return Code:", result.returncode)
 
 
-def get_routine(name: str) -> datetime:
-    response = get_routine_str(name)
-    time_str = response.replace('.', ':')
-    return datetime.strptime(time_str, "%H:%M:%S")
+# -------------------------- ROUTINE ------------------------- #
 
 
-def get_routine_str(name: str) -> str:
+def get_routine(name: str) -> str | None:
     try:
         response = requests.get(ROUTINE_ENDPOINT, params={"q": name})
         response.raise_for_status()
-        return response.text
+        return format_time(response.text)
     except requests.exceptions.RequestException as e:
-        raise RuntimeError(f"Failed to fetch routine: {e}")
+        print(f"Failed to fetch routine: {e}")
+        return None
+
+
+def format_time(time_str):
+    time_str = time_str.replace('.', ':')
+    parts = time_str.split(':')
+
+    hours = parts[0].zfill(2)
+    minutes = parts[1].zfill(2)
+
+    return f"{hours}:{minutes}"
