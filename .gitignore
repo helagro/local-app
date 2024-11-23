@@ -224,3 +224,4 @@ pyrightconfig.json
 
 .vscode/
 ignored
+nohup.out
