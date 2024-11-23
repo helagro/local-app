@@ -1,3 +1,5 @@
+import asyncio
+
 # ---------------------- SIMPLE READINGS --------------------- #
 
 
@@ -31,5 +33,17 @@ def read_pressure():
 # ------------------------- ADVANCED ------------------------- #
 
 
-def sample_light():
-    
+async def read_avg_light(callback: callable, max=None):
+    interval = 15 * 60
+    duration = 45 * 60
+
+    num_samples = duration // interval
+    samples = []
+
+    for _ in range(num_samples):
+        value = read_light(max=max)
+        samples.append(value)
+        await asyncio.sleep(interval)
+
+    average = sum(samples) / len(samples)
+    callback(average)

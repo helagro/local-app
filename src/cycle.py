@@ -1,7 +1,7 @@
 import schedule
 import time
 from outward import is_away, a, get_routine, log
-from sensors import read_voc, read_temp, read_hum, read_light, read_uv, read_pressure
+from sensors import read_voc, read_temp, read_hum, read_light, read_uv, read_pressure, read_avg_light
 
 # ------------------------- CONSTANTS ------------------------ #
 
@@ -77,31 +77,30 @@ def on_eve() -> None:
         print("Was away for on_eve")
         return
 
-    a(f"voc {_voc}")
-    a(f"hum {read_hum()}")
-    a(f"light {read_light()}")
-    a(f"pressure {read_pressure()}")
+    a(f"voc {_voc}")  # reason - is the air quality causing issues?
+    a(f"hum {read_hum()}")  # reason - is dry air causing issues?
+    a(f"pressure {read_pressure()}")  # reason - does the weather give me headaches?
+    a(f"light {read_avg_light()}")  # reason - are my lights too bright at night?
 
 
 def on_night() -> None:
     if _away_for_eve: return
 
-    a(f"uv {read_uv()}")
-    a(f"temp {read_temp()}")
-    a(f"light {read_light()}")
+    a(f"temp {read_temp()}")  # reason - is it too warm to sleep?
+    a(f"light {read_light()}")  # reason - is it too bright to sleep?
 
 
 def on_before_wake() -> None:
     if _away_for_eve: return
 
-    a(f"temp {read_temp()}")
-    a(f"light {read_light()}")
+    a(f"temp {read_temp()}")  # reason - do I wake up because it's too warm?
+    a(f"light {read_avg_light()}")  # reason - do I wake up because it's too bright?
 
 
 def on_morning() -> None:
     if _away_for_eve: return
 
-    a(f"light {read_light()}")
+    a(f"light {read_avg_light()}")  # reason - it it bright enough to wake up?
 
 
 # --------------------------- SCHEDULES -------------------------- #
