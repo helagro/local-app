@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
-from sensors import read_temp, read_hum, read_light, read_uv, read_pressure
-from cycle import get_away_for_eve, get_detached, get_before_wake
+from sensors import read_temp, read_hum, read_light, read_uv, read_pressure, read_voc
+from cycle import get_away_for_eve, get_detached, get_before_wake, get_voc
 
 app = Flask(__name__)
 
@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 def all_readings():
-    return {"temp": read_temp(), "hum": read_hum(), "light": read_light(), "uv": read_uv(), "pressure": read_pressure()}
+    return {"temp": read_temp(), "hum": read_hum(), "light": read_light(), "uv": read_uv(), "pressure": read_pressure(), "voc": get_voc()}
 
 
 # ------------------------- ALL ROUTE ------------------------ #
@@ -55,6 +55,11 @@ def uv():
 @app.route('/pressure')
 def pressure():
     return f"{read_pressure()}\n"
+
+
+@app.route('/voc')
+def voc():
+    return f"{read_voc()}\n"
 
 
 # ------------------------- CONTROL ------------------------- #
