@@ -1,6 +1,6 @@
 import server
 import threading
-from reader import run_schedule, get_detached, get_away_for_eve
+from cycle import run_schedule, get_detached, get_away_for_eve
 
 ran_once = False
 

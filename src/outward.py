@@ -51,7 +51,7 @@ def get_routine(name: str) -> str | None:
         response.raise_for_status()
         return format_time(response.text)
     except requests.exceptions.RequestException as e:
-        print(f"Failed to fetch routine: {e}")
+        log(f"Failed to fetch routine: {e}")
         return None
 
 
