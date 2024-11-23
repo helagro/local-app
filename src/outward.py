@@ -2,30 +2,44 @@ import subprocess
 import os
 import requests
 
+# -------------------------- ENVIRONMENT ------------------------- #
+
 ROUTINE_ENDPOINT = os.getenv("ROUTINE_ENDPOINT")
 if not ROUTINE_ENDPOINT:
     raise ValueError("SECRET_ENDPOINT environment variable is not set")
 
+# -------------------------- IS AWAY ------------------------- #
 
-def is_away():
+
+def is_away() -> bool:
     result = subprocess.run(
         ["zsh", "-i", "-c", "source ~/.zshrc && tl is/away | st cnt"],
         capture_output=True,
         text=True)
 
-    print("STDOUT:", result.stdout)
-    print("STDERR:", result.stderr)
-    print("Return Code:", result.returncode)
+    if result.returncode == 0:
+        return result.stdout.strip() == "1"
+    else:
+        log(f" Failed to check if away, {result.stderr}")
+        return False
 
 
-def a(content: str):
+# ----------------------------- A ---------------------------- #
+
+
+def log(content: str):
+    """prepend (location context) and space"""
+    print(content)
+    a(f"env-tracker{content}")
+
+
+def a(content: str) -> None:
     result = subprocess.run(["zsh", "-c", f"source ~/.zshrc && a {content}"],
                             capture_output=True,
                             text=True)
 
-    print("STDOUT:", result.stdout)
-    print("STDERR:", result.stderr)
-    print("Return Code:", result.returncode)
+    if result.returncode != 0:
+        print(f"Failed to send notification, error: {result.stderr}")
 
 
 # -------------------------- ROUTINE ------------------------- #
