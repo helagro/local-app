@@ -86,9 +86,9 @@ def _on_eve() -> None:
     if hum is not None:
         a(f"{HUM_NAME} {hum} s")  # reason - is dry air causing issues?
 
-    pressure = round(read_pressure())
+    pressure = read_pressure()
     if pressure is not None:
-        a(f"{PRESSURE_NAME} {pressure} s")  # reason - does the weather give me headaches?
+        a(f"{PRESSURE_NAME} {round(pressure)} s")  # reason - does the weather give me headaches?
 
     light = read_light()
     if light is not None:

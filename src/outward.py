@@ -25,7 +25,7 @@ def is_away() -> bool:
     if result.returncode == 0:
         return result.stdout.strip() == "1"
     else:
-        log(f" Failed to check if away, {result.stderr}")
+        log(f" Failed to check if away: {result.stderr} - {result.stdout}")
         return False
 
 
