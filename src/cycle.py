@@ -82,30 +82,50 @@ def _on_eve() -> None:
         print("Was away for on_eve")
         return
 
-    a(f"voc {_voc} s")  # reason - is the air quality causing issues?
-    a(f"hum {read_hum()} s")  # reason - is dry air causing issues?
-    a(f"pressure {read_pressure()} s")  # reason - does the weather give me headaches?
-    a(f"light_eve {read_avg_light()} s")  # reason - are my lights too bright at night?
+    hum = read_hum()
+    if hum is not None:
+        a(f"hum {hum} s")  # reason - is dry air causing issues?
+
+    pressure = read_pressure()
+    if pressure is not None:
+        a(f"pressure {pressure} s")  # reason - does the weather give me headaches?
+
+    light = read_light()
+    if light is not None:
+        a(f"light_eve {light} s")  # reason - are my lights too bright at night?
+
+    if _voc is not None:
+        a(f"voc {_voc} s")  # reason - is the air quality causing issues?
 
 
 def _on_night() -> None:
     if _away_for_eve: return
 
-    a(f"temp_night {read_temp()} s")  # reason - is it too warm to sleep?
-    a(f"light_night {read_light()} s")  # reason - is it too bright to sleep?
+    temp = read_temp()
+    if temp is not None:
+        a(f"temp_night {temp} s")  # reason - is it too warm to sleep?
+
+    light = read_light()
+    if light is not None:
+        a(f"light_night {light} s")  # reason - is it too bright to sleep?
 
 
 def _on_before_wake() -> None:
     if _away_for_eve: return
 
-    a(f"temp_before_wake {read_temp()} s")  # reason - do I wake up because it's too warm?
-    a(f"light_before_wake {read_avg_light()} s")  # reason - do I wake up because it's too bright?
+    temp = read_temp()
+    if temp is not None:
+        a(f"temp_before_wake {read_temp()} s")  # reason - do I wake up because it's too warm?
+
+    light = read_light()
+    if light is not None:
+        a(f"light_before_wake {read_avg_light()} s")  # reason - do I wake up because it's too bright?
 
 
 def _on_morning() -> None:
     if _away_for_eve: return
 
-    a(f"light_morning {read_avg_light()} s")  # reason - it it bright enough to wake up?
+    read_avg_light(lambda x: a(f"light_morning {x} s"))  # reason - is it bright enough to wake up?
 
 
 # --------------------------- SCHEDULES -------------------------- #
