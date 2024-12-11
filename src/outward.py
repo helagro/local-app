@@ -12,10 +12,7 @@ if not ROUTINE_ENDPOINT:
 
 
 def is_away() -> bool:
-    result = subprocess.run(
-        ["zsh", "-i", "-c", "source ~/.zshrc && tl is/away | st cnt"],
-        capture_output=True,
-        text=True)
+    result = subprocess.run(["zsh", "-i", "-c", "source ~/.zshrc && tl is/away | st cnt"], capture_output=True, text=True)
 
     if result.returncode == 0:
         return result.stdout.strip() == "1"
@@ -34,9 +31,7 @@ def log(content: str):
 
 
 def a(content: str) -> None:
-    result = subprocess.run(["zsh", "-c", f"source ~/.zshrc && a {content}"],
-                            capture_output=True,
-                            text=True)
+    result = subprocess.run(["zsh", "-c", f"source ~/.zshrc && a {content}"], capture_output=True, text=True)
 
     if result.returncode != 0:
         print(f"Failed to send notification, error: {result.stderr}")
@@ -49,13 +44,13 @@ def get_routine(name: str) -> str | None:
     try:
         response = requests.get(ROUTINE_ENDPOINT, params={"q": name})
         response.raise_for_status()
-        return format_time(response.text)
+        return _format_time(response.text)
     except requests.exceptions.RequestException as e:
         log(f"Failed to fetch routine: {e}")
         return None
 
 
-def format_time(time_str):
+def _format_time(time_str):
     time_str = time_str.replace('.', ':')
     parts = time_str.split(':')
 

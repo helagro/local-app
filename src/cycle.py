@@ -13,7 +13,7 @@ DETACHED_ROUTINE_NAME = "detached"
 _before_wake = get_routine(BEFORE_WAKE_ROUTINE_NAME) or "07:00"
 _detached = get_routine(DETACHED_ROUTINE_NAME) or "21:00"
 
-_voc = None
+_voc: int | None = None
 _away_for_eve = is_away()
 
 # -------------------------- GETTERS ------------------------- #
@@ -31,20 +31,20 @@ def get_away_for_eve() -> bool:
     return _away_for_eve
 
 
-def get_voc() -> int:
+def get_voc() -> int | None:
     return _voc
 
 
 # --------------------- UPDATING ROUTINE --------------------- #
 
 
-def on_week() -> None:
+def _on_week() -> None:
     global _before_wake, _detached
-    _before_wake = try_updating_routine(BEFORE_WAKE_ROUTINE_NAME, _before_wake, morning_schedule, on_morning)
-    _detached = try_updating_routine(DETACHED_ROUTINE_NAME, _detached, eve_schedule, on_eve)
+    _before_wake = _try_updating_routine(BEFORE_WAKE_ROUTINE_NAME, _before_wake, morning_schedule, _on_morning)
+    _detached = _try_updating_routine(DETACHED_ROUTINE_NAME, _detached, eve_schedule, _on_eve)
 
 
-def try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: callable) -> str | None:
+def _try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: callable) -> str | None:
     new_value = get_routine(name)
 
     if new_value is None:
@@ -63,17 +63,18 @@ def try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: call
 # ------------------------- ROUTINES ------------------------ #
 
 
-def on_voc() -> None:
+def _on_voc() -> None:
     global _voc
 
     if is_away():
+        _voc = None
         a("was away for on_voc")
-        return
 
-    _voc = read_voc()
+    else:
+        _voc = read_voc()
 
 
-def on_eve() -> None:
+def _on_eve() -> None:
     global _away_for_eve
     _away_for_eve = is_away()
 
@@ -81,41 +82,41 @@ def on_eve() -> None:
         print("Was away for on_eve")
         return
 
-    a(f"voc {_voc}")  # reason - is the air quality causing issues?
-    a(f"hum {read_hum()}")  # reason - is dry air causing issues?
-    a(f"pressure {read_pressure()}")  # reason - does the weather give me headaches?
-    a(f"light {read_avg_light()}")  # reason - are my lights too bright at night?
+    a(f"voc {_voc} s")  # reason - is the air quality causing issues?
+    a(f"hum {read_hum()} s")  # reason - is dry air causing issues?
+    a(f"pressure {read_pressure()} s")  # reason - does the weather give me headaches?
+    a(f"light_eve {read_avg_light()} s")  # reason - are my lights too bright at night?
 
 
-def on_night() -> None:
+def _on_night() -> None:
     if _away_for_eve: return
 
-    a(f"temp {read_temp()}")  # reason - is it too warm to sleep?
-    a(f"light {read_light()}")  # reason - is it too bright to sleep?
+    a(f"temp_night {read_temp()} s")  # reason - is it too warm to sleep?
+    a(f"light_night {read_light()} s")  # reason - is it too bright to sleep?
 
 
-def on_before_wake() -> None:
+def _on_before_wake() -> None:
     if _away_for_eve: return
 
-    a(f"temp {read_temp()}")  # reason - do I wake up because it's too warm?
-    a(f"light {read_avg_light()}")  # reason - do I wake up because it's too bright?
+    a(f"temp_before_wake {read_temp()} s")  # reason - do I wake up because it's too warm?
+    a(f"light_before_wake {read_avg_light()} s")  # reason - do I wake up because it's too bright?
 
 
-def on_morning() -> None:
+def _on_morning() -> None:
     if _away_for_eve: return
 
-    a(f"light {read_avg_light()}")  # reason - it it bright enough to wake up?
+    a(f"light_morning {read_avg_light()} s")  # reason - it it bright enough to wake up?
 
 
 # --------------------------- SCHEDULES -------------------------- #
 
-week_schedule = schedule.every(1).weeks.do(on_week)
-voc_schedule = schedule.every(3).days.at("17:00").do(on_voc)
+week_schedule = schedule.every(1).weeks.do(_on_week)
+# voc_schedule = schedule.every(3).days.at("17:00").do(on_voc)
 
-eve_schedule = schedule.every().day.at(_detached).do(on_eve)
-night_schedule = schedule.every().day.at("01:00").do(on_night)
-before_wake_schedule = schedule.every().day.at(_before_wake).do(on_before_wake)
-morning_schedule = schedule.every().day.at("09:00").do(on_morning)
+eve_schedule = schedule.every().day.at(_detached).do(_on_eve)
+night_schedule = schedule.every().day.at("01:00").do(_on_night)
+before_wake_schedule = schedule.every().day.at(_before_wake).do(_on_before_wake)
+morning_schedule = schedule.every().day.at("09:00").do(_on_morning)
 
 # --------------------------- START -------------------------- #
 

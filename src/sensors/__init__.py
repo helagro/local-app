@@ -1,5 +1,18 @@
 import asyncio
 
+import BME280
+import TSL2591
+import LTR390
+
+# ----------------------- SETUP SENSORS ---------------------- #
+
+bme280 = BME280.BME280()
+bme280.get_calib_param()
+
+light = TSL2591.TSL2591()
+
+uv = LTR390.LTR390()
+
 # ---------------------- SIMPLE READINGS --------------------- #
 
 
@@ -7,27 +20,29 @@ def read_voc():
     return 500
 
 
+def read_pressure():
+    return round(bme280.readData()[0], 2)
+
+
 def read_temp():
-    return 25.0
+    return round(bme280.readData()[1], 2)
 
 
 def read_hum():
-    return 50.0
+    return round(bme280.readData()[2], 2)
 
 
 def read_light(max=None):
-    if max and 1000 > max:
+    lux = round(light.Lux(), 2)
+
+    if max and lux > max:
         return None
     else:
-        return 1000
+        return lux
 
 
 def read_uv():
-    return 0
-
-
-def read_pressure():
-    return 1000
+    return uv.UVS()
 
 
 # ------------------------- ADVANCED ------------------------- #
