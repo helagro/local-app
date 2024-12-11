@@ -2,6 +2,14 @@ import subprocess
 import os
 import requests
 
+# -------------------------- VALUES -------------------------- #
+
+PRESSURE_NAME = 'weather_air_pressure'
+HUM_NAME = 'hum_indoor'
+
+TEMP_NIGHT_NAME = 'temp_night_indoor'
+TEMP_EARLY_NAME = 'temp_early_indoor'
+
 # -------------------------- ENVIRONMENT ------------------------- #
 
 ROUTINE_ENDPOINT = os.getenv("ROUTINE_ENDPOINT")
@@ -30,7 +38,11 @@ def log(content: str):
     a(f"env-tracker{content}")
 
 
-def a(content: str) -> None:
+def a(content: str, do_exec=True) -> None:
+    if not do_exec:
+        print(f"Would have added: {content}")
+        return
+
     result = subprocess.run(["zsh", "-c", f"source ~/.zshrc && a {content}"], capture_output=True, text=True)
 
     if result.returncode != 0:
