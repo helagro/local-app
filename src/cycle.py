@@ -84,18 +84,9 @@ def _on_eve() -> None:
         print("Was away for on_eve")
         return
 
-    hum = read_hum()
-    if hum is not None:
-        a(f"{HUM} {hum} s")  # reason - is dry air causing issues?
-
-    pressure = read_pressure()
-    if pressure is not None:
-        a(f"{PRESSURE} {round(pressure)} s")  # reason - does the weather give me headaches?
+    track_time_independents()
 
     read_avg_light(lambda x: a(f"{LIGHT_EVE} {x} s"))  # reason - are my lights too bright on evenings?
-
-    if _voc is not None:
-        a(f"voc {_voc} s", do_exec=False)  # reason - is the air quality causing issues?
 
 
 def _on_night() -> None:
@@ -125,6 +116,22 @@ def _on_morning() -> None:
     if _away_for_eve: return
 
     # read_avg_light(lambda x: a(f"light_morning {x} s", do_exec=False))  # reason - is it bright enough to wake up?
+
+
+# -------------------------- OTHER ------------------------- #
+
+
+def track_time_independents():
+    hum = read_hum()
+    if hum is not None:
+        a(f"{HUM} {hum} s")  # reason - is dry air causing issues?
+
+    pressure = read_pressure()
+    if pressure is not None:
+        a(f"{PRESSURE} {round(pressure)} s")  # reason - does the weather give me headaches?
+
+    if _voc is not None:
+        a(f"voc {_voc} s", do_exec=False)  # reason - is the air quality causing issues?
 
 
 # --------------------------- SCHEDULES -------------------------- #

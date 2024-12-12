@@ -47,8 +47,8 @@ def read_voc() -> float | None:
         return None
 
     try:
-        tmp_round = round(temp_raw)
-        hum_round = round(hum_raw)
+        tmp_round = int(round(temp_raw))
+        hum_round = int(round(hum_raw))
 
         return round(sgp.measureRaw(tmp_round, hum_round), 2)
     except Exception as e:
