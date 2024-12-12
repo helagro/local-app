@@ -50,7 +50,9 @@ def a(content: str, do_exec=True) -> None:
     result = subprocess.run(["zsh", "-c", f"source ~/.zshrc && a {content}"], capture_output=True, text=True)
 
     if result.returncode != 0:
-        print(f"Failed to send notification, error: {result.stderr}")
+        print(f"Failed to send command, error: {result.stderr}")
+    else:
+        print(f"Tracked: {content}")
 
 
 # -------------------------- ROUTINE ------------------------- #

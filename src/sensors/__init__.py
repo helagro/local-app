@@ -1,6 +1,7 @@
 import asyncio
 import sys
 import os
+from dotenv import load_dotenv
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -13,6 +14,12 @@ try:
     from sensirion_gas_index_algorithm.voc_algorithm import VocAlgorithm
 except Exception as e:
     print(f"Error importing sensor libraries: {e}")
+    
+# ----------------------- COMPENSATE ----------------------- #
+
+load_dotenv()
+
+TEMP_COMPENSATION = float(os.getenv('TEMP_COMPENSATION', '0'))
 
 # ----------------------- SETUP SENSORS ---------------------- #
 
@@ -49,7 +56,7 @@ def read_voc() -> float | None:
         return None
 
     try:
-        voc_raw = sgp.measureRaw(tmp, hum)
+        voc_raw = sgp.measureRaw(temp, hum)
          
     except Exception as e:
         print(f"Error reading VOC: {e}")
@@ -66,7 +73,8 @@ def read_pressure() -> float | None:
 
 def read_temp() -> float | None:
     try:
-        return round(bme280.readData()[1], 2)
+        raw_temp = bme280.readData()[1] + TEMP_COMPENSATION 
+        return round(raw_temp, 2)
     except Exception as e:
         print(f"Error reading temperature: {e}")
         return None

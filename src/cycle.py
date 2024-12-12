@@ -124,7 +124,7 @@ def _on_morning() -> None:
 def track_time_independents():
     hum = read_hum()
     if hum is not None:
-        a(f"{HUM} {hum} s")  # reason - is dry air causing issues?
+        a(f"{HUM} {hum / 100} s")  # reason - is dry air causing issues?
 
     pressure = read_pressure()
     if pressure is not None:

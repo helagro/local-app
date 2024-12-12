@@ -27,6 +27,7 @@ def all():
 @app.route('/do_track')
 def do_track():
     track_time_independents()
+    return "Tracked readings"
 
 
 # -------------------------- SENSOR ROUTES -------------------------- #
