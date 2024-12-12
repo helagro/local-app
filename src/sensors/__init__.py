@@ -8,7 +8,9 @@ try:
     import BME280
     import TSL2591
     import LTR390
-    import SGP40
+    # import SGP40
+
+    from sensirion_gas_index_algorithm.voc_algorithm import VocAlgorithm
 except Exception as e:
     print(f"Error importing sensor libraries: {e}")
 
@@ -39,18 +41,16 @@ except Exception as e:
 
 
 def read_voc() -> float | None:
-    temp_raw = read_temp()
-    hum_raw = read_hum()
+    temp = read_temp()
+    hum = read_hum()
 
-    if temp_raw is None or hum_raw is None:
+    if temp is None or hum is None:
         print("Got bad temp or hum value WHEN reading VOC")
         return None
 
     try:
-        tmp_round = int(round(temp_raw))
-        hum_round = int(round(hum_raw))
-
-        return round(sgp.measureRaw(tmp_round, hum_round), 2)
+        voc_raw = sgp.measureRaw(tmp, hum)
+         
     except Exception as e:
         print(f"Error reading VOC: {e}")
         return None
