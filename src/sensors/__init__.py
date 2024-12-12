@@ -8,6 +8,7 @@ try:
     import BME280
     import TSL2591
     import LTR390
+    import SGP40
 except Exception as e:
     print(f"Error importing sensor libraries: {e}")
 
@@ -29,11 +30,20 @@ try:
 except Exception as e:
     print(f"Error initialising LTR390: {e}")
 
+try:
+    sgp = SGP40.SGP40()
+except Exception as e:
+    print(f"Error initialising SGP40: {e}")
+
 # ---------------------- SIMPLE READINGS --------------------- #
 
 
 def read_voc() -> float | None:
-    return 500
+    try:
+        return round(sgp.raw(), 2)
+    except Exception as e:
+        print(f"Error reading VOC: {e}")
+        return None
 
 
 def read_pressure() -> float | None:
