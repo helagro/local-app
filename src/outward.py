@@ -4,11 +4,15 @@ import requests
 
 # -------------------------- VALUES -------------------------- #
 
-PRESSURE_NAME = 'weather_air_pressure'
-HUM_NAME = 'hum_indoor'
+PRESSURE = 'weather_air_pressure'
+HUM = 'hum_indoor'
 
-TEMP_NIGHT_NAME = 'temp_night_indoor'
-TEMP_EARLY_NAME = 'temp_early_indoor'
+LIGHT_EVE = 'light_eve'
+LIGHT_NIGHT = 'light_night'
+LIGHT_BEFORE_WAKE = 'light_before_wake'
+
+TEMP_NIGHT = 'temp_night_indoor'
+TEMP_EARLY = 'temp_early_indoor'
 
 # -------------------------- ENVIRONMENT ------------------------- #
 

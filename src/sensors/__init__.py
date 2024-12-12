@@ -39,8 +39,18 @@ except Exception as e:
 
 
 def read_voc() -> float | None:
+    temp_raw = read_temp()
+    hum_raw = read_hum()
+
+    if temp_raw is None or hum_raw is None:
+        print("Got bad temp or hum value WHEN reading VOC")
+        return None
+
     try:
-        return round(sgp.raw(), 2)
+        tmp_round = round(temp_raw)
+        hum_round = round(hum_raw)
+
+        return round(sgp.measureRaw(tmp_round, hum_round), 2)
     except Exception as e:
         print(f"Error reading VOC: {e}")
         return None
@@ -72,7 +82,8 @@ def read_hum() -> float:
 
 def read_light(max=None) -> float | None:
     try:
-        lux = round(light.Lux(), 2)
+        raw_lux = light.Lux()
+        lux = 0.0 if raw_lux == 0 else round(light.Lux(), 2)
     except Exception as e:
         print(f"Error reading light: {e}")
         return None

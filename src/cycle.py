@@ -1,12 +1,14 @@
 import schedule
 import time
-from outward import is_away, a, get_routine, log, PRESSURE_NAME, TEMP_NIGHT_NAME, HUM_NAME, TEMP_EARLY_NAME
-from sensors import read_voc, read_temp, read_hum, read_light, read_uv, read_pressure, read_avg_light
+from outward import *
+from sensors import *
 
 # ------------------------- CONSTANTS ------------------------ #
 
 BEFORE_WAKE_ROUTINE_NAME = "before_wake"
 DETACHED_ROUTINE_NAME = "detached"
+
+MAX_NIGHT_LIGHT = 0.2
 
 # ------------------------- VARIABLES ------------------------ #
 
@@ -84,15 +86,13 @@ def _on_eve() -> None:
 
     hum = read_hum()
     if hum is not None:
-        a(f"{HUM_NAME} {hum} s")  # reason - is dry air causing issues?
+        a(f"{HUM} {hum} s")  # reason - is dry air causing issues?
 
     pressure = read_pressure()
     if pressure is not None:
-        a(f"{PRESSURE_NAME} {round(pressure)} s")  # reason - does the weather give me headaches?
+        a(f"{PRESSURE} {round(pressure)} s")  # reason - does the weather give me headaches?
 
-    light = read_light()
-    if light is not None:
-        a(f"light_eve {light} s", do_exec=False)  # reason - are my lights too bright at night?
+    read_avg_light(lambda x: a(f"{LIGHT_EVE} {x} s"))  # reason - are my lights too bright on evenings?
 
     if _voc is not None:
         a(f"voc {_voc} s", do_exec=False)  # reason - is the air quality causing issues?
@@ -103,11 +103,11 @@ def _on_night() -> None:
 
     temp = read_temp()
     if temp is not None:
-        a(f"{TEMP_NIGHT_NAME} {temp} s")  # reason - is it too warm to sleep?
+        a(f"{TEMP_NIGHT} {temp} s")  # reason - is it too warm to sleep?
 
-    light = read_light()
+    light = read_light(max=MAX_NIGHT_LIGHT)
     if light is not None:
-        a(f"light_night {light} s", do_exec=False)  # reason - is it too bright to sleep?
+        a(f"{LIGHT_NIGHT} {light} s", )  # reason - is it too bright to sleep?
 
 
 def _on_before_wake() -> None:
@@ -115,17 +115,16 @@ def _on_before_wake() -> None:
 
     temp = read_temp()
     if temp is not None:
-        a(f"{TEMP_EARLY_NAME} {read_temp()} s")  # reason - do I wake up because it's too warm?
+        a(f"{TEMP_EARLY} {read_temp()} s")  # reason - do I wake up because it's too warm?
 
-    light = read_light()
-    if light is not None:
-        a(f"light_before_wake {read_avg_light()} s", do_exec=False)  # reason - do I wake up because it's too bright?
+    # reason - do I wake up because it's too bright?
+    read_avg_light(lambda x: a(f"{LIGHT_BEFORE_WAKE} {x} s", do_exec=False), max=MAX_NIGHT_LIGHT)
 
 
 def _on_morning() -> None:
     if _away_for_eve: return
 
-    read_avg_light(lambda x: a(f"light_morning {x} s", do_exec=False))  # reason - is it bright enough to wake up?
+    # read_avg_light(lambda x: a(f"light_morning {x} s", do_exec=False))  # reason - is it bright enough to wake up?
 
 
 # --------------------------- SCHEDULES -------------------------- #
@@ -135,7 +134,7 @@ week_schedule = schedule.every(1).weeks.do(_on_week)
 
 eve_schedule = schedule.every().day.at(_detached).do(_on_eve)
 night_schedule = schedule.every().day.at("01:00").do(_on_night)
-# before_wake_schedule = schedule.every().day.at(_before_wake).do(_on_before_wake)
+before_wake_schedule = schedule.every().day.at(_before_wake).do(_on_before_wake)
 morning_schedule = schedule.every().day.at("09:00").do(_on_morning)
 
 # --------------------------- START -------------------------- #
