@@ -2,6 +2,7 @@ import asyncio
 import sys
 import os
 from dotenv import load_dotenv
+import time
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -14,7 +15,7 @@ try:
     from sensirion_gas_index_algorithm.voc_algorithm import VocAlgorithm
 except Exception as e:
     print(f"Error importing sensor libraries: {e}")
-    
+
 # ----------------------- COMPENSATE ----------------------- #
 
 load_dotenv()
@@ -57,7 +58,7 @@ def read_voc() -> float | None:
 
     try:
         voc_raw = sgp.measureRaw(temp, hum)
-         
+
     except Exception as e:
         print(f"Error reading VOC: {e}")
         return None
@@ -73,7 +74,7 @@ def read_pressure() -> float | None:
 
 def read_temp() -> float | None:
     try:
-        raw_temp = bme280.readData()[1] + TEMP_COMPENSATION 
+        raw_temp = bme280.readData()[1] + TEMP_COMPENSATION
         return round(raw_temp, 2)
     except Exception as e:
         print(f"Error reading temperature: {e}")
@@ -91,7 +92,9 @@ def read_hum() -> float:
 def read_light(max=None) -> float | None:
     try:
         raw_lux = light.Lux()
-        lux = 0.0 if raw_lux == 0 else round(light.Lux(), 2)
+        lux = round(light.Lux(), 2)
+    except ZeroDivisionError:
+        lux = 0
     except Exception as e:
         print(f"Error reading light: {e}")
         return None
@@ -113,7 +116,7 @@ def read_uv() -> float:
 # ------------------------- ADVANCED ------------------------- #
 
 
-async def read_avg_light(callback: callable, max=None):
+def read_avg_light(callback: callable, max=None) -> None:
     interval = 15 * 60
     duration = 45 * 60
 
@@ -127,7 +130,8 @@ async def read_avg_light(callback: callable, max=None):
             return
 
         samples.append(value)
-        await asyncio.sleep(interval)
+
+        time.sleep(interval)
 
     average = sum(samples) / len(samples)
     callback(average)

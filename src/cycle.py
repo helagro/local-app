@@ -2,6 +2,7 @@ import schedule
 import time
 from outward import *
 from sensors import *
+from threading import Thread
 
 # ------------------------- CONSTANTS ------------------------ #
 
@@ -86,7 +87,8 @@ def _on_eve() -> None:
 
     track_time_independents()
 
-    read_avg_light(lambda x: a(f"{LIGHT_EVE} {x} s"))  # reason - are my lights too bright on evenings?
+    callback = lambda x: a(f"{LIGHT_EVE} {x} s")
+    Thread(target=read_avg_light, args=(callback, )).start()  # reason - are my lights too bright on evenings?
 
 
 def _on_night() -> None:
@@ -109,7 +111,8 @@ def _on_before_wake() -> None:
         a(f"{TEMP_EARLY} {read_temp()} s")  # reason - do I wake up because it's too warm?
 
     # reason - do I wake up because it's too bright?
-    read_avg_light(lambda x: a(f"{LIGHT_BEFORE_WAKE} {x} s", do_exec=False), max=MAX_NIGHT_LIGHT)
+    callback = lambda x: a(f"{LIGHT_BEFORE_WAKE} {x} s")
+    Thread(target=read_avg_light, args=(callback, ), kwargs={'max': MAX_NIGHT_LIGHT}).start()
 
 
 def _on_morning() -> None:
