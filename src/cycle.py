@@ -34,10 +34,6 @@ def get_away_for_eve() -> bool:
     return _away_for_eve
 
 
-def get_voc() -> int | None:
-    return _voc
-
-
 # --------------------- UPDATING ROUTINE --------------------- #
 
 

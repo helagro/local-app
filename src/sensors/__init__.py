@@ -1,4 +1,3 @@
-import asyncio
 import sys
 import os
 from dotenv import load_dotenv
@@ -10,9 +9,8 @@ try:
     import BME280
     import TSL2591
     import LTR390
-    # import SGP40
+    import sgp40
 
-    from sensirion_gas_index_algorithm.voc_algorithm import VocAlgorithm
 except Exception as e:
     print(f"Error importing sensor libraries: {e}")
 
@@ -40,15 +38,21 @@ try:
 except Exception as e:
     print(f"Error initialising LTR390: {e}")
 
-try:
-    sgp = SGP40.SGP40()
-except Exception as e:
-    print(f"Error initialising SGP40: {e}")
+# ------------------------ GET LAST VALUE ------------------------ #
+
+_last_voc = None
+
+
+def get_last_voc() -> float | None:
+    return _last_voc
+
 
 # ---------------------- SIMPLE READINGS --------------------- #
 
 
 def read_voc() -> float | None:
+    global _last_voc
+
     temp = read_temp()
     hum = read_hum()
 
@@ -57,7 +61,8 @@ def read_voc() -> float | None:
         return None
 
     try:
-        voc_raw = sgp.measureRaw(temp, hum)
+        _last_voc = sgp40.read(temp, hum)
+        return _last_voc
 
     except Exception as e:
         print(f"Error reading VOC: {e}")
