@@ -60,6 +60,7 @@ def read_voc() -> float | None:
         print("Got bad temp or hum value WHEN reading VOC")
         return None
 
+    print("Reading VOC...")
     try:
         _last_voc = sgp40.read(temp, hum)
         return _last_voc
@@ -96,7 +97,6 @@ def read_hum() -> float:
 
 def read_light(max=None) -> float | None:
     try:
-        raw_lux = light.Lux()
         lux = round(light.Lux(), 2)
     except ZeroDivisionError:
         lux = 0

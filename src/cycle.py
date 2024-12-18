@@ -114,7 +114,7 @@ def _on_before_wake() -> None:
 def _on_morning() -> None:
     if _away_for_eve: return
 
-    # read_avg_light(lambda x: a(f"light_morning {x} s", do_exec=False))  # reason - is it bright enough to wake up?
+    read_avg_light(lambda x: a(f"light_morning {x} s", do_exec=False))  # reason - is it bright enough to wake up?
 
 
 # -------------------------- OTHER ------------------------- #
@@ -136,7 +136,7 @@ def track_time_independents():
 # --------------------------- SCHEDULES -------------------------- #
 
 week_schedule = schedule.every(1).weeks.do(_on_week)
-# voc_schedule = schedule.every(3).days.at("17:00").do(on_voc)
+# voc_schedule = schedule.every(3).days.at("17:00").do(_on_voc)
 
 eve_schedule = schedule.every().day.at(_detached).do(_on_eve)
 night_schedule = schedule.every().day.at("01:00").do(_on_night)

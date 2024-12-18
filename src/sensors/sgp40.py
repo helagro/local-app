@@ -5,7 +5,7 @@ from sensirion_gas_index_algorithm.voc_algorithm import VocAlgorithm
 
 # ------------------------- VARIABLES ------------------------ #
 
-RUN_TIME_SEC = 350
+RUN_TIME_SEC = 300
 voc_algorithm = VocAlgorithm()
 
 # ------------------------- FUNCTIONS ------------------------ #
@@ -29,10 +29,12 @@ def read(temperature: float, humidity: float) -> float | None:
 
 
 def _take_reading(sgp40: Sgp40I2cDevice, temperature: float, humidity: float) -> float | None:
-    for _ in range(300):
+    for i in range(RUN_TIME_SEC):
         time.sleep(1)
         sraw_voc = sgp40.measure_raw(temperature=temperature, relative_humidity=humidity)
         voc_index = voc_algorithm.process(sraw_voc.ticks)
+        if i % 60 == 0:
+            print(f"VOC at {i}: {voc_index}")
 
     return voc_index
 

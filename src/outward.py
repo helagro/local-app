@@ -1,6 +1,11 @@
 import subprocess
 import os
 import requests
+import sys
+
+script_dir = os.path.expanduser("~/.dotfiles/scripts")
+sys.path.append(script_dir)
+import exist
 
 # -------------------------- VALUES -------------------------- #
 
@@ -24,12 +29,11 @@ if not ROUTINE_ENDPOINT:
 
 
 def is_away() -> bool:
-    result = subprocess.run(["zsh", "-i", "-c", "source ~/.zshrc && tl is/away | st cnt"], capture_output=True, text=True)
-
-    if result.returncode == 0:
-        return result.stdout.strip() == "1"
-    else:
-        log(f" Failed to check if away: {result.stderr} - {result.stdout}")
+    try:
+        away_dict = exist.main('away', 1, None)
+        return list(away_dict.values())[0] == 1
+    except Exception as e:
+        log(f"/is_away - failed to check if away: {e}")
         return False
 
 
@@ -37,7 +41,7 @@ def is_away() -> bool:
 
 
 def log(content: str):
-    """prepend (location context) and space"""
+    """ prepend (location context) and space """
     print(content)
     a(f"env-tracker{content}")
 
@@ -52,7 +56,7 @@ def a(content: str, do_exec=True) -> None:
     if result.returncode != 0:
         print(f"Failed to send command, error: {result.stderr}")
     else:
-        print(f"Tracked: {content}")
+        print(f"A: {content}")
 
 
 # -------------------------- ROUTINE ------------------------- #
