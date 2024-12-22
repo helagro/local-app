@@ -7,6 +7,7 @@ from threading import Thread
 # ------------------------- CONSTANTS ------------------------ #
 
 BEFORE_WAKE_ROUTINE_NAME = "before_wake"
+AFTER_WAKE_ROUTINE_NAME = "after_wake"
 DETACHED_ROUTINE_NAME = "detached"
 
 MAX_NIGHT_LIGHT = 0.2
@@ -14,6 +15,7 @@ MAX_NIGHT_LIGHT = 0.2
 # ------------------------- VARIABLES ------------------------ #
 
 _before_wake = get_routine(BEFORE_WAKE_ROUTINE_NAME) or "07:00"
+_after_wake = get_routine(AFTER_WAKE_ROUTINE_NAME) or "9:00"
 _detached = get_routine(DETACHED_ROUTINE_NAME) or "21:00"
 
 _voc: int | None = None
@@ -38,8 +40,9 @@ def get_away_for_eve() -> bool:
 
 
 def _on_week() -> None:
-    global _before_wake, _detached
+    global _before_wake, _detached, _after_wake
     _before_wake = _try_updating_routine(BEFORE_WAKE_ROUTINE_NAME, _before_wake, job=morning_schedule, fun=_on_morning)
+    _after_wake = _try_updating_routine(AFTER_WAKE_ROUTINE_NAME, _after_wake, job=before_wake_schedule, fun=_on_before_wake)
     _detached = _try_updating_routine(DETACHED_ROUTINE_NAME, _detached, job=eve_schedule, fun=_on_eve)
 
 
@@ -114,7 +117,7 @@ def _on_before_wake() -> None:
 def _on_morning() -> None:
     if _away_for_eve: return
 
-    read_avg_light(lambda x: a(f"light_morning {x} s", do_exec=False))  # reason - is it bright enough to wake up?
+    read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s"))  # reason - is it bright enough to wake up?
 
 
 # -------------------------- OTHER ------------------------- #
@@ -141,7 +144,7 @@ week_schedule = schedule.every(1).weeks.do(_on_week)
 eve_schedule = schedule.every().day.at(_detached).do(_on_eve)
 night_schedule = schedule.every().day.at("01:00").do(_on_night)
 before_wake_schedule = schedule.every().day.at(_before_wake).do(_on_before_wake)
-morning_schedule = schedule.every().day.at("09:00").do(_on_morning)
+morning_schedule = schedule.every().day.at(_after_wake).do(_on_morning)
 
 # --------------------------- START -------------------------- #
 

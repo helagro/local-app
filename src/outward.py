@@ -15,6 +15,7 @@ HUM = 'hum_indoor'
 LIGHT_EVE = 'light_eve'
 LIGHT_NIGHT = 'light_night'
 LIGHT_BEFORE_WAKE = 'light_before_wake'
+LIGHT_DAWN = 'light_dawn'
 
 TEMP_NIGHT = 'temp_night_indoor'
 TEMP_EARLY = 'temp_early_indoor'
