@@ -139,7 +139,7 @@ def track_time_independents():
 # --------------------------- SCHEDULES -------------------------- #
 
 week_schedule = schedule.every(1).weeks.do(_on_week)
-# voc_schedule = schedule.every(3).days.at("17:00").do(_on_voc)
+voc_schedule = schedule.every(5).days.at("17:00").do(_on_voc)
 
 eve_schedule = schedule.every().day.at(_detached).do(_on_eve)
 night_schedule = schedule.every().day.at("01:00").do(_on_night)

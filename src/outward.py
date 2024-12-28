@@ -2,10 +2,13 @@ import subprocess
 import os
 import requests
 import sys
+import re
 
 script_dir = os.path.expanduser("~/.dotfiles/scripts")
 sys.path.append(script_dir)
 import exist
+
+A_PATTERN = r'^[a-zA-Z0-9\s\-_]+$'
 
 # -------------------------- VALUES -------------------------- #
 
@@ -48,6 +51,10 @@ def log(content: str):
 
 
 def a(content: str, do_exec=True) -> None:
+    if not re.fullmatch(A_PATTERN, content):
+        print(f"Invalid content: {content}")
+        return
+
     if not do_exec:
         print(f"Would have added: {content}")
         return
