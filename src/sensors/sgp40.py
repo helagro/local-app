@@ -5,7 +5,7 @@ from sensirion_gas_index_algorithm.voc_algorithm import VocAlgorithm
 
 # ------------------------- VARIABLES ------------------------ #
 
-RUN_TIME_SEC = 300
+RUN_TIME_SEC = 350
 voc_algorithm = VocAlgorithm()
 
 # ------------------------- FUNCTIONS ------------------------ #
