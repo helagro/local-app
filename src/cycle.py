@@ -75,6 +75,9 @@ def _on_voc() -> None:
     else:
         _voc = read_voc()
 
+        if _voc is not None:
+            a(f"voc {_voc} s")  # reason - is the air quality causing issues?
+
 
 def _on_eve() -> None:
     global _away_for_eve
@@ -131,9 +134,6 @@ def track_time_independents():
     pressure = read_pressure()
     if pressure is not None:
         a(f"{PRESSURE} {round(pressure)} s")  # reason - does the weather give me headaches?
-
-    if _voc is not None:
-        a(f"voc {_voc} s", do_exec=False)  # reason - is the air quality causing issues?
 
 
 # --------------------------- SCHEDULES -------------------------- #
