@@ -76,7 +76,7 @@ def _on_voc() -> None:
         _voc = read_voc()
 
         if _voc is not None:
-            a(f"voc {_voc} s")  # reason - is the air quality causing issues?
+            a(f"voc {_voc} s #u")  # reason - is the air quality causing issues?
 
 
 def _on_eve() -> None:
@@ -89,7 +89,7 @@ def _on_eve() -> None:
 
     track_time_independents()
 
-    callback = lambda x: a(f"{LIGHT_EVE} {x} s")
+    callback = lambda x: a(f"{LIGHT_EVE} {x} s #u")
     Thread(target=read_avg_light, args=(callback, )).start()  # reason - are my lights too bright on evenings?
 
 
@@ -98,11 +98,11 @@ def _on_night() -> None:
 
     temp = read_temp()
     if temp is not None:
-        a(f"{TEMP_NIGHT} {temp} s")  # reason - is it too warm to sleep?
+        a(f"{TEMP_NIGHT} {temp} s #u")  # reason - is it too warm to sleep?
 
     light = read_light(max=MAX_NIGHT_LIGHT)
     if light is not None:
-        a(f"{LIGHT_NIGHT} {light} s", )  # reason - is it too bright to sleep?
+        a(f"{LIGHT_NIGHT} {light} s #u", )  # reason - is it too bright to sleep?
 
 
 def _on_before_wake() -> None:
@@ -110,17 +110,17 @@ def _on_before_wake() -> None:
 
     temp = read_temp()
     if temp is not None:
-        a(f"{TEMP_EARLY} {read_temp()} s")  # reason - do I wake up because it's too warm?
+        a(f"{TEMP_EARLY} {read_temp()} s #u")  # reason - do I wake up because it's too warm?
 
     # reason - do I wake up because it's too bright?
-    callback = lambda x: a(f"{LIGHT_BEFORE_WAKE} {x} s")
+    callback = lambda x: a(f"{LIGHT_BEFORE_WAKE} {x} s #u")
     Thread(target=read_avg_light, args=(callback, ), kwargs={'max': MAX_NIGHT_LIGHT}).start()
 
 
 def _on_morning() -> None:
     if _away_for_eve: return
 
-    read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s"))  # reason - is it bright enough to wake up?
+    read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))  # reason - is it bright enough to wake up?
 
 
 # -------------------------- OTHER ------------------------- #
@@ -129,11 +129,11 @@ def _on_morning() -> None:
 def track_time_independents():
     hum = read_hum()
     if hum is not None:
-        a(f"{HUM} {hum / 100} s")  # reason - is dry air causing issues?
+        a(f"{HUM} {hum / 100} s #u")  # reason - is dry air causing issues?
 
     pressure = read_pressure()
     if pressure is not None:
-        a(f"{PRESSURE} {round(pressure)} s")  # reason - does the weather give me headaches?
+        a(f"{PRESSURE} {round(pressure)} s #u")  # reason - does the weather give me headaches?
 
 
 # --------------------------- SCHEDULES -------------------------- #
