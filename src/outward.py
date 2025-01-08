@@ -25,9 +25,10 @@ TEMP_EARLY = 'temp_early_indoor'
 
 # -------------------------- ENVIRONMENT ------------------------- #
 
-ROUTINE_ENDPOINT = os.getenv("ROUTINE_ENDPOINT")
-if not ROUTINE_ENDPOINT:
-    raise ValueError("SECRET_ENDPOINT environment variable is not set")
+TOOLS_URL = os.getenv("TOOLS_URL")
+if not TOOLS_URL:
+    raise ValueError("TOOLS_URL environment variable is not set")
+ROUTINE_ENDPOINT = f"{TOOLS_URL}/routines"
 
 # -------------------------- IS AWAY ------------------------- #
 
@@ -72,9 +73,11 @@ def a(content: str, do_exec=True) -> None:
 
 def get_routine(name: str) -> str | None:
     try:
-        response = requests.get(ROUTINE_ENDPOINT, params={"q": name})
+        response = requests.get(f"{ROUTINE_ENDPOINT}/{name}")
         response.raise_for_status()
-        return _format_time(response.text)
+
+        body = response.json()
+        return _format_time(body['start'])
     except requests.exceptions.RequestException as e:
         log(f"Failed to fetch routine: {e}")
         return None
@@ -88,3 +91,7 @@ def _format_time(time_str):
     minutes = parts[1].zfill(2)
 
     return f"{hours}:{minutes}"
+
+
+if __name__ == "__main__":
+    print(get_routine("detach"))
