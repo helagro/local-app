@@ -30,7 +30,26 @@ if not TOOLS_URL:
     raise ValueError("TOOLS_URL environment variable is not set")
 ROUTINE_ENDPOINT = f"{TOOLS_URL}/routines"
 
-# -------------------------- IS AWAY ------------------------- #
+CONFIG_URL = os.getenv("MY_CONFIG_URL")
+if not CONFIG_URL:
+    raise ValueError("MY_CONFIG_URL environment variable is not set")
+
+AUTH_TOKEN = os.getenv("A75H")
+if not AUTH_TOKEN:
+    raise ValueError("AUTH_TOKEN environment variable is not set")
+
+# -------------------------- UNCATEGORISED FUNCTIONS ------------------------- #
+
+
+def get_config(name: str) -> str | None:
+    try:
+        response = requests.get(f"{CONFIG_URL}/env-tracker/settings.json")
+        response.raise_for_status()
+
+        return response.json()[name]
+    except requests.exceptions.RequestException as e:
+        log(f"Failed to fetch config: {e}")
+        return None
 
 
 def is_away() -> bool:
@@ -72,8 +91,10 @@ def a(content: str, do_exec=True) -> None:
 
 
 def get_routine(name: str) -> str | None:
+    headers = {"Authorization": f"Bearer {AUTH_TOKEN}"}
+
     try:
-        response = requests.get(f"{ROUTINE_ENDPOINT}/{name}")
+        response = requests.get(f"{ROUTINE_ENDPOINT}/{name}", headers=headers)
         response.raise_for_status()
 
         body = response.json()
@@ -95,3 +116,4 @@ def _format_time(time_str):
 
 if __name__ == "__main__":
     print(get_routine("detach"))
+    print(get_config("reduceHeatThreshold"))

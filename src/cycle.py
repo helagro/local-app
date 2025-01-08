@@ -8,6 +8,7 @@ from threading import Thread
 
 BEFORE_WAKE_ROUTINE_NAME = "before_wake"
 AFTER_WAKE_ROUTINE_NAME = "after_wake"
+REDUCE_TEMP_ROUTINE_NAME = "lower_heating"
 DETACHED_ROUTINE_NAME = "detached"
 
 MAX_NIGHT_LIGHT = 0.2
@@ -16,6 +17,7 @@ MAX_NIGHT_LIGHT = 0.2
 
 _before_wake = get_routine(BEFORE_WAKE_ROUTINE_NAME) or "07:00"
 _after_wake = get_routine(AFTER_WAKE_ROUTINE_NAME) or "9:00"
+_reduce_temp = get_routine(REDUCE_TEMP_ROUTINE_NAME) or "16:00"
 _detached = get_routine(DETACHED_ROUTINE_NAME) or "21:00"
 
 _voc: int | None = None
@@ -32,6 +34,10 @@ def get_before_wake() -> str:
     return _before_wake
 
 
+def get_reduce_temp_time() -> str:
+    return _reduce_temp
+
+
 def get_away_for_eve() -> bool:
     return _away_for_eve
 
@@ -39,10 +45,11 @@ def get_away_for_eve() -> bool:
 # --------------------- UPDATING ROUTINE --------------------- #
 
 
-def _on_week() -> None:
-    global _before_wake, _detached, _after_wake
+def _on_do_update() -> None:
+    global _before_wake, _detached, _after_wake, _reduce_temp
     _before_wake = _try_updating_routine(BEFORE_WAKE_ROUTINE_NAME, _before_wake, job=morning_schedule, fun=_on_morning)
     _after_wake = _try_updating_routine(AFTER_WAKE_ROUTINE_NAME, _after_wake, job=before_wake_schedule, fun=_on_before_wake)
+    _reduce_temp = _try_updating_routine(REDUCE_TEMP_ROUTINE_NAME, _reduce_temp, job=reduce_temp_schedule, fun=_on_do_reduce_temp)
     _detached = _try_updating_routine(DETACHED_ROUTINE_NAME, _detached, job=eve_schedule, fun=_on_eve)
 
 
@@ -123,6 +130,17 @@ def _on_morning() -> None:
     read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))  # reason - is it bright enough to wake up?
 
 
+def _on_do_reduce_temp() -> None:
+    if is_away(): return
+
+    temp = read_temp()
+    temp_treshold = get_config("reduceHeatThreshold")
+    print(f"reduce_temp HAS temp: {temp}, temp_treshold: {temp_treshold}")
+
+    if temp is not None and temp > temp_treshold:
+        a(f"#b reduce temperature - current: {temp}")
+
+
 # -------------------------- OTHER ------------------------- #
 
 
@@ -138,9 +156,10 @@ def track_time_independents():
 
 # --------------------------- SCHEDULES -------------------------- #
 
-week_schedule = schedule.every(1).weeks.do(_on_week)
-voc_schedule = schedule.every(5).days.at("17:00").do(_on_voc)
+voc_schedule = schedule.every(4).days.at("17:00").do(_on_voc)
+update_schedule = schedule.every(2).days.at("14:00").do(_on_do_update)
 
+reduce_temp_schedule = schedule.every().day.at(_reduce_temp).do(_on_do_reduce_temp)
 eve_schedule = schedule.every().day.at(_detached).do(_on_eve)
 night_schedule = schedule.every().day.at("01:00").do(_on_night)
 before_wake_schedule = schedule.every().day.at(_before_wake).do(_on_before_wake)

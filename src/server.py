@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from sensors import read_temp, read_hum, read_light, read_uv, read_pressure, read_voc, get_last_voc
-from cycle import get_away_for_eve, get_detached, get_before_wake, track_time_independents
+from cycle import get_away_for_eve, get_detached, get_before_wake, get_reduce_temp_time, track_time_independents
 
 app = Flask(__name__)
 
@@ -24,9 +24,13 @@ def all_readings():
 @app.route('/')
 def all():
     return jsonify({
-        "detached": get_detached(),
-        "before_wake": get_before_wake(),
+        "version": "1.0",
         "away_for_eve": get_away_for_eve(),
+        "routines": {
+            "before_wake": get_before_wake(),
+            "reduce_temp_time": get_reduce_temp_time(),
+            "detached": get_detached(),
+        },
         "readings": all_readings()
     })
 
