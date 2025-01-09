@@ -99,26 +99,20 @@ def a(content: str, do_exec=True) -> None:
 
 def get_routine(name: str) -> str | None:
     headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
+    params = {"sep": ":", "sec": "false"}
 
     try:
-        response = requests.get(f"{_ROUTINE_ENDPOINT}/{name}", headers=headers)
+        response = requests.get(
+            f"{_ROUTINE_ENDPOINT}/{name}/start",
+            params=params,
+            headers=headers,
+        )
         response.raise_for_status()
 
-        body = response.json()
-        return _format_time(body['start'])
+        return response.text
     except requests.exceptions.RequestException as e:
         log(f"Failed to fetch routine: {e}")
         return None
-
-
-def _format_time(time_str):
-    time_str = time_str.replace('.', ':')
-    parts = time_str.split(':')
-
-    hours = parts[0].zfill(2)
-    minutes = parts[1].zfill(2)
-
-    return f"{hours}:{minutes}"
 
 
 if __name__ == "__main__":
