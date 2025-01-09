@@ -157,7 +157,7 @@ def track_time_independents():
 # --------------------------- SCHEDULES -------------------------- #
 
 voc_schedule = schedule.every(4).days.at("17:00").do(_on_voc)
-update_schedule = schedule.every(2).days.at("14:00").do(_on_do_update)
+update_schedule = schedule.every(1).days.at("14:00").do(_on_do_update)
 
 reduce_temp_schedule = schedule.every().day.at(_reduce_temp).do(_on_do_reduce_temp)
 eve_schedule = schedule.every().day.at(_detached).do(_on_eve)

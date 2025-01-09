@@ -78,6 +78,10 @@ def log(content: str):
 
 
 def a(content: str, do_exec=True) -> None:
+    ''' Input must match the regex! '''
+
+    content = content.strip()
+
     if not re.fullmatch(_A_PATTERN, content):
         print(f"Invalid content: {content}")
         return
