@@ -8,7 +8,7 @@ script_dir = os.path.expanduser("~/.dotfiles/scripts")
 sys.path.append(script_dir)
 import exist
 
-_A_PATTERN = r'^[a-zA-Z0-9\s\-_\.#]+$'
+_A_PATTERN = r'^[a-zA-Z0-9\s\-_\.:#]+$'
 
 # ----------------------- CONFIG VALUES ---------------------- #
 
@@ -61,7 +61,7 @@ def is_away() -> bool:
     if get_config('doTrack') == False: return True
 
     try:
-        away_dict = exist.main('away', 1, None)
+        away_dict = exist.values('away', 1, None)
         return list(away_dict.values())[0] == 1
     except Exception as e:
         log(f"/is_away - failed to check if away: {e}")
