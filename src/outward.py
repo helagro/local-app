@@ -94,7 +94,7 @@ def a(content: str, do_exec=True) -> None:
         print(f"Would have added: {content}")
         return
 
-    result = subprocess.run(["zsh", "-c", f"source ~/.zshrc && a {content}"], capture_output=True, text=True)
+    result = subprocess.run(["zsh", "-c", f"source ~/.zshrc && a.sh {content}"], capture_output=True, text=True)
 
     if result.returncode != 0:
         print(f"Failed to send command, error: {result.stderr}")
