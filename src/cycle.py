@@ -134,7 +134,7 @@ def _on_do_reduce_temp() -> None:
     if is_away(): return
 
     temp = read_temp()
-    temp_treshold = get_config("reduceHeatThreshold")
+    temp_treshold = get_config(REDUCE_HEAT_THRESHOLD)
     print(f"reduce_temp HAS temp: {temp}, temp_treshold: {temp_treshold}")
 
     if temp is not None and temp > temp_treshold:

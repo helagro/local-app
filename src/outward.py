@@ -8,9 +8,13 @@ script_dir = os.path.expanduser("~/.dotfiles/scripts")
 sys.path.append(script_dir)
 import exist
 
-A_PATTERN = r'^[a-zA-Z0-9\s\-_\.#]+$'
+_A_PATTERN = r'^[a-zA-Z0-9\s\-_\.#]+$'
 
-# -------------------------- VALUES -------------------------- #
+# ----------------------- CONFIG VALUES ---------------------- #
+
+REDUCE_HEAT_THRESHOLD = 'reduceHeatThreshold'
+
+# -------------------------- TRACKING VALUES -------------------------- #
 
 PRESSURE = 'weather_air_pressure'
 HUM = 'hum_indoor'
@@ -25,17 +29,17 @@ TEMP_EARLY = 'temp_early_indoor'
 
 # -------------------------- ENVIRONMENT ------------------------- #
 
-TOOLS_URL = os.getenv("TOOLS_URL")
-if not TOOLS_URL:
+_TOOLS_URL = os.getenv("TOOLS_URL")
+if not _TOOLS_URL:
     raise ValueError("TOOLS_URL environment variable is not set")
-ROUTINE_ENDPOINT = f"{TOOLS_URL}/routines"
+_ROUTINE_ENDPOINT = f"{_TOOLS_URL}/routines"
 
-CONFIG_URL = os.getenv("MY_CONFIG_URL")
-if not CONFIG_URL:
+_CONFIG_URL = os.getenv("MY_CONFIG_URL")
+if not _CONFIG_URL:
     raise ValueError("MY_CONFIG_URL environment variable is not set")
 
-AUTH_TOKEN = os.getenv("A75H")
-if not AUTH_TOKEN:
+_AUTH_TOKEN = os.getenv("A75H")
+if not _AUTH_TOKEN:
     raise ValueError("AUTH_TOKEN environment variable is not set")
 
 # -------------------------- UNCATEGORISED FUNCTIONS ------------------------- #
@@ -43,16 +47,19 @@ if not AUTH_TOKEN:
 
 def get_config(name: str) -> str | None:
     try:
-        response = requests.get(f"{CONFIG_URL}/env-tracker/settings.json")
+        response = requests.get(f"{_CONFIG_URL}/env-tracker/settings.json")
         response.raise_for_status()
+        json = response.json()
 
-        return response.json()[name]
+        return json[name] if name else json
     except requests.exceptions.RequestException as e:
         log(f"Failed to fetch config: {e}")
         return None
 
 
 def is_away() -> bool:
+    if get_config('doTrack') == False: return True
+
     try:
         away_dict = exist.main('away', 1, None)
         return list(away_dict.values())[0] == 1
@@ -71,7 +78,7 @@ def log(content: str):
 
 
 def a(content: str, do_exec=True) -> None:
-    if not re.fullmatch(A_PATTERN, content):
+    if not re.fullmatch(_A_PATTERN, content):
         print(f"Invalid content: {content}")
         return
 
@@ -91,10 +98,10 @@ def a(content: str, do_exec=True) -> None:
 
 
 def get_routine(name: str) -> str | None:
-    headers = {"Authorization": f"Bearer {AUTH_TOKEN}"}
+    headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
 
     try:
-        response = requests.get(f"{ROUTINE_ENDPOINT}/{name}", headers=headers)
+        response = requests.get(f"{_ROUTINE_ENDPOINT}/{name}", headers=headers)
         response.raise_for_status()
 
         body = response.json()
