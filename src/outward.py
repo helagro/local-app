@@ -8,7 +8,7 @@ script_dir = os.path.expanduser("~/.dotfiles/scripts")
 sys.path.append(script_dir)
 import exist
 
-A_PATTERN = r'^[a-zA-Z0-9\s\-_\.]+$'
+A_PATTERN = r'^[a-zA-Z0-9\s\-_\.#]+$'
 
 # -------------------------- VALUES -------------------------- #
 
