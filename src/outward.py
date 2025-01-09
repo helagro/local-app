@@ -82,6 +82,10 @@ def a(content: str, do_exec=True) -> None:
 
     content = content.strip()
 
+    if not content:
+        print("Empty content")
+        return
+
     if not re.fullmatch(_A_PATTERN, content):
         print(f"Invalid content: {content}")
         return
