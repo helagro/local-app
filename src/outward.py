@@ -2,13 +2,10 @@ import subprocess
 import os
 import requests
 import sys
-import re
 
-script_dir = os.path.expanduser("~/.dotfiles/scripts")
+script_dir = os.path.expanduser("~/.dotfiles/scripts/lang/python")
 sys.path.append(script_dir)
 import exist
-
-_A_PATTERN = r'^[a-zA-Z0-9\s\-_\.:#]+$'
 
 # ----------------------- CONFIG VALUES ---------------------- #
 
@@ -78,23 +75,18 @@ def log(content: str):
 
 
 def a(content: str, do_exec=True) -> None:
-    ''' Input must match the regex! '''
-
     content = content.strip()
 
     if not content:
         print("Empty content")
         return
 
-    if not re.fullmatch(_A_PATTERN, content):
-        print(f"Invalid content: {content}")
-        return
-
     if not do_exec:
         print(f"Would have added: {content}")
         return
 
-    result = subprocess.run(["zsh", "-c", f"source ~/.zshrc && a.sh {content}"], capture_output=True, text=True)
+    script_path = os.path.expanduser('~/.dotfiles/scripts/path/a.sh')
+    result = subprocess.run([script_path, content], capture_output=True, text=True)
 
     if result.returncode != 0:
         print(f"Failed to send command, error: {result.stderr}")
