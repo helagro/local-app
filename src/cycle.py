@@ -3,6 +3,7 @@ import time
 from outward import *
 from sensors import *
 from threading import Thread
+from typing import Tuple
 
 # ------------------------- CONSTANTS ------------------------ #
 
@@ -46,19 +47,25 @@ def get_away_for_eve() -> bool:
 
 
 def _on_do_update() -> None:
-    global _before_wake, _detached, _after_wake, _reduce_temp
-    _before_wake = _try_updating_routine(BEFORE_WAKE_ROUTINE_NAME, _before_wake, job=morning_schedule, fun=_on_morning)
-    _after_wake = _try_updating_routine(AFTER_WAKE_ROUTINE_NAME, _after_wake, job=before_wake_schedule, fun=_on_before_wake)
-    _reduce_temp = _try_updating_routine(REDUCE_TEMP_ROUTINE_NAME, _reduce_temp, job=reduce_temp_schedule, fun=_on_do_reduce_temp)
-    _detached = _try_updating_routine(DETACHED_ROUTINE_NAME, _detached, job=eve_schedule, fun=_on_eve)
+    global _before_wake, _detached, _after_wake, _reduce_temp, morning_schedule, before_wake_schedule, reduce_temp_schedule, eve_schedule
+    _before_wake, morning_schedule = _try_updating_routine(BEFORE_WAKE_ROUTINE_NAME, _before_wake, job=morning_schedule, fun=_on_morning)
+    _after_wake, before_wake_schedule = _try_updating_routine(AFTER_WAKE_ROUTINE_NAME,
+                                                              _after_wake,
+                                                              job=before_wake_schedule,
+                                                              fun=_on_before_wake)
+    _reduce_temp, reduce_temp_schedule = _try_updating_routine(REDUCE_TEMP_ROUTINE_NAME,
+                                                               _reduce_temp,
+                                                               job=reduce_temp_schedule,
+                                                               fun=_on_do_reduce_temp)
+    _detached, eve_schedule = _try_updating_routine(DETACHED_ROUTINE_NAME, _detached, job=eve_schedule, fun=_on_eve)
 
 
-def _try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: callable) -> str | None:
+def _try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: callable) -> Tuple[str, schedule.Job]:
     new_value = get_routine(name)
 
     if new_value is None:
         log(f"/on_week: {name} is None")
-        return old_value
+        return old_value, job
 
     elif new_value != old_value:
         print(f"on_week: {name} updated to {new_value}")
@@ -66,7 +73,7 @@ def _try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: cal
         schedule.cancel_job(job)
         job = schedule.every().day.at(new_value).do(fun)
 
-    return new_value
+    return new_value, job
 
 
 # ------------------------- ROUTINES ------------------------ #
