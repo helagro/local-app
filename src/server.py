@@ -2,8 +2,10 @@ from flask import Flask, jsonify
 from sensors import read_temp, read_hum, read_light, read_uv, read_pressure, read_voc, get_last_voc
 from cycle import get_away_for_eve, get_detached, get_before_wake, get_reduce_temp_time, track_time_independents
 from outward import REDUCE_HEAT_THRESHOLD, get_config
+from datetime import date
 
 app = Flask(__name__)
+startup_date = date.today()
 
 # ---------------------- HELPER METHODS ---------------------- #
 
@@ -26,6 +28,7 @@ def all_readings():
 def all():
     return jsonify({
         "version": "1.0",
+        "startup_date": startup_date,
         "away_for_eve": get_away_for_eve(),
         "config": get_config(""),
         "routines": {

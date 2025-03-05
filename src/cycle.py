@@ -92,6 +92,11 @@ def _on_voc() -> None:
         if _voc is not None:
             a(f"voc {_voc} s #u")  # reason - is the air quality causing issues?
 
+            if _voc > 100:
+                a(f"voc: ${_voc} s #b")
+        else:
+            log("/on_voc: VOC is None")
+
 
 def _on_eve() -> None:
     global _away_for_eve
@@ -163,7 +168,7 @@ def track_time_independents():
 
 # --------------------------- SCHEDULES -------------------------- #
 
-voc_schedule = schedule.every(4).days.at("17:00").do(_on_voc)
+voc_schedule = schedule.every(3).days.at("17:00").do(_on_voc)
 update_schedule = schedule.every(1).days.at("14:00").do(_on_do_update)
 
 reduce_temp_schedule = schedule.every().day.at(_reduce_temp).do(_on_do_reduce_temp)
