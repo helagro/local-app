@@ -90,7 +90,7 @@ def _on_voc() -> None:
         _voc = read_voc()
 
         if _voc is not None:
-            a(f"voc {_voc} s #u")  # reason - is the air quality causing issues?
+            a(f"voc {_voc} s #u")
 
             if _voc > 100:
                 a(f"voc: ${_voc} s #b")
@@ -109,7 +109,7 @@ def _on_eve() -> None:
     track_time_independents()
 
     callback = lambda x: a(f"{LIGHT_EVE} {x} s  #u")
-    Thread(target=read_avg_light, args=(callback, )).start()  # reason - are my lights too bright on evenings?
+    Thread(target=read_avg_light, args=(callback, )).start()
 
 
 def _on_night() -> None:
@@ -117,11 +117,11 @@ def _on_night() -> None:
 
     temp = read_temp()
     if temp is not None:
-        a(f"{TEMP_NIGHT} {temp} s #u")  # reason - is it too warm to sleep?
+        a(f"{TEMP_NIGHT} {temp} s #u")
 
     light = read_light(max=MAX_NIGHT_LIGHT)
     if light is not None:
-        a(f"{LIGHT_NIGHT} {light} s #u", )  # reason - is it too bright to sleep?
+        a(f"{LIGHT_NIGHT} {light} s #u", )
 
 
 def _on_before_wake() -> None:
@@ -129,7 +129,7 @@ def _on_before_wake() -> None:
 
     temp = read_temp()
     if temp is not None:
-        a(f"{TEMP_EARLY} {read_temp()} s #u")  # reason - do I wake up because it's too warm?
+        a(f"{TEMP_EARLY} {read_temp()} s #u")
 
     # reason - do I wake up because it's too bright?
     callback = lambda x: a(f"{LIGHT_BEFORE_WAKE} {x} s #u")
@@ -139,7 +139,7 @@ def _on_before_wake() -> None:
 def _on_morning() -> None:
     if _away_for_eve: return
 
-    read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))  # reason - is it bright enough to wake up?
+    read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))
 
 
 def _on_do_reduce_temp() -> None:
@@ -159,16 +159,16 @@ def _on_do_reduce_temp() -> None:
 def track_time_independents():
     hum = read_hum()
     if hum is not None:
-        a(f"{HUM} {hum / 100} s #u")  # reason - is dry air causing issues?
+        a(f"{HUM} {hum / 100} s #u")
 
     pressure = read_pressure()
     if pressure is not None:
-        a(f"{PRESSURE} {round(pressure)} s #u")  # reason - does the weather give me headaches?
+        a(f"{PRESSURE} {round(pressure)} s #u")
 
 
 # --------------------------- SCHEDULES -------------------------- #
 
-voc_schedule = schedule.every(3).days.at("17:00").do(_on_voc)
+voc_schedule = schedule.every(2).days.at("17:00").do(_on_voc)
 update_schedule = schedule.every(1).days.at("14:00").do(_on_do_update)
 
 reduce_temp_schedule = schedule.every().day.at(_reduce_temp).do(_on_do_reduce_temp)
