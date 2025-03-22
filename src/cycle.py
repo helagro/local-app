@@ -131,7 +131,6 @@ def _on_before_wake() -> None:
     if temp is not None:
         a(f"{TEMP_EARLY} {read_temp()} s #u")
 
-    # reason - do I wake up because it's too bright?
     callback = lambda x: a(f"{LIGHT_BEFORE_WAKE} {x} s #u")
     Thread(target=read_avg_light, args=(callback, ), kwargs={'max': MAX_NIGHT_LIGHT}).start()
 

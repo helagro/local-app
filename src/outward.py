@@ -85,7 +85,7 @@ def a(content: str, do_exec=True) -> None:
         print(f"Would have added: {content}")
         return
 
-    script_path = os.path.expanduser('~/.dotfiles/scripts/path/a.sh')
+    script_path = os.path.expanduser('~/.dotfiles/scripts/path/task/a.sh')
     result = subprocess.run([script_path, content], capture_output=True, text=True)
 
     if result.returncode != 0:
