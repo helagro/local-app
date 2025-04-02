@@ -10,6 +10,7 @@ import exist
 # ----------------------- CONFIG VALUES ---------------------- #
 
 REDUCE_HEAT_THRESHOLD = 'reduceHeatThreshold'
+IS_SUMMER_WEATHER = 'isSummerWeather'
 
 # -------------------------- TRACKING VALUES -------------------------- #
 
@@ -42,7 +43,7 @@ if not _AUTH_TOKEN:
 # -------------------------- UNCATEGORISED FUNCTIONS ------------------------- #
 
 
-def get_config(name: str) -> str | None:
+def get_config(name: str) -> str | dict | None:
     try:
         response = requests.get(f"{_CONFIG_URL}/env-tracker/settings.json")
         response.raise_for_status()

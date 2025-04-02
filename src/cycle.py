@@ -145,10 +145,19 @@ def _on_do_reduce_temp() -> None:
     if is_away(): return
 
     temp = read_temp()
-    temp_treshold = get_config(REDUCE_HEAT_THRESHOLD)
-    print(f"reduce_temp HAS temp: {temp}, temp_treshold: {temp_treshold}")
+    config = get_config()
 
-    if temp is not None and temp > temp_treshold:
+    if config is None:
+        log("/_on_do_reduce_temp: config is None")
+        return
+
+    temp_treshold = config.get(REDUCE_HEAT_THRESHOLD, None)
+    is_summer_weather = config.get(IS_SUMMER_WEATHER, True)
+
+    print(f"reduce_temp HAS temp: {temp}, temp_treshold: {temp_treshold}, is_summer_weather: {is_summer_weather}")
+
+    values_does_exist = temp is not None and temp_treshold is not None and is_summer_weather is not None
+    if values_does_exist and not is_summer_weather and temp > temp_treshold:
         a(f"reduce temperature - current: {temp} #b")
 
 
