@@ -145,7 +145,7 @@ def _on_do_reduce_temp() -> None:
     if is_away(): return
 
     temp = read_temp()
-    config = get_config()
+    config = get_config('')
 
     if config is None:
         log("/_on_do_reduce_temp: config is None")
