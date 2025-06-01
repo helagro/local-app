@@ -3,7 +3,7 @@ import time
 from outward import *
 from sensors import *
 from threading import Thread
-from typing import Tuple
+from typing import Tuple, Callable, cast
 
 # ------------------------- CONSTANTS ------------------------ #
 
@@ -21,7 +21,7 @@ _after_wake = get_routine(AFTER_WAKE_ROUTINE_NAME) or "9:00"
 _reduce_temp = get_routine(REDUCE_TEMP_ROUTINE_NAME) or "16:00"
 _detached = get_routine(DETACHED_ROUTINE_NAME) or "21:00"
 
-_voc: int | None = None
+_voc: float | None = None
 _away_for_eve = is_away()
 
 # -------------------------- GETTERS ------------------------- #
@@ -60,7 +60,7 @@ def _on_do_update() -> None:
     _detached, eve_schedule = _try_updating_routine(DETACHED_ROUTINE_NAME, _detached, job=eve_schedule, fun=_on_eve)
 
 
-def _try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: callable) -> Tuple[str, schedule.Job]:
+def _try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: Callable) -> Tuple[str, schedule.Job]:
     new_value = get_routine(name)
 
     if new_value is None:
@@ -145,19 +145,19 @@ def _on_do_reduce_temp() -> None:
     if is_away(): return
 
     temp = read_temp()
-    config = get_config('')
+    config: dict | None = cast(dict | None, get_config(''))
 
     if config is None:
         log("/_on_do_reduce_temp: config is None")
         return
 
-    temp_treshold = config.get(REDUCE_HEAT_THRESHOLD, None)
-    is_summer_weather = config.get(IS_SUMMER_WEATHER, True)
+    temp_treshold: None | float = cast(None | float, config.get(REDUCE_HEAT_THRESHOLD, None))
+    is_summer_weather: None | float = cast(None | float, config.get(IS_SUMMER_WEATHER, True))
 
     print(f"reduce_temp HAS temp: {temp}, temp_treshold: {temp_treshold}, is_summer_weather: {is_summer_weather}")
 
     values_does_exist = temp is not None and temp_treshold is not None and is_summer_weather is not None
-    if values_does_exist and not is_summer_weather and temp > temp_treshold:
+    if values_does_exist and not is_summer_weather and cast(float, temp) > cast(float, temp_treshold):
         a(f"reduce temperature - current: {temp} #b")
 
 
@@ -176,7 +176,7 @@ def track_time_independents():
 
 # --------------------------- SCHEDULES -------------------------- #
 
-voc_schedule = schedule.every(2).days.at("17:00").do(_on_voc)
+voc_schedule = schedule.every(1).days.at("17:00").do(_on_voc)
 update_schedule = schedule.every(1).days.at("14:00").do(_on_do_update)
 
 reduce_temp_schedule = schedule.every().day.at(_reduce_temp).do(_on_do_reduce_temp)

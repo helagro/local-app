@@ -2,41 +2,44 @@ import sys
 import os
 from dotenv import load_dotenv
 import time
+from typing import Callable
 
 sys.path.append(os.path.dirname(__file__))
-
-try:
-    import BME280
-    import TSL2591
-    import LTR390
-    import sgp40
-
-except Exception as e:
-    print(f"Error importing sensor libraries: {e}")
 
 # ----------------------- COMPENSATE ----------------------- #
 
 load_dotenv()
-
 TEMP_COMPENSATION = float(os.getenv('TEMP_COMPENSATION', '0'))
 
 # ----------------------- SETUP SENSORS ---------------------- #
 
 try:
+    import BME280
     bme280 = BME280.BME280()
     bme280.get_calib_param()
 except Exception as e:
     print(f"Error initialising BME280: {e}")
+    BME280 = None
 
 try:
+    import TSL2591
     light = TSL2591.TSL2591()
 except Exception as e:
     print(f"Error initialising TSL2591: {e}")
+    TSL2591 = None
 
 try:
+    import LTR390
     uv = LTR390.LTR390()
 except Exception as e:
     print(f"Error initialising LTR390: {e}")
+    LTR390 = None
+
+try:
+    import sgp40
+except Exception as e:
+    print(f"Error initialising SGP40: {e}")
+    sgp40 = None
 
 # ------------------------ GET LAST VALUE ------------------------ #
 
@@ -52,6 +55,10 @@ def get_last_voc() -> float | None:
 
 def read_voc() -> float | None:
     global _last_voc
+
+    if sgp40 is None:
+        print("SGP40 sensor not initialised")
+        return None
 
     temp = read_temp()
     hum = read_hum()
@@ -87,7 +94,7 @@ def read_temp() -> float | None:
         return None
 
 
-def read_hum() -> float:
+def read_hum() -> float | None:
     try:
         return round(bme280.readData()[2], 2)
     except Exception as e:
@@ -110,7 +117,7 @@ def read_light(max=None) -> float | None:
         return lux
 
 
-def read_uv() -> float:
+def read_uv() -> float | None:
     try:
         return uv.UVS()
     except Exception as e:
@@ -121,7 +128,7 @@ def read_uv() -> float:
 # ------------------------- ADVANCED ------------------------- #
 
 
-def read_avg_light(callback: callable, max=None) -> None:
+def read_avg_light(callback: Callable, max=None) -> None:
     interval = 15 * 60
     duration = 45 * 60
 
