@@ -17,4 +17,4 @@ python-dotenv==1.0.1
 sensirion-gas-index-algorithm==3.2.2
 sensirion-i2c-sgp4x==0.1.0
 sensirion-i2c-sht==0.4.0
-setuptools==70.0.0
+setuptools==78.1.1
