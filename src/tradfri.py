@@ -24,6 +24,8 @@ gateway_addr: str | None = os.environ.get("TRADFRI_ADDR")
 
 if not gateway_addr:
     raise PytradfriError("E-3: TRADFRI_ADDR is not set")
+else:
+    print(f"Using Tradfri Gateway at {gateway_addr}")
 
 
 def init() -> None:
