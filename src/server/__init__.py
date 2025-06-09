@@ -3,13 +3,11 @@ from outward import get_config
 from datetime import date
 from cycle import get_away_for_eve, get_detached, get_before_wake, get_reduce_temp_time
 from .readings import all_readings, bp as readings_bp
-from .iot import bp as iot_bp
 
 startup_date = date.today()
 
 app = Flask(__name__)
 app.register_blueprint(readings_bp)
-app.register_blueprint(iot_bp, url_prefix='/iot')
 
 # ================================== ROUTES ================================== #
 
