@@ -5,7 +5,6 @@
 
 import sys
 import time
-import math
 import smbus
 
 ADDR = (0x29)

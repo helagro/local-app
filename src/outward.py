@@ -43,9 +43,9 @@ if not _AUTH_TOKEN:
 # -------------------------- UNCATEGORISED FUNCTIONS ------------------------- #
 
 
-def get_config(name: str) -> str | dict | None:
+def get_config(name: str) -> str | dict | None | float:
     try:
-        response = requests.get(f"{_CONFIG_URL}/env-tracker/settings.json")
+        response = requests.get(f"{_CONFIG_URL}/local-app/settings.json")
         response.raise_for_status()
         json = response.json()
 
@@ -72,7 +72,7 @@ def is_away() -> bool:
 def log(content: str):
     """ prepend (location context) and space """
     print(content)
-    a(f"env-tracker{content}")
+    a(f"local-app{content}")
 
 
 def a(content: str, do_exec=True) -> None:

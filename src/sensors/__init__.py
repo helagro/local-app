@@ -3,13 +3,14 @@ import os
 from dotenv import load_dotenv
 import time
 from typing import Callable
+from outward import get_config
 
 sys.path.append(os.path.dirname(__file__))
 
 # ----------------------- COMPENSATE ----------------------- #
 
 load_dotenv()
-TEMP_COMPENSATION = float(os.getenv('TEMP_COMPENSATION', '0'))
+TEMP_COMPENSATION = get_config('tempCompensation') or 0.0
 
 # ----------------------- SETUP SENSORS ---------------------- #
 
