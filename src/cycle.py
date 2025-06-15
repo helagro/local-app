@@ -49,6 +49,10 @@ def get_away_for_eve() -> bool:
 def _on_do_update() -> None:
     global _before_wake, _detached, _after_wake, _reduce_temp, morning_schedule, before_wake_schedule, reduce_temp_schedule, eve_schedule
 
+    if (get_config('kill') == True):
+        print("Killing local app from config")
+        exit(0)
+
     _before_wake, morning_schedule = _try_updating_routine(BEFORE_WAKE_ROUTINE_NAME, _before_wake, job=morning_schedule, fun=_on_morning)
     _detached, eve_schedule = _try_updating_routine(DETACHED_ROUTINE_NAME, _detached, job=eve_schedule, fun=_on_eve)
 
