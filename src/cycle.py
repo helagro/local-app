@@ -99,7 +99,7 @@ def _on_voc() -> None:
             a(f"voc {_voc} s #u")
 
             if _voc > 100:
-                a(f"voc: ${_voc} s #b")
+                a(f"open window - voc {_voc} > 100 #b")
         else:
             log("/on_voc: VOC is None")
 
