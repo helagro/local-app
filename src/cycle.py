@@ -187,7 +187,7 @@ update_schedule = schedule.every(1).days.at("14:00").do(_on_do_update)
 
 reduce_temp_schedule = schedule.every().day.at(_reduce_temp).do(_on_do_reduce_temp)
 eve_schedule = schedule.every().day.at(_detached).do(_on_eve)
-night_schedule = schedule.every().day.at("01:00").do(_on_night)
+night_schedule = schedule.every().day.at("02:00").do(_on_night)
 before_wake_schedule = schedule.every().day.at(_before_wake).do(_on_before_wake)
 morning_schedule = schedule.every().day.at(_after_wake).do(_on_morning)
 
