@@ -1,8 +1,8 @@
 from flask import Flask, jsonify
-from outward import get_config
+from remote_interfaces import get_config
 from datetime import date
 from cycle import get_away_for_eve, get_detached, get_before_wake, get_reduce_temp_time
-from .readings import all_readings, bp as readings_bp
+from ._readings import all_readings, bp as readings_bp
 
 startup_date = date.today()
 

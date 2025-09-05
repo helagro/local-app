@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 import time
 from typing import Callable
-from outward import get_config
+from remote_interfaces import get_config
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -15,32 +15,32 @@ TEMP_COMPENSATION = get_config('tempCompensation') or 0.0
 # ----------------------- SETUP SENSORS ---------------------- #
 
 try:
-    import BME280
-    bme280 = BME280.BME280()
+    import sensors._BME280 as _BME280
+    bme280 = _BME280.BME280()
     bme280.get_calib_param()
 except Exception as e:
     print(f"Error initialising BME280: {e}")
-    BME280 = None
+    _BME280 = None
 
 try:
-    import TSL2591
-    light = TSL2591.TSL2591()
+    import sensors._TSL2591 as _TSL2591
+    light = _TSL2591.TSL2591()
 except Exception as e:
     print(f"Error initialising TSL2591: {e}")
-    TSL2591 = None
+    _TSL2591 = None
 
 try:
-    import LTR390
-    uv = LTR390.LTR390()
+    import sensors._LTR390 as _LTR390
+    uv = _LTR390.LTR390()
 except Exception as e:
     print(f"Error initialising LTR390: {e}")
-    LTR390 = None
+    _LTR390 = None
 
 try:
-    import sgp40
+    import sensors._sgp40 as _sgp40
 except Exception as e:
     print(f"Error initialising SGP40: {e}")
-    sgp40 = None
+    _sgp40 = None
 
 # ------------------------ GET LAST VALUE ------------------------ #
 
@@ -57,7 +57,7 @@ def get_last_voc() -> float | None:
 def read_voc() -> float | None:
     global _last_voc
 
-    if sgp40 is None:
+    if _sgp40 is None:
         print("SGP40 sensor not initialised")
         return None
 
@@ -70,7 +70,7 @@ def read_voc() -> float | None:
 
     print("Reading VOC...")
     try:
-        _last_voc = sgp40.read(temp, hum)
+        _last_voc = _sgp40.read(temp, hum)
         return _last_voc
 
     except Exception as e:

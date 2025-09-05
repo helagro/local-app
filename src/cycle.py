@@ -1,6 +1,8 @@
+from remote_interfaces.config import IS_SUMMER_WEATHER, REDUCE_HEAT_THRESHOLD
+from remote_interfaces.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a
 import schedule
 import time
-from outward import *
+from remote_interfaces import *
 from sensors import *
 from threading import Thread
 from typing import Tuple, Callable, cast
