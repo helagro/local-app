@@ -8,11 +8,12 @@ from sensors import *
 from threading import Thread
 from typing import cast
 
-# ------------------------- CONSTANTS ------------------------ #
+# ------------------------- VARIABLES ------------------------ #
 
 MAX_NIGHT_LIGHT = 0.2
 
 _voc: float | None = None
+_config: dict | None = cast(dict | None, get_config())
 _away_when_detached = is_away()
 
 # ------------------------- ROUTINES ------------------------ #
@@ -51,14 +52,13 @@ def _on_do_reduce_temp() -> None:
     if is_away(): return
 
     temp = read_temp()
-    config: dict | None = cast(dict | None, get_config(''))
 
-    if config is None:
+    if _config is None:
         log("/_on_do_reduce_temp: config is None")
         return
 
-    temp_treshold: None | float = cast(None | float, config.get(REDUCE_HEAT_THRESHOLD, None))
-    is_summer_weather: None | float = cast(None | float, config.get(IS_SUMMER_WEATHER, True))
+    temp_treshold: None | float = cast(None | float, _config.get(REDUCE_HEAT_THRESHOLD, None))
+    is_summer_weather: None | float = cast(None | float, _config.get(IS_SUMMER_WEATHER, True))
 
     values_does_exist = temp is not None and temp_treshold is not None and is_summer_weather is not None
     if values_does_exist and not is_summer_weather and cast(float, temp) > cast(float, temp_treshold):
@@ -67,10 +67,10 @@ def _on_do_reduce_temp() -> None:
 
 def _on_eve() -> None:
     _update_routines()
-    if _away_when_detached: return
+    if _away_when_detached or not _config: return
 
-    a('#b prepare for night')
-    a('#b prepare for imorgon')
+    for task in _config["tasks"]["eve"]:
+        a(task)
 
 
 def _on_detached() -> None:
@@ -111,7 +111,10 @@ def track_time_independents():
 
 
 def _update_routines() -> None:
-    if (get_config('kill') == True):
+    global _config
+    _config = cast(dict | None, get_config())
+
+    if (_config and _config['kill'] == True):
         print("Killing local app from config")
         exit(0)
 
@@ -125,8 +128,8 @@ _routines: dict[str, Routine] = {
     "night": Routine(name="night", time="02:00", function=_on_night),
     "before_wake": SyncedRoutine(name="before_wake", default_time="07:00", function=_on_before_wake),
     "after_wake": SyncedRoutine(name="after_wake", default_time="09:00", function=_on_morning),
-    "reduce_temp": SyncedRoutine(name="reduce_temp", default_time="16:00", function=_on_do_reduce_temp),
-    "update": Routine(name="update", time="18:00", function=_on_eve),
+    "reduce_temp": SyncedRoutine(name="lower_heating", default_time="16:00", function=_on_do_reduce_temp),
+    "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
     "detached": SyncedRoutine(name="detached", default_time="21:00", function=_on_detached),
 }
 

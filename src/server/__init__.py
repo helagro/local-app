@@ -18,7 +18,7 @@ def all():
         "version": "1.0",
         "startup_date": startup_date,
         "away_for_eve": get_away_for_eve(),
-        "config": get_config(""),
+        "config": get_config(),
         "routines": get_routines(),
         "readings": all_readings()
     })
