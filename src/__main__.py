@@ -1,6 +1,6 @@
 import server
 import threading
-from cycle import run_schedule, get_away_for_eve
+from routines import run_schedule, get_away_for_eve
 
 ran_once = False
 
