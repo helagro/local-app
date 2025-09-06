@@ -33,7 +33,7 @@ class SyncedRoutine(Routine):
             return
 
         if new_time != self.time:
-            log(f"/update: Routine {self.name} updated to {new_time}")
+            log(f"/update: Updating routine {self.name} to {new_time}...")
             self.time = new_time
             schedule.cancel_job(self.job)
             self.job = schedule.every().day.at(self.time).do(self._function)
