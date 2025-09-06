@@ -3,86 +3,17 @@ from remote_interfaces.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIG
 import schedule
 import time
 from remote_interfaces import *
+from routine import Routine, SyncedRoutine
 from sensors import *
 from threading import Thread
-from typing import Tuple, Callable, cast
+from typing import cast
 
 # ------------------------- CONSTANTS ------------------------ #
 
-BEFORE_WAKE_ROUTINE_NAME = "before_wake"
-AFTER_WAKE_ROUTINE_NAME = "after_wake"
-REDUCE_TEMP_ROUTINE_NAME = "lower_heating"
-DETACHED_ROUTINE_NAME = "detached"
-
 MAX_NIGHT_LIGHT = 0.2
-
-# ------------------------- VARIABLES ------------------------ #
-
-_before_wake = get_routine(BEFORE_WAKE_ROUTINE_NAME) or "07:00"
-_after_wake = get_routine(AFTER_WAKE_ROUTINE_NAME) or "9:00"
-_reduce_temp = get_routine(REDUCE_TEMP_ROUTINE_NAME) or "16:00"
-_detached = get_routine(DETACHED_ROUTINE_NAME) or "21:00"
 
 _voc: float | None = None
 _away_for_eve = is_away()
-
-# -------------------------- GETTERS ------------------------- #
-
-
-def get_detached() -> str:
-    return _detached
-
-
-def get_before_wake() -> str:
-    return _before_wake
-
-
-def get_reduce_temp_time() -> str:
-    return _reduce_temp
-
-
-def get_away_for_eve() -> bool:
-    return _away_for_eve
-
-
-# --------------------- UPDATING ROUTINE --------------------- #
-
-
-def _on_do_update() -> None:
-    global _before_wake, _detached, _after_wake, _reduce_temp, morning_schedule, before_wake_schedule, reduce_temp_schedule, eve_schedule
-
-    if (get_config('kill') == True):
-        print("Killing local app from config")
-        exit(0)
-
-    _before_wake, morning_schedule = _try_updating_routine(BEFORE_WAKE_ROUTINE_NAME, _before_wake, job=morning_schedule, fun=_on_morning)
-    _detached, eve_schedule = _try_updating_routine(DETACHED_ROUTINE_NAME, _detached, job=eve_schedule, fun=_on_eve)
-
-    _after_wake, before_wake_schedule = _try_updating_routine(AFTER_WAKE_ROUTINE_NAME,
-                                                              _after_wake,
-                                                              job=before_wake_schedule,
-                                                              fun=_on_before_wake)
-    _reduce_temp, reduce_temp_schedule = _try_updating_routine(REDUCE_TEMP_ROUTINE_NAME,
-                                                               _reduce_temp,
-                                                               job=reduce_temp_schedule,
-                                                               fun=_on_do_reduce_temp)
-
-
-def _try_updating_routine(name: str, old_value: str, job: schedule.Job, fun: Callable) -> Tuple[str, schedule.Job]:
-    new_value = get_routine(name)
-
-    if new_value is None:
-        log(f"/on_do_update: {name} is None")
-        return old_value, job
-
-    elif new_value != old_value:
-        print(f"on_do_update: {name} updated to {new_value}")
-
-        schedule.cancel_job(job)
-        job = schedule.every().day.at(new_value).do(fun)
-
-    return new_value, job
-
 
 # ------------------------- ROUTINES ------------------------ #
 
@@ -182,16 +113,37 @@ def track_time_independents():
         a(f"{PRESSURE} {round(pressure)} s #u")
 
 
+def _on_do_update() -> None:
+    if (get_config('kill') == True):
+        print("Killing local app from config")
+        exit(0)
+
+    for routine in _routines.values():
+        routine.update()
+
+
 # --------------------------- SCHEDULES -------------------------- #
 
-voc_schedule = schedule.every(1).days.at("17:00").do(_on_voc)
-update_schedule = schedule.every(1).days.at("14:00").do(_on_do_update)
+_routines: dict[str, Routine] = {
+    "night": Routine(name="night", time="02:00", function=_on_night),
+    "before_wake": SyncedRoutine(name="before_wake", default_time="07:00", function=_on_before_wake),
+    "after_wake": SyncedRoutine(name="after_wake", default_time="09:00", function=_on_morning),
+    "update": Routine(name="update", time="14:00", function=_on_do_update),
+    "reduce_temp": SyncedRoutine(name="reduce_temp", default_time="16:00", function=_on_do_reduce_temp),
+    "voc": SyncedRoutine(name="voc", default_time="17:00", function=_on_voc),
+    "detached": SyncedRoutine(name="detached", default_time="21:00", function=_on_eve),
+}
 
-reduce_temp_schedule = schedule.every().day.at(_reduce_temp).do(_on_do_reduce_temp)
-eve_schedule = schedule.every().day.at(_detached).do(_on_eve)
-night_schedule = schedule.every().day.at("02:00").do(_on_night)
-before_wake_schedule = schedule.every().day.at(_before_wake).do(_on_before_wake)
-morning_schedule = schedule.every().day.at(_after_wake).do(_on_morning)
+# -------------------------- GETTERS ------------------------- #
+
+
+def get_away_for_eve() -> bool:
+    return _away_for_eve
+
+
+def get_routines() -> dict[str, Routine]:
+    return _routines
+
 
 # --------------------------- START -------------------------- #
 

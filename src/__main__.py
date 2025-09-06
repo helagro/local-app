@@ -1,6 +1,6 @@
 import server
 import threading
-from cycle import run_schedule, get_detached, get_away_for_eve
+from cycle import run_schedule, get_away_for_eve
 
 ran_once = False
 
@@ -10,7 +10,6 @@ if __name__ == '__main__':
         ran_once = True
 
         print("Checks: ")
-        print(f"  Detached is {get_detached()}")
         print(f"  Is away: {get_away_for_eve()}")
         print("")
 

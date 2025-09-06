@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from remote_interfaces import get_config
 from datetime import date
-from cycle import get_away_for_eve, get_detached, get_before_wake, get_reduce_temp_time
+from cycle import get_away_for_eve, get_routines
 from ._readings import all_readings, bp as readings_bp
 
 startup_date = date.today()
@@ -19,11 +19,7 @@ def all():
         "startup_date": startup_date,
         "away_for_eve": get_away_for_eve(),
         "config": get_config(""),
-        "routines": {
-            "before_wake": get_before_wake(),
-            "reduce_temp_time": get_reduce_temp_time(),
-            "detached": get_detached(),
-        },
+        "routines": get_routines(),
         "readings": all_readings()
     })
 
