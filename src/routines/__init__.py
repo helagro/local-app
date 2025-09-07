@@ -7,6 +7,7 @@ from routines.routine import Routine, SyncedRoutine
 from sensors import *
 from threading import Thread
 from typing import cast
+from log import log
 
 # ------------------------- VARIABLES ------------------------ #
 
@@ -54,7 +55,7 @@ def _on_do_reduce_temp() -> None:
     temp = read_temp()
 
     if _config is None:
-        log("/_on_do_reduce_temp: config is None")
+        log_to_server("/_on_do_reduce_temp: config is None")
         return
 
     temp_treshold: None | float = cast(None | float, _config.get(REDUCE_HEAT_THRESHOLD, None))
@@ -78,7 +79,7 @@ def _on_detached() -> None:
     _away_when_detached = is_away()
 
     if _away_when_detached:
-        print(f"Was away for {_on_detached.__name__}")
+        log(f"Was away for {_on_detached.__name__}")
         _voc = None
         return
 
@@ -115,7 +116,7 @@ def _update_routines() -> None:
     _config = cast(dict | None, get_config())
 
     if (_config and _config['kill'] == True):
-        print("Killing local app from config")
+        log("Killing local app from config")
         exit(0)
 
     for routine in _routines.values():
@@ -142,6 +143,10 @@ def get_away_for_eve() -> bool:
 
 def get_routines() -> dict[str, Routine]:
     return _routines
+
+
+def get_routine_strings() -> list[str]:
+    return [repr(routine) for routine in _routines.values()]
 
 
 # --------------------------- START -------------------------- #

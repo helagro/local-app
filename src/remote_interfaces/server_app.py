@@ -1,6 +1,7 @@
 import os
 import subprocess
 import requests
+from log import log
 
 # ============================== TRACKING VALUES ============================= #
 
@@ -43,16 +44,16 @@ def get_routine(name: str) -> str | None:
 
         return response.text
     except requests.exceptions.RequestException as e:
-        log(f"Failed to fetch routine: {e}")
+        log_to_server(f"Failed to fetch routine: {e}")
         return None
 
 
 # ================================== POSTING ================================= #
 
 
-def log(content: str):
+def log_to_server(content: str):
     """ prepend (location context) and space """
-    print(content)
+    log(content)
     a(f"local-app{content}")
 
 
@@ -60,17 +61,17 @@ def a(content: str, do_exec=True) -> None:
     content = content.strip()
 
     if not content:
-        print("Empty content")
+        log("Empty content")
         return
 
     if not do_exec:
-        print(f"Would have added: {content}")
+        log(f"Would have added: {content}")
         return
 
     script_path = os.path.expanduser('~/.dotfiles/scripts/path/task/a.sh')
     result = subprocess.run([script_path, content], capture_output=True, text=True)
 
     if result.returncode != 0:
-        print(f"Failed to send command, error: {result.stderr}")
+        log(f"Failed to send command, error: {result.stderr}")
     else:
-        print(f"A: {content}")
+        log(f"A: {content}")

@@ -2,7 +2,7 @@ import os
 import sys
 
 from remote_interfaces.config import get_config
-from remote_interfaces.server_app import get_routine, log
+from remote_interfaces.server_app import get_routine, log_to_server
 
 script_dir = os.path.expanduser("~/.dotfiles/scripts/lang/python")
 sys.path.append(script_dir)
@@ -18,7 +18,7 @@ def is_away() -> bool:
         away_dict = exist.values('away', 1, None)
         return list(away_dict.values())[0] == 1
     except Exception as e:
-        log(f"/is_away - failed to check if away: {e}")
+        log_to_server(f"/is_away - failed to check if away: {e}")
         return False
 
 

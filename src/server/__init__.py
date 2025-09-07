@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from remote_interfaces import get_config
 from datetime import date
-from routines import get_away_for_eve, get_routines
+from routines import get_away_for_eve, get_routine_strings, get_routines
 from ._readings import all_readings, bp as readings_bp
 
 startup_date = date.today()
@@ -19,9 +19,15 @@ def all():
         "startup_date": startup_date,
         "away_for_eve": get_away_for_eve(),
         "config": get_config(),
-        "routines": get_routines(),
+        "routines": get_routine_strings(),
         "readings": all_readings()
     })
+
+
+@app.route('/logs')
+def logs():
+    from log import get_logs
+    return jsonify({"logs": get_logs()})
 
 
 # ================================== CONTROL ================================= #
