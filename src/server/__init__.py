@@ -1,4 +1,5 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from log import log
 from remote_interfaces import get_config
 from datetime import date
 from routines import get_away_for_eve, get_routine_strings, get_routines
@@ -28,6 +29,16 @@ def all():
 def logs():
     from log import get_logs
     return jsonify({"logs": get_logs()})
+
+
+# ================================ MIDDLEWARE ================================ #
+
+
+@app.after_request
+def before_request_func(response):
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    log(f"REQ TO {request.path} FROM {ip}")
+    return response
 
 
 # ================================== CONTROL ================================= #
