@@ -74,6 +74,13 @@ def _on_eve() -> None:
         a(task)
 
 
+def _on_latest_dinner() -> None:
+    if _away_when_detached or not _config: return
+
+    for task in _config["tasks"]["latest_dinner"]:
+        a(task)
+
+
 def _on_detached() -> None:
     global _away_when_detached, _voc
     _away_when_detached = is_away()
@@ -131,6 +138,7 @@ _routines: dict[str, Routine] = {
     "after_wake": SyncedRoutine(name="after_wake", default_time="09:00", function=_on_morning),
     "reduce_temp": SyncedRoutine(name="lower_heating", default_time="16:00", function=_on_do_reduce_temp),
     "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
+    "latest_dinner": SyncedRoutine(name="latest_dinner", default_time="20:00", function=_on_latest_dinner),
     "detached": SyncedRoutine(name="detached", default_time="21:00", function=_on_detached),
 }
 
