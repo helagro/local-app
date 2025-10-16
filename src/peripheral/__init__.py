@@ -2,7 +2,7 @@ from transducers.actuators.led import get_lamp
 import time
 from evdev import InputDevice, categorize, ecodes, list_devices
 
-MOUSE_PATH = '/dev/input/event2'
+MOUSE_PATH = '/dev/input/by-id/usb-MOSART_Semi._2.4G_Wireless_Mouse-event-mouse'
 
 
 def menu(button_name):
@@ -26,19 +26,15 @@ def menu(button_name):
 def wait_for_device(path):
     """Wait until the device exists and is ready"""
     while True:
-        devices = list_devices()
-        print(f"Available devices: {devices}")
 
-        if path in devices:
-            try:
-                dev = InputDevice(path)
-                print(f"Device connected: {dev.name}")
-                return dev
-            except Exception as e:
-                print(f"Error opening device: {e}")
+        try:
+            device = InputDevice(path)
+            print(f"Device found: {device}")
+            return device
+        except Exception as e:
+            print(f"Waiting for device {path}... ({e})")
 
-        print("Waiting for device...")
-        time.sleep(5)
+        time.sleep(60)
 
 
 def handle_input():
