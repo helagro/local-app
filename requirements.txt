@@ -11,10 +11,13 @@ requests==2.32.3
 schedule==1.2.2
 urllib3==2.2.3
 Werkzeug==3.1.3
-sensirion-gas-index-algorithm==3.2.2
-smbus==1.1.post2
 python-dotenv==1.0.1
+setuptools==78.1.1
+
+# Linux only
+smbus==1.1.post2
+gpiozero
+sensirion-gas-index-algorithm==3.2.2
 sensirion-gas-index-algorithm==3.2.2
 sensirion-i2c-sgp4x==0.1.0
 sensirion-i2c-sht==0.4.0
-setuptools==78.1.1

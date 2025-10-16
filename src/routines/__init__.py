@@ -4,7 +4,7 @@ import schedule
 import time
 from remote_interfaces import *
 from routines.routine import Routine, SyncedRoutine
-from sensors import *
+from transducers.sensors import *
 from threading import Thread
 from typing import cast
 from log import log

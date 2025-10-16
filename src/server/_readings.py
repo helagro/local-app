@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint
-from sensors import read_temp, read_hum, read_light, read_uv, read_pressure, read_voc, get_last_voc
+from transducers.sensors import read_temp, read_hum, read_light, read_uv, read_pressure, read_voc, get_last_voc
 from routines import track_time_independents
 
 bp = Blueprint('readings', __name__)
