@@ -1,3 +1,5 @@
+from activity import start_activity, stop_activity
+from log import log
 from transducers.actuators.led import get_lamp
 from transducers.actuators.tradfri import get_device
 import time
@@ -24,19 +26,17 @@ def menu(button_name):
 
     elif button_name == 'BTN_EXTRA':
         print("Extra button action")
-        subprocess.run(['zsh', '-i', '-c', 'tgs study'], stdin=subprocess.DEVNULL, timeout=5)
-        get_lamp('red').on()
+        start_activity()
 
     elif button_name == 'BTN_SIDE':
         print("Side button action")
-        subprocess.run(['zsh', '-i', '-c', 'toggl stop'], stdin=subprocess.DEVNULL, timeout=5)
-        get_lamp('red').off()
+        stop_activity()
 
     else:
         print(f"Unhandled button: {button_name}")
         return
 
-    get_lamp('blue').blink()
+    log(f"Button pressed: {button_name}")
 
 
 def wait_for_device(path):
@@ -68,7 +68,6 @@ def handle_input():
                         menu(code)
 
         except OSError:
-            # Device disconnected
             print("Mouse unplugged. Waiting for replug...")
             mouse.close()
             mouse = wait_for_device(MOUSE_PATH)

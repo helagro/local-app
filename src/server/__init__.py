@@ -4,11 +4,13 @@ from remote_interfaces import get_config
 from datetime import date
 from routines import get_away_for_eve, get_routine_strings, get_routines
 from ._readings import all_readings, bp as readings_bp
+from ._activity import bp as activity_bp
 
 startup_date = date.today()
 
 app = Flask(__name__)
 app.register_blueprint(readings_bp)
+app.register_blueprint(activity_bp)
 
 # ================================== ROUTES ================================== #
 
