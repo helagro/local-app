@@ -3,6 +3,7 @@ from transducers.actuators.tradfri import get_device
 import time
 from evdev import InputDevice, categorize, ecodes
 import subprocess
+import sys
 
 MOUSE_PATH = '/dev/input/by-id/usb-MOSART_Semi._2.4G_Wireless_Mouse-event-mouse'
 
@@ -71,4 +72,4 @@ def handle_input():
         except KeyboardInterrupt:
             print("Exiting...")
             mouse.close()
-            break
+            exit(0)
