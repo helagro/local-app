@@ -43,7 +43,7 @@ class Lamp:
     def blink(self):
         self.on()
 
-        threading.Timer(0.2, self.off).start()
+        threading.Timer(0.1, self.off).start()
 
 
 _lamps = {
