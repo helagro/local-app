@@ -2,7 +2,7 @@ from transducers.actuators.led import get_lamp
 import time
 from evdev import InputDevice, categorize, ecodes, list_devices
 
-MOUSE_PATH = '/dev/input/by-id/usb-MOSART_Semi._2.4G_Wireless_Mouse-event-mouse'
+MOUSE_PATH = '/dev/input/event2'
 
 
 def menu(button_name):
