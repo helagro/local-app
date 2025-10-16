@@ -19,11 +19,19 @@ class Lamp:
 
     def on(self):
         self.is_on = True
-        self.led.on()
+
+        try:
+            self.led.on()
+        except Exception as e:
+            log(f"Error turning on LED on pin {self.pin}: {e}")
 
     def off(self):
         self.is_on = False
-        self.led.off()
+
+        try:
+            self.led.off()
+        except Exception as e:
+            log(f"Error turning off LED on pin {self.pin}: {e}")
 
     def toggle(self):
         if self.is_on:

@@ -2,6 +2,7 @@ from transducers.actuators.led import get_lamp
 from transducers.actuators.tradfri import get_device
 import time
 from evdev import InputDevice, categorize, ecodes
+import subprocess
 
 MOUSE_PATH = '/dev/input/by-id/usb-MOSART_Semi._2.4G_Wireless_Mouse-event-mouse'
 
@@ -11,18 +12,24 @@ def menu(button_name):
     if button_name == 'BTN_LEFT':
         print("Left button action")
         get_device('eve').toggle()
+
     elif button_name == 'BTN_RIGHT':
         print("Right button action")
         get_device('day').toggle()
+
     elif button_name == 'BTN_MIDDLE':
         print("Middle button action")
         get_device('read').toggle()
+
     elif button_name == 'BTN_EXTRA':
-        get_lamp('blue').toggle()
         print("Extra button action")
-    elif button_name == 'BTN_SIDE':
         get_lamp('red').toggle()
+        subprocess.run(['zsh', '-i', '-c', 'tgs study'], stdin=subprocess.DEVNULL, timeout=5)
+
+    elif button_name == 'BTN_SIDE':
         print("Side button action")
+        subprocess.run(['zsh', '-i', '-c', 'toggl stop'], stdin=subprocess.DEVNULL, timeout=5)
+
     else:
         print(f"Unhandled button: {button_name}")
 
