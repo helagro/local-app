@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing_extensions import Literal
 from log import log
+import threading
 
 try:
     from gpiozero import LED
@@ -38,6 +39,11 @@ class Lamp:
             self.off()
         else:
             self.on()
+
+    def blink(self):
+        self.on()
+
+        threading.Timer(0.2, self.off).start()
 
 
 _lamps = {

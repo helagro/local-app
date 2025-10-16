@@ -34,6 +34,9 @@ def menu(button_name):
 
     else:
         print(f"Unhandled button: {button_name}")
+        return
+
+    get_lamp('blue').blink()
 
 
 def wait_for_device(path):
