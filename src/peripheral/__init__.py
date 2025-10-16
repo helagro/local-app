@@ -27,14 +27,16 @@ def wait_for_device(path):
     """Wait until the device exists and is ready"""
     while True:
         devices = list_devices()
+        print(f"Available devices: {devices}")
+
         if path in devices:
             try:
                 dev = InputDevice(path)
-                dev.grab()  # optional: prevent other apps from seeing events
                 print(f"Device connected: {dev.name}")
                 return dev
             except Exception as e:
                 print(f"Error opening device: {e}")
+
         print("Waiting for device...")
         time.sleep(5)
 
