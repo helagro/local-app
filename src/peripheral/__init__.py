@@ -44,9 +44,9 @@ def handle_input():
         try:
             for event in mouse.read_loop():
                 # Only handle key/button events
-                if event.type == ecodes.EV_KEY and event.keystate == event.key_down:
+                if event.type == ecodes.EV_KEY:
                     key_event = categorize(event)
-                    if key_event.keycode in ('BTN_LEFT', 'BTN_RIGHT', 'BTN_MIDDLE', 'BTN_EXTRA', 'BTN_SIDE'):
+                    if key_event.keystate == key_event.key_down:
                         menu(key_event.keycode)
 
         except OSError:
