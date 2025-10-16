@@ -47,7 +47,9 @@ def handle_input():
                 if event.type == ecodes.EV_KEY:
                     key_event = categorize(event)
                     if key_event.keystate == key_event.key_down:
-                        menu(key_event.keycode)
+                        code = key_event.keycode if isinstance(key_event.keycode, str) else key_event.keycode[0]
+
+                        menu(code)
 
         except OSError:
             # Device disconnected
