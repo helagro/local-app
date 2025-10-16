@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing_extensions import Literal
 from log import log
 
 try:
@@ -32,9 +33,10 @@ class Lamp:
 
 
 _lamps = {
-    17: Lamp(17),
+    'blue': Lamp(17),
+    'red': Lamp(27),
 }
 
 
-def get_lamp(pin: int) -> Lamp:
+def get_lamp(pin: Literal['blue', 'red']) -> Lamp:
     return _lamps[pin]

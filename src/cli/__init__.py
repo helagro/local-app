@@ -27,7 +27,9 @@ def getch():
 
 def menu(char: str) -> None:
     match char:
+        case '8':
+            get_lamp('red').on()
         case '9':
-            get_lamp(17).toggle()
+            get_lamp('blue').toggle()
         case _:
             print("Invalid input", end='\r\n')
