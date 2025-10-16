@@ -16,6 +16,7 @@ def menu(button_name):
         get_device('day').toggle()
     elif button_name == 'BTN_MIDDLE':
         print("Middle button action")
+        get_device('read').toggle()
     elif button_name == 'BTN_EXTRA':
         get_lamp('blue').toggle()
         print("Extra button action")

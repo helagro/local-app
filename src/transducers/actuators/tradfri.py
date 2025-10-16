@@ -25,10 +25,10 @@ class Device:
             self.turn_on()
 
 
-_devices = {'eve': Device(ids=[65537]), 'day': Device(ids=[65541, 65542, 65543])}
+_devices = {'eve': Device(ids=[65537]), 'day': Device(ids=[65541, 65542, 65543]), 'read': Device(ids=[65541])}
 
 
-def get_device(name: Literal['eve', 'day']) -> Device:
+def get_device(name: Literal['eve', 'day', 'read']) -> Device:
     return _devices[name]
 
 
