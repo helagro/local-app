@@ -2,7 +2,7 @@ import server
 import threading
 from routines import run_schedule, get_away_for_eve
 from log import log
-from cli import run_cli
+from peripheral import handle_input
 
 ran_once = False
 
@@ -15,4 +15,4 @@ if __name__ == '__main__':
         threading.Thread(target=run_schedule, daemon=True).start()
         threading.Thread(target=server.start, daemon=True).start()
 
-    run_cli()
+    handle_input()
