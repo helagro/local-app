@@ -23,11 +23,12 @@ def menu(button_name):
 
     elif button_name == 'BTN_EXTRA':
         print("Extra button action")
-        get_lamp('red').toggle()
+        get_lamp('red').on()
         subprocess.run(['zsh', '-i', '-c', 'tgs study'], stdin=subprocess.DEVNULL, timeout=5)
 
     elif button_name == 'BTN_SIDE':
         print("Side button action")
+        get_lamp('red').off()
         subprocess.run(['zsh', '-i', '-c', 'toggl stop'], stdin=subprocess.DEVNULL, timeout=5)
 
     else:
