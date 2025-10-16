@@ -28,7 +28,7 @@ def getch():
 def menu(char: str) -> None:
     match char:
         case '8':
-            get_lamp('red').on()
+            get_lamp('red').toggle()
         case '9':
             get_lamp('blue').toggle()
         case _:
