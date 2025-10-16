@@ -10,13 +10,14 @@ def menu(button_name):
     """Handle a button press"""
     if button_name == 'BTN_LEFT':
         print("Left button action")
-        get_device('lamp').toggle()
+        get_device('eve').toggle()
     elif button_name == 'BTN_RIGHT':
         print("Right button action")
-        get_lamp('blue').toggle()
+        get_device('day').toggle()
     elif button_name == 'BTN_MIDDLE':
         print("Middle button action")
     elif button_name == 'BTN_EXTRA':
+        get_lamp('blue').toggle()
         print("Extra button action")
     elif button_name == 'BTN_SIDE':
         get_lamp('red').toggle()

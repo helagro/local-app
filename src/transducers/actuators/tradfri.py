@@ -5,16 +5,18 @@ from typing import Literal
 
 @dataclass
 class Device:
-    id: int
+    ids: list[int]
     is_on: bool = False
 
     def turn_on(self):
         self.is_on = True
-        _exec_cmd('on', id=self.id)
+        for id in self.ids:
+            _exec_cmd('on', id)
 
     def turn_off(self):
         self.is_on = False
-        _exec_cmd('off', id=self.id)
+        for id in self.ids:
+            _exec_cmd('off', id)
 
     def toggle(self):
         if self.is_on:
@@ -23,18 +25,16 @@ class Device:
             self.turn_on()
 
 
-_devices = {
-    'lamp': Device(id=65537),
-}
+_devices = {'eve': Device(ids=[65537]), 'day': Device(ids=[65541, 65542, 65543])}
 
 
-def get_device(name: Literal['lamp']) -> Device:
+def get_device(name: Literal['eve', 'day']) -> Device:
     return _devices[name]
 
 
 def _exec_cmd(command: Literal['on', 'off'], id: int):
     cmd = f'tradfri {command} {id}'
-    subprocess.run(['zsh', '-i', '-c', cmd])
+    subprocess.run(['zsh', '-i', '-c', cmd], stdin=subprocess.DEVNULL, timeout=5)
 
 
 if __name__ == '__main__':
