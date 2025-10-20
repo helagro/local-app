@@ -6,7 +6,12 @@ rest_inputs = ['l', 'r', 'm', 'e', 's']
 
 
 def menu(command: str, input_set: list[str]):
-    index = input_set.index(command)
+
+    try:
+        index = input_set.index(command)
+    except ValueError:
+        print(f"Command not found in input set: {command}")
+        return
 
     match index:
         case 0:
