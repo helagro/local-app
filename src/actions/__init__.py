@@ -10,7 +10,7 @@ def menu(command: str, input_set: list[str]):
     try:
         index = input_set.index(command)
     except ValueError:
-        print(f"Command not found in input set: {command}")
+        print(f"{command} not in {input_set}")
         return
 
     match index:

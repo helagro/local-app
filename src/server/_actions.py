@@ -1,6 +1,8 @@
+from typing import Literal, cast
 from actions import menu, rest_inputs
 from flask import jsonify, Blueprint
 from remote_interfaces.activity import start_activity, stop_activity, is_running
+from transducers.actuators.tradfri import get_device, get_devices
 
 bp = Blueprint('actions', __name__)
 
@@ -17,8 +19,19 @@ def stop():
     return jsonify({"is_running": is_running()})
 
 
-@bp.route('/cmd/<string:command>')
+@bp.route('/dev/<str:name>/lvl/<int:level>')
+def level(name: str, level: int):
+    if name not in ['eve', 'day', 'read']:
+        return jsonify({"error": "Invalid device name"}), 400
+
+    device = get_device(cast(Literal['eve', 'day', 'read'], name))
+    device.level(level)
+
+    return jsonify({"is_running": is_running(), "devices": [text for text in get_devices()]})
+
+
+@bp.route('/c/<string:command>')
 def command(command: str):
     menu(command, rest_inputs)
 
-    return jsonify({"command": command, "is_running": is_running()})
+    return jsonify({"is_running": is_running(), "devices": [text for text in get_devices()]})
