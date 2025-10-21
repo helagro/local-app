@@ -24,7 +24,7 @@ def level(name: str, level: int):
     if name not in ['eve', 'day', 'read']:
         return jsonify({"error": "Invalid device name"}), 400
 
-    device = get_device(cast(Literal['eve', 'day', 'read'], name))
+    device = get_device(name)
     device.level(level)
 
     return jsonify({"is_running": is_running(), "devices": [text for text in get_devices()]})

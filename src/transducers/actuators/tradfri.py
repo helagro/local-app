@@ -32,7 +32,10 @@ class Device:
 _devices = {'eve': Device(ids=[65537]), 'day': Device(ids=[65541, 65542, 65543]), 'read': Device(ids=[65541])}
 
 
-def get_device(name: Literal['eve', 'day', 'read']) -> Device:
+def get_device(name: Literal['eve', 'day', 'read'] | str) -> Device:
+    if name not in _devices:
+        raise ValueError(f"Device '{name}' not found")
+
     return _devices[name]
 
 
