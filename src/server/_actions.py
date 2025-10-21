@@ -19,7 +19,7 @@ def stop():
     return jsonify({"is_running": is_running()})
 
 
-@bp.route('/dev/<str:name>/lvl/<int:level>')
+@bp.route('/dev/<string:name>/lvl/<int:level>')
 def level(name: str, level: int):
     if name not in ['eve', 'day', 'read']:
         return jsonify({"error": "Invalid device name"}), 400
