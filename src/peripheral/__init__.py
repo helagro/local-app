@@ -41,4 +41,4 @@ def handle_input():
         except KeyboardInterrupt:
             print("Exiting...")
             mouse.close()
-            exit(0)
+            return
