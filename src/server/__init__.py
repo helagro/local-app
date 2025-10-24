@@ -5,6 +5,7 @@ from datetime import date
 from routines import get_away_for_eve, get_routine_strings, get_routines
 from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as activity_bp
+from os import _exit
 
 startup_date = date.today()
 
@@ -31,6 +32,12 @@ def all():
 def logs():
     from log import get_logs
     return jsonify({"logs": get_logs()})
+
+
+@app.route('/quit')
+def quit():
+    log("Shutting down server...")
+    _exit(0)
 
 
 # ================================ MIDDLEWARE ================================ #
