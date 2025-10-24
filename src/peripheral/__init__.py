@@ -2,8 +2,10 @@ from log import log
 from actions import menu, button_inputs
 import time
 from evdev import InputDevice, categorize, ecodes
+from transducers.actuators.led import get_lamp
 
 MOUSE_PATH = '/dev/input/by-id/usb-MOSART_Semi._2.4G_Wireless_Mouse-event-mouse'
+blue_led = get_lamp('blue')
 
 
 def wait_for_device(path):
@@ -33,6 +35,7 @@ def handle_input():
                         code = key_event.keycode if isinstance(key_event.keycode, str) else key_event.keycode[0]
 
                         menu(code, button_inputs)
+                        blue_led.blink()
 
         except OSError:
             print("Mouse unplugged. Waiting for replug...")
