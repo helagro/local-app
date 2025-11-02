@@ -48,7 +48,10 @@ def _exec_cmd(id: int, command: Literal['on', 'off', 'level'], argument: str | N
     if argument:
         cmd += f' {argument}'
 
-    subprocess.run(['zsh', '-i', '-c', cmd], stdin=subprocess.DEVNULL, timeout=5)
+    try:
+        subprocess.run(['zsh', '-i', '-c', cmd], stdin=subprocess.DEVNULL, timeout=5)
+    except Exception as e:
+        print(f"Error executing command '{cmd}': {e}")
 
 
 if __name__ == '__main__':

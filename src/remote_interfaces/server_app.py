@@ -2,6 +2,7 @@ import os
 import subprocess
 import requests
 from log import log
+from remote_interfaces.config import get_config
 
 # ============================== TRACKING VALUES ============================= #
 
@@ -48,13 +49,30 @@ def get_routine(name: str) -> str | None:
         return None
 
 
+def should_track() -> bool:
+    if get_config('doTrack') == False: return True
+    headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
+
+    try:
+        response = requests.get(
+            f"{_TOOLS_URL}/is/away",
+            headers=headers,
+        )
+        response.raise_for_status()
+
+        return response.text == '1'
+    except requests.exceptions.RequestException as e:
+        log_to_server(f"/is_away - failed to check if away: {e}")
+        return True
+
+
 # ================================== POSTING ================================= #
 
 
 def log_to_server(content: str):
     """ prepend (location context) and space """
     log(content)
-    a(f"local-app{content}")
+    a(f"local-app{content} @rm")
 
 
 def a(content: str, do_exec=True) -> None:

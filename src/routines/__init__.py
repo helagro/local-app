@@ -1,5 +1,5 @@
 from remote_interfaces.config import IS_SUMMER_WEATHER, REDUCE_HEAT_THRESHOLD
-from remote_interfaces.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a
+from remote_interfaces.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_track, log_to_server
 import schedule
 import time
 from remote_interfaces import *
@@ -15,7 +15,7 @@ MAX_NIGHT_LIGHT = 0.2
 
 _voc: float | None = None
 _config: dict | None = cast(dict | None, get_config())
-_away_when_detached = is_away()
+_away_when_detached = should_track()
 
 # ------------------------- ROUTINES ------------------------ #
 
@@ -50,7 +50,7 @@ def _on_morning() -> None:
 
 
 def _on_do_reduce_temp() -> None:
-    if is_away(): return
+    if should_track(): return
 
     temp = read_temp()
 
@@ -83,7 +83,7 @@ def _on_latest_dinner() -> None:
 
 def _on_detached() -> None:
     global _away_when_detached, _voc
-    _away_when_detached = is_away()
+    _away_when_detached = should_track()
 
     if _away_when_detached:
         log(f"Was away for {_on_detached.__name__}")
