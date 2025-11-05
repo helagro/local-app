@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 import time
 from typing import Callable
-from remote_interfaces import get_config
+from remote_interfaces.config import get_config
 from log import log
 
 sys.path.append(os.path.dirname(__file__))
