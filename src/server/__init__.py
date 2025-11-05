@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from log import log
-from remote_interfaces import get_config
+from remote_interfaces.config import get_config
 from datetime import date
 from routines import get_away_for_eve, get_routine_strings, get_routines
 from ._readings import all_readings, bp as readings_bp
