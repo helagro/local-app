@@ -1,6 +1,6 @@
 import os
 import requests
-from remote_interfaces.server_app import log_to_server
+from log import log
 
 REDUCE_HEAT_THRESHOLD = 'reduceHeatThreshold'
 IS_SUMMER_WEATHER = 'isSummerWeather'
@@ -18,5 +18,5 @@ def get_config(name: str | None = None) -> str | dict | None | float:
 
         return json[name] if name else json
     except requests.exceptions.RequestException as e:
-        log_to_server(f"Failed to fetch config: {e}")
+        log(f"Failed to fetch config: {e}")
         return None
