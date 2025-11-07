@@ -1,6 +1,7 @@
 import os
-from flask import send_from_directory, abort, Blueprint
+from flask import send_from_directory, abort, Blueprint, redirect, url_for
 from random import choice
+from log import log
 
 HOSTED_FOLDER_PATH = '/media/pi/16_GB_USB/public'
 
@@ -24,18 +25,24 @@ def random_file(filename):
         abort(404, description="Folder not found")
 
     files = [f for f in os.listdir(full_path) if os.path.isfile(os.path.join(full_path, f))]
-
+    files = [f for f in files if not f.startswith('.')]
     if not files:
         abort(404, description="No files found in directory")
 
     chosen_file = choice(files)
     file_path = os.path.realpath(os.path.join(full_path, chosen_file))
 
+    log(f"Chose random file: {file_path}")
+
     # 🔒 Double-check chosen file is inside HOSTED_FOLDER_PATH
     if not file_path.startswith(base_path + os.sep):
         abort(403, description="Access denied")
 
-    return send_from_directory(full_path, chosen_file)
+    # Compute relative path (relative to HOSTED_FOLDER_PATH)
+    rel_path = os.path.relpath(file_path, base_path)
+
+    # ✅ Redirect to the main /<path:filename> route
+    return redirect(url_for('files.files', filename=rel_path))
 
 
 @bp.route('/<path:filename>')
