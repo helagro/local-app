@@ -1,22 +1,44 @@
 import os
 import requests
 from log import log
+from dataclasses import dataclass, field
+from typing import Dict, List, Literal
 
-REDUCE_HEAT_THRESHOLD = 'reduceHeatThreshold'
-IS_SUMMER_WEATHER = 'isSummerWeather'
+
+@dataclass
+class Config:
+    doTrack: bool
+    kill: bool
+    reduceHeatThreshold: float
+    isSummerWeather: bool
+    tempCompensation: float
+    tasks: Dict[Literal['eve', 'latest_dinner'], List[str]] = field(default_factory=dict)
+
+
+# variables ------------------------------------------------------------------ #
+
+_config: None | Config = None
 
 _CONFIG_URL = os.getenv("MY_CONFIG_URL")
 if not _CONFIG_URL:
     raise ValueError("MY_CONFIG_URL environment variable is not set")
 
+# functions ------------------------------------------------------------------ #
 
-def get_config(name: str | None = None) -> str | dict | None | float:
+
+def get_cashed() -> None | Config:
+    return _config
+
+
+def sync_config() -> None | Config:
+    global _config
+
     try:
         response = requests.get(f"{_CONFIG_URL}/local-app/settings.json")
         response.raise_for_status()
-        json = response.json()
+        data = response.json()
+        _config = Config(**data)
+        return _config
 
-        return json[name] if name else json
     except requests.exceptions.RequestException as e:
-        log(f"Failed to fetch config: {e}")
-        return None
+        log(f"Failed to sync config: {e}")

@@ -1,4 +1,4 @@
-from remote_interfaces.config import IS_SUMMER_WEATHER, REDUCE_HEAT_THRESHOLD
+from remote_interfaces.config import sync_config
 from remote_interfaces.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_track, log_to_server
 import schedule
 import time
@@ -14,7 +14,6 @@ from log import log
 MAX_NIGHT_LIGHT = 0.2
 
 _voc: float | None = None
-_config: dict | None = cast(dict | None, get_config())
 _away_when_detached = should_track()
 
 # ------------------------- ROUTINES ------------------------ #
@@ -53,31 +52,34 @@ def _on_do_reduce_temp() -> None:
     if should_track(): return
 
     temp = read_temp()
+    if temp is None: return
 
-    if _config is None:
-        log_to_server("/_on_do_reduce_temp: config is None")
-        return
+    config = get_cashed()
+    if not config: return
 
-    temp_treshold: None | float = cast(None | float, _config.get(REDUCE_HEAT_THRESHOLD, None))
-    is_summer_weather: None | float = cast(None | float, _config.get(IS_SUMMER_WEATHER, True))
+    temp_treshold: float = config.reduceHeatThreshold
+    is_summer_weather: float = config.isSummerWeather
 
-    values_does_exist = temp is not None and temp_treshold is not None and is_summer_weather is not None
-    if values_does_exist and not is_summer_weather and cast(float, temp) > cast(float, temp_treshold):
+    if not is_summer_weather and cast(float, temp) > cast(float, temp_treshold):
         a(f"reduce temperature - current: {temp} #b")
 
 
 def _on_eve() -> None:
     _update_routines()
-    if _away_when_detached or not _config: return
+    if _away_when_detached: return
 
-    for task in _config["tasks"]["eve"]:
+    config = get_cashed()
+    if not config: return
+
+    for task in config.tasks["eve"]:
         a(task)
 
 
 def _on_latest_dinner() -> None:
-    if _away_when_detached or not _config: return
+    config = get_cashed()
+    if _away_when_detached or not config: return
 
-    for task in _config["tasks"]["latest_dinner"]:
+    for task in config.tasks["latest_dinner"]:
         a(task)
 
 
@@ -119,10 +121,9 @@ def track_time_independents():
 
 
 def _update_routines() -> None:
-    global _config
-    _config = cast(dict | None, get_config())
+    config = sync_config()
 
-    if (_config and _config['kill'] == True):
+    if (config and config.kill == True):
         log("Killing local app from config")
         exit(0)
 

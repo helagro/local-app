@@ -9,3 +9,7 @@ Uses a Raspberry Pi B with a Environment Sensor HAT from Waveshare. The code tak
 ## Notes
 
 - Public repository
+
+## To Do
+
+- Rename settings.json to config.json

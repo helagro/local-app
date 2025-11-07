@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 import time
 from typing import Callable
-from remote_interfaces.config import get_config
+from remote_interfaces.config import get_cashed
 from log import log
 
 sys.path.append(os.path.dirname(__file__))
@@ -11,7 +11,10 @@ sys.path.append(os.path.dirname(__file__))
 # ----------------------- COMPENSATE ----------------------- #
 
 load_dotenv()
-TEMP_COMPENSATION = get_config('tempCompensation') or 0.0
+
+cfg = get_cashed()
+TEMP_COMPENSATION = cfg.tempCompensation if cfg else 0.0
+del cfg
 
 # ----------------------- SETUP SENSORS ---------------------- #
 

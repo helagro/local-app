@@ -2,7 +2,7 @@ import os
 import subprocess
 import requests
 from log import log
-from remote_interfaces.config import get_config
+from remote_interfaces.config import get_cashed
 
 # ============================== TRACKING VALUES ============================= #
 
@@ -50,7 +50,10 @@ def get_routine(name: str) -> str | None:
 
 
 def should_track() -> bool:
-    if get_config('doTrack') == False: return True
+    config = get_cashed()
+    if not config: return False
+
+    if not config.doTrack: return False
     headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
 
     try:
