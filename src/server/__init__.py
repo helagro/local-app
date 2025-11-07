@@ -1,16 +1,18 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory, abort
 from log import log
 from remote_interfaces.config import get_config
 from datetime import date
-from routines import get_away_for_eve, get_routine_strings, get_routines
+from routines import get_away_for_eve, get_routine_strings
 from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as activity_bp
+from ._files import bp as files_bp
 from os import _exit
 
 startup_date = date.today()
 
 app = Flask(__name__)
-app.register_blueprint(readings_bp)
+app.register_blueprint(readings_bp, url_prefix='/sens')
+app.register_blueprint(files_bp, url_prefix='/files')
 app.register_blueprint(activity_bp)
 
 # ================================== ROUTES ================================== #
