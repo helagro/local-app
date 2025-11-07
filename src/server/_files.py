@@ -1,5 +1,5 @@
 import os
-from flask import send_from_directory, abort, Blueprint, redirect, url_for
+from flask import send_from_directory, abort, Blueprint, redirect, url_for, jsonify
 from random import choice
 from log import log
 
@@ -45,9 +45,20 @@ def random_file(filename):
     return redirect(url_for('files.files', filename=rel_path))
 
 
+@bp.route("/", defaults={"filename": ""})
 @bp.route('/<path:filename>')
 def files(filename):
     if os.path.isdir(HOSTED_FOLDER_PATH):
+        full_path = os.path.realpath(os.path.join(HOSTED_FOLDER_PATH, filename))
+        is_host_path = full_path == os.path.realpath(HOSTED_FOLDER_PATH)
+
+        if not full_path.startswith(os.path.realpath(HOSTED_FOLDER_PATH) + os.sep) and not is_host_path:
+            abort(403, description="Access denied")
+
+        if os.path.isdir(full_path):
+            contents = [os.path.join(filename, f) for f in os.listdir(full_path) if not f.startswith('.')]
+            return jsonify({"path": filename, "contents": [{f: url_for('files.files', filename=f, _external=True)} for f in contents]})
+
         return send_from_directory(HOSTED_FOLDER_PATH, filename)
     else:
-        abort(404, description="Folder not found")
+        abort(404, description="Host folder not found")
