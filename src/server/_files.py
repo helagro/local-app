@@ -1,8 +1,8 @@
 import os
-from flask import Flask, jsonify, request, send_from_directory, abort, Blueprint
+from flask import send_from_directory, abort, Blueprint
 from random import choice
 
-HOSTED_FOLDER_PATH = ''
+HOSTED_FOLDER_PATH = '/media/pi/16_GB_USB/public'
 
 bp = Blueprint('files', __name__)
 
