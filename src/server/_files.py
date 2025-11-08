@@ -56,8 +56,14 @@ def files(filename):
             abort(403, description="Access denied")
 
         if os.path.isdir(full_path):
-            contents = [os.path.join(filename, f) for f in os.listdir(full_path) if not f.startswith('.')]
-            return jsonify({"path": filename, "contents": [{f: url_for('files.files', filename=f, _external=True)} for f in contents]})
+            contents = [f for f in os.listdir(full_path) if not f.startswith('.')]
+            return jsonify({
+                "path": filename,
+                "rand": url_for('files.random_file', filename=filename, _external=True),
+                "contents": [{
+                    f: url_for('files.files', filename=os.path.join(filename, f), _external=True)
+                } for f in contents]
+            })
 
         return send_from_directory(HOSTED_FOLDER_PATH, filename)
     else:
