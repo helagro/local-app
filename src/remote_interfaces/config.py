@@ -34,7 +34,7 @@ def sync_config() -> None | Config:
     global _config
 
     try:
-        response = requests.get(f"{_CONFIG_URL}/local-app/settings.json")
+        response = requests.get(f"{_CONFIG_URL}/local-app/config.json")
         response.raise_for_status()
         data = response.json()
         _config = Config(**data)
