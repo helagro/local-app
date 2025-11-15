@@ -19,6 +19,16 @@ def stop():
     return jsonify({"is_running": is_running()})
 
 
+@bp.route('/toggle')
+def toggle():
+    if is_running():
+        stop_activity(track=False)
+    else:
+        start_activity(track=False)
+
+    return jsonify({"is_running": is_running()})
+
+
 @bp.route('/dev/<string:name>/lvl/<int:level>')
 def level(name: str, level: int):
     if name not in ['eve', 'day', 'read']:
