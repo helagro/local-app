@@ -13,7 +13,7 @@ startup_date = date.today()
 app = Flask(__name__)
 app.register_blueprint(readings_bp, url_prefix='/sens')
 app.register_blueprint(files_bp, url_prefix='/files')
-app.register_blueprint(actions_bp, url_prefix='/actions')
+app.register_blueprint(actions_bp)
 
 # ================================== ROUTES ================================== #
 
