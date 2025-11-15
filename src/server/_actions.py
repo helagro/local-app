@@ -22,9 +22,9 @@ def stop():
 @bp.route('/toggle')
 def toggle():
     if is_running():
-        stop_activity(track=False)
+        stop_activity()
     else:
-        start_activity(track=False)
+        start_activity()
 
     return jsonify({"is_running": is_running()})
 
