@@ -1,25 +1,38 @@
 import subprocess
 from dataclasses import dataclass
 from typing import Literal
+import json
+from log import log
 
 
 @dataclass
 class Device:
     ids: list[int]
-    is_on: bool = False
+
+    def is_some_on(self):
+        for id in self.ids:
+            res = _exec_cmd(id, 'raw')
+            if res:
+                try:
+                    json_res = json.loads(res)
+                    if json_res.get('3312')[0].get('5850') == 1:
+                        return True
+                except Exception as e:
+                    log(f"Error parsing response for device {id}: {e}")
+        return False
 
     def turn_on(self):
-        self.is_on = True
         for id in self.ids:
             _exec_cmd(id, 'on')
 
     def turn_off(self):
-        self.is_on = False
         for id in self.ids:
             _exec_cmd(id, 'off')
 
     def toggle(self):
-        if self.is_on:
+        is_on = self.is_some_on()
+
+        if is_on:
             self.turn_off()
         else:
             self.turn_on()
@@ -43,13 +56,20 @@ def get_devices() -> dict[str, Device]:
     return _devices
 
 
-def _exec_cmd(id: int, command: Literal['on', 'off', 'level'], argument: str | None = None):
+def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: str | None = None) -> str | None:
     cmd = f'tradfri {command} {id}'
     if argument:
         cmd += f' {argument}'
 
     try:
-        subprocess.run(['zsh', '-i', '-c', cmd], stdin=subprocess.DEVNULL, timeout=5)
+        result = subprocess.run(
+            ['zsh', '-i', '-c', cmd],
+            stdin=subprocess.DEVNULL,
+            timeout=5,
+            capture_output=True,
+            text=True,
+        )
+        return result.stdout.strip()
     except Exception as e:
         print(f"Error executing command '{cmd}': {e}")
 
