@@ -68,7 +68,6 @@ def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: 
             ['zsh', '-i', '-c', f'{{ {cmd}; }}'],
             stdin=subprocess.DEVNULL,
             timeout=5,
-            capture_output=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
