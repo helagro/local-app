@@ -19,7 +19,7 @@ def wait_for_device(path):
         except Exception as e:
             print(f"Waiting for device {path}... ({e})")
 
-        time.sleep(60)
+        time.sleep(360)
 
 
 def handle_input():

@@ -15,10 +15,12 @@ class Device:
             if res:
                 try:
                     json_res = json.loads(res)
-                    if json_res.get('3312')[0].get('5850') == 1:
+                    control = '3312' if '3312' in json_res else '3311'
+
+                    if json_res.get(control)[0].get('5850') == 1:
                         return True
                 except Exception as e:
-                    log(f"Error parsing response for device {id}: {e}")
+                    log(f"Error parsing response for device {id}: {e}, response: {res}")
         return False
 
     def turn_on(self):
