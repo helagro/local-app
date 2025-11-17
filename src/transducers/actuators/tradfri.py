@@ -65,14 +65,14 @@ def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: 
 
     try:
         result = subprocess.run(
-            ['zsh', '-i', '-c', f'{{ {cmd}; }}'],
+            ['zsh', '-i', '-c', f'{cmd} >&2'],
             stdin=subprocess.DEVNULL,
             timeout=5,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
         )
-        return result.stdout.strip()
+        return result.stderr.strip()
     except Exception as e:
         print(f"Error executing command '{cmd}': {e}")
 
