@@ -29,6 +29,11 @@ def toggle():
     return jsonify({"is_running": is_running()})
 
 
+@bp.route('/is-running')
+def is_running_route():
+    return jsonify({"is_running": is_running()})
+
+
 @bp.route('/dev/<string:name>/lvl/<int:level>')
 def level(name: str, level: int):
     if name not in ['eve', 'day', 'read']:
