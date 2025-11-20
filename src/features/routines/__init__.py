@@ -4,7 +4,7 @@ import schedule
 import time
 from interfaces.api import *
 from features.routines.routine import Routine, SyncedRoutine
-from interfaces.transducers.sensors import *
+from interfaces.sensors import *
 from threading import Thread
 from typing import cast
 from log import log

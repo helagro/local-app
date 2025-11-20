@@ -1,7 +1,7 @@
 import time
 from log import log
 from interfaces.api.config import get_cashed
-from interfaces.transducers.actuators.tradfri import get_device
+from interfaces.actuators.tradfri import get_device
 import threading
 
 _should_run = False

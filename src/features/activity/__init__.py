@@ -1,7 +1,7 @@
 from features.activity.blink_timer import start_blink_timer, stop_blink_timer
 from log import log
 from interfaces.api.time_tracking import stop_tracking_activity, track_activity
-from interfaces.transducers.actuators.led import get_lamp
+from interfaces.actuators.led import get_lamp
 
 _lamp = get_lamp('red')
 _running = False

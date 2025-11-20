@@ -2,7 +2,7 @@ import server
 import threading
 from features.routines import run_schedule
 from log import log
-from peripheral import handle_input
+from interfaces.peripheral import handle_input
 import threading
 
 ran_once = False
