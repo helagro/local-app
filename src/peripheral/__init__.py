@@ -1,8 +1,14 @@
 from log import log
-from menu import menu, button_inputs
+from features.menu import menu, button_inputs
 import time
-from evdev import InputDevice, categorize, ecodes
 from transducers.actuators.led import get_lamp
+import sys
+
+try:
+    from evdev import InputDevice, categorize, ecodes
+except ImportError:
+    log("evdev not installed, peripheral input handling will not work.")
+    sys.exit(1)
 
 MOUSE_PATH = '/dev/input/by-id/usb-MOSART_Semi._2.4G_Wireless_Mouse-event-mouse'
 blue_led = get_lamp('blue')

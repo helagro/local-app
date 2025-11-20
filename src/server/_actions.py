@@ -1,5 +1,5 @@
 from features.activity import start_activity, stop_activity, is_activity_running
-from menu import menu, rest_inputs
+from features.menu import menu, rest_inputs
 from flask import jsonify, Blueprint
 from remote_interfaces.time_tracking import track_activity, stop_tracking_activity
 from transducers.actuators.tradfri import get_device, get_devices
