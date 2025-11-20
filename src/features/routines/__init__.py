@@ -79,7 +79,7 @@ def _on_latest_dinner() -> None:
     config = get_cashed()
     if _away_when_detached or not config: return
 
-    for task in config.tasks["latest_dinner"]:
+    for task in config.tasks["latestDinner"]:
         a(task)
 
 

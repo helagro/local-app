@@ -1,5 +1,6 @@
 from remote_interfaces.activity import start_activity, stop_activity
 from transducers.actuators.tradfri import get_device
+from features.activity.blink_timer import start as start_blink_timer, stop as stop_blink_timer
 
 button_inputs = ['BTN_LEFT', 'BTN_RIGHT', 'BTN_MIDDLE', 'BTN_EXTRA', 'BTN_SIDE']
 rest_inputs = ['l', 'r', 'm', 'e', 's']

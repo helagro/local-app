@@ -7,12 +7,16 @@ from typing import Dict, List, Literal
 
 @dataclass
 class Config:
+    doBlinkTimer: bool
+    alertFrequency: int
+    pauseDelay: int
+
     doTrack: bool
     kill: bool
     reduceHeatThreshold: float
     isSummerWeather: bool
     tempCompensation: float
-    tasks: Dict[Literal['eve', 'latest_dinner'], List[str]] = field(default_factory=dict)
+    tasks: Dict[Literal['eve', 'latestDinner'], List[str]] = field(default_factory=dict)
 
 
 # variables ------------------------------------------------------------------ #
