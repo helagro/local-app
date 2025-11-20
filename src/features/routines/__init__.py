@@ -1,10 +1,10 @@
-from remote_interfaces.config import sync_config
-from remote_interfaces.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_track, log_to_server
+from interfaces.api.config import sync_config
+from interfaces.api.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_track, log_to_server
 import schedule
 import time
-from remote_interfaces import *
+from interfaces.api import *
 from features.routines.routine import Routine, SyncedRoutine
-from transducers.sensors import *
+from interfaces.transducers.sensors import *
 from threading import Thread
 from typing import cast
 from log import log

@@ -1,7 +1,7 @@
 import time
 from log import log
-from remote_interfaces.config import get_cashed
-from transducers.actuators.tradfri import get_device
+from interfaces.api.config import get_cashed
+from interfaces.transducers.actuators.tradfri import get_device
 import threading
 
 _should_run = False
@@ -14,7 +14,7 @@ def start_blink_timer():
     global _should_run
     _should_run = True
 
-    threading.Thread(target=blink_timer(), daemon=True).start()
+    threading.Thread(target=_blink_timer, daemon=True).start()
 
 
 def stop_blink_timer():
@@ -26,7 +26,7 @@ def stop_blink_timer():
 # ================================== PRIVATE ================================= #
 
 
-def blink_timer():
+def _blink_timer():
     config = get_cashed()
     if not config:
         log("No config found, skipping blink timer routine.")

@@ -1,5 +1,5 @@
-from remote_interfaces.time_tracking import track_activity, stop_tracking_activity
-from transducers.actuators.tradfri import get_device
+from interfaces.api.time_tracking import track_activity, stop_tracking_activity
+from interfaces.transducers.actuators.tradfri import get_device
 
 button_inputs = ['BTN_LEFT', 'BTN_RIGHT', 'BTN_MIDDLE', 'BTN_EXTRA', 'BTN_SIDE']
 rest_inputs = ['l', 'r', 'm', 'e', 's']

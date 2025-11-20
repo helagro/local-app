@@ -2,7 +2,7 @@ import os
 import subprocess
 import requests
 from log import log
-from remote_interfaces.config import get_cashed
+from interfaces.api.config import get_cashed
 
 # ============================== TRACKING VALUES ============================= #
 

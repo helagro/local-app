@@ -1,7 +1,7 @@
 from log import log
 from features.menu import menu, button_inputs
 import time
-from transducers.actuators.led import get_lamp
+from interfaces.transducers.actuators.led import get_lamp
 import sys
 
 try:

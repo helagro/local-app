@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 import time
 from typing import Callable
-from remote_interfaces.config import get_cashed
+from interfaces.api.config import get_cashed
 from log import log
 
 sys.path.append(os.path.dirname(__file__))
@@ -19,7 +19,7 @@ del cfg
 # ----------------------- SETUP SENSORS ---------------------- #
 
 try:
-    import transducers.sensors._BME280 as _BME280
+    import interfaces.transducers.sensors._BME280 as _BME280
     bme280 = _BME280.BME280()
     bme280.get_calib_param()
 except Exception as e:
@@ -27,21 +27,21 @@ except Exception as e:
     _BME280 = None
 
 try:
-    import transducers.sensors._TSL2591 as _TSL2591
+    import interfaces.transducers.sensors._TSL2591 as _TSL2591
     light = _TSL2591.TSL2591()
 except Exception as e:
     log(f"Error initialising TSL2591: {e}")
     _TSL2591 = None
 
 try:
-    import transducers.sensors._LTR390 as _LTR390
+    import interfaces.transducers.sensors._LTR390 as _LTR390
     uv = _LTR390.LTR390()
 except Exception as e:
     log(f"Error initialising LTR390: {e}")
     _LTR390 = None
 
 try:
-    import transducers.sensors._sgp40 as _sgp40
+    import interfaces.transducers.sensors._sgp40 as _sgp40
 except Exception as e:
     log(f"Error initialising SGP40: {e}")
     _sgp40 = None

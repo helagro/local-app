@@ -1,4 +1,4 @@
-from remote_interfaces.server_app import get_routine
+from interfaces.api.server_app import get_routine
 
 # -------------------------- TESTING ENTRY POINT ------------------------- #
 
