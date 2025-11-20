@@ -1,5 +1,5 @@
 from log import log
-from actions import menu, button_inputs
+from menu import menu, button_inputs
 import time
 from evdev import InputDevice, categorize, ecodes
 from transducers.actuators.led import get_lamp

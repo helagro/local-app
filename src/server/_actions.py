@@ -1,5 +1,5 @@
 from typing import Literal, cast
-from actions import menu, rest_inputs
+from menu import menu, rest_inputs
 from flask import jsonify, Blueprint
 from remote_interfaces.activity import start_activity, stop_activity, is_running
 from transducers.actuators.tradfri import get_device, get_devices
