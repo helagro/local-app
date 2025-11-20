@@ -1,10 +1,14 @@
-import subprocess
-
+from features.activity.blink_timer import start_blink_timer, stop_blink_timer
 from log import log
+from remote_interfaces.time_tracking import stop_tracking_activity, track_activity
 from transducers.actuators.led import get_lamp
 
 _lamp = get_lamp('red')
 _running = False
+
+
+def is_activity_running() -> bool:
+    return _running
 
 
 def start_activity(track=True):
@@ -13,8 +17,10 @@ def start_activity(track=True):
     log("Started study timer")
 
     _lamp.on()
+    start_blink_timer()
+
     if track:
-        subprocess.run(['zsh', '-i', '-c', 'tgs study'], stdin=subprocess.DEVNULL, timeout=5)
+        track_activity()
 
 
 def stop_activity(track=True):
@@ -23,9 +29,7 @@ def stop_activity(track=True):
     log("Stopped timer")
 
     _lamp.off()
+    stop_blink_timer()
+
     if track:
-        subprocess.run(['zsh', '-i', '-c', 'toggl stop'], stdin=subprocess.DEVNULL, timeout=5)
-
-
-def is_running() -> bool:
-    return _running
+        stop_tracking_activity()

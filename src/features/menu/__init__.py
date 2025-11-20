@@ -1,6 +1,5 @@
-from remote_interfaces.activity import start_activity, stop_activity
+from remote_interfaces.time_tracking import track_activity, stop_tracking_activity
 from transducers.actuators.tradfri import get_device
-from features.activity.blink_timer import start as start_blink_timer, stop as stop_blink_timer
 
 button_inputs = ['BTN_LEFT', 'BTN_RIGHT', 'BTN_MIDDLE', 'BTN_EXTRA', 'BTN_SIDE']
 rest_inputs = ['l', 'r', 'm', 'e', 's']
@@ -26,10 +25,10 @@ def menu(command: str, input_set: list[str]):
             get_device('read').toggle()
         case 3:
             print("Extra button action")
-            start_activity()
+            track_activity()
         case 4:
             print("Side button action")
-            stop_activity()
+            stop_tracking_activity()
         case _:
             print(f"Unhandled command: {command}")
             return
