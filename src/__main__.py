@@ -1,6 +1,6 @@
 import server
 import threading
-from routines import run_schedule
+from features.routines import run_schedule
 from log import log
 from peripheral import handle_input
 

@@ -3,7 +3,7 @@ from remote_interfaces.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIG
 import schedule
 import time
 from remote_interfaces import *
-from routines.routine import Routine, SyncedRoutine
+from features.routines.routine import Routine, SyncedRoutine
 from transducers.sensors import *
 from threading import Thread
 from typing import cast
