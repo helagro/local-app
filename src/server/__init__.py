@@ -7,6 +7,7 @@ from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as actions_bp
 from ._files import bp as files_bp
 from os import _exit
+from remote_interfaces.config import sync_config
 
 startup_date = date.today()
 
@@ -40,6 +41,12 @@ def logs():
 def quit():
     log("Shutting down server...")
     _exit(0)
+
+
+@app.route('/sync')
+def sync():
+    sync_config()
+    return jsonify({"status": "Config synced"})
 
 
 # ================================ MIDDLEWARE ================================ #

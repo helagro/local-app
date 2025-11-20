@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
         schedule_thread = threading.Thread(target=run_schedule, daemon=True).start()
         server_thread = threading.Thread(target=server.start, daemon=True).start()
-        peripheral_thread = threading.Thread(target=handle_input, daemon=True).start()
+        # peripheral_thread = threading.Thread(target=handle_input, daemon=True).start()
 
     threading.Event().wait()
 
