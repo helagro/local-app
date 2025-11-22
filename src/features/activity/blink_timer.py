@@ -5,16 +5,19 @@ from interfaces.actuators.tradfri import get_device
 import threading
 
 _should_run = False
+_thread = None
 
 # ================================== PUBLIC ================================== #
 
 
 def start_blink_timer():
     log("Starting blink timer routine.")
-    global _should_run
+    global _should_run, _thread
     _should_run = True
 
-    threading.Thread(target=_blink_timer, daemon=True).start()
+    if not _thread or not _thread.is_alive():
+        _alert(5)
+        _thread = threading.Thread(target=_blink_timer, daemon=True).start()
 
 
 def stop_blink_timer():
@@ -36,10 +39,10 @@ def _blink_timer():
         alertFrequency = config.alertFrequency
         time.sleep(alertFrequency * 60)
 
-        _alert(config)
+        _run_scheduled_alert(config)
 
 
-def _alert(config):
+def _run_scheduled_alert(config):
     if not _should_run:
         return
 
@@ -49,7 +52,11 @@ def _alert(config):
         return
 
     pause_delay = config.pauseDelay
+    _alert(pause_delay)
+
+
+def _alert(duration):
     get_device('read').toggle()
 
-    time.sleep(pause_delay)
+    time.sleep(duration)
     get_device('read').toggle()
