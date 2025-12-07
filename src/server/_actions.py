@@ -44,6 +44,6 @@ def level(name: str, level: int):
 
 @bp.route('/c/<string:command>')
 def command(command: str):
-    menu(command, rest_inputs)
+    output = menu(command, rest_inputs)
 
-    return jsonify({"is_running": is_activity_running()})
+    return jsonify({"is_running": is_activity_running(), "output": output})

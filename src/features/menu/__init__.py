@@ -1,17 +1,18 @@
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
 from interfaces.actuators.tradfri import get_device
+from log import log
 
 button_inputs = ['BTN_LEFT', 'BTN_RIGHT', 'BTN_MIDDLE', 'BTN_EXTRA', 'BTN_SIDE']
-rest_inputs = ['l', 'r', 'm', 'e', 's', 'off', 'on', 'out', 'plant']
+rest_inputs = ['l', 'r', 'm', 'e', 's', 'off', 'on', 'out', 'plant', 'chill']
 
 
-def menu(command: str, input_set: list[str]):
+def menu(command: str, input_set: list[str]) -> str | None:
 
     try:
         index = input_set.index(command)
     except ValueError:
-        print(f"{command} not in {input_set}")
-        return
+        log(f"{command} not in {input_set}")
+        return f"{command} not in {input_set}"
 
     match index:
         case 0:
@@ -41,6 +42,9 @@ def menu(command: str, input_set: list[str]):
         case 8:
             print('Toggle plant lamp')
             get_device('plant').toggle()
+        case 9:
+            print('Turn on chill group')
+            get_device('chill').turn_on()
         case _:
             print(f"Unhandled command: {command}")
             return

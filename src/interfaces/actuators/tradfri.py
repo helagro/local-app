@@ -49,6 +49,7 @@ _devices = {
     # Specifics:
     'day': Group(ids=[65541, 65542, 65543]),
     'out': Group(ids=[65537, 65541, 65543]),
+    'chill': Group(ids=[65537, 65542, 65543]),
     # Singles:
     'eve': Group(ids=[65537]),
     'read': Group(ids=[65541]),
@@ -61,6 +62,10 @@ def get_device(name: str) -> Group:
         raise ValueError(f"Device '{name}' not found")
 
     return _devices[name]
+
+
+def get_devices_string() -> str:
+    return json.dumps({name: device.ids for name, device in _devices.items()})
 
 
 def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: str | None = None) -> str | None:
