@@ -1,5 +1,6 @@
+from interfaces.actuators.tradfri import get_device
 from interfaces.api.config import sync_config
-from interfaces.api.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_track, log_to_server
+from interfaces.api.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
 import schedule
 import time
 from interfaces.api import *
@@ -14,13 +15,13 @@ from log import log
 MAX_NIGHT_LIGHT = 0.2
 
 _voc: float | None = None
-_away_when_detached = should_track()
+_no_track_for_detach = should_skip_tracking()
 
 # ------------------------- ROUTINES ------------------------ #
 
 
 def _on_night() -> None:
-    if _away_when_detached: return
+    if _no_track_for_detach: return
 
     temp = read_temp()
     if temp is not None:
@@ -32,7 +33,9 @@ def _on_night() -> None:
 
 
 def _on_before_wake() -> None:
-    if _away_when_detached: return
+    if _no_track_for_detach:
+        get_device('all').turn_off()
+        return
 
     temp = read_temp()
     if temp is not None:
@@ -43,13 +46,13 @@ def _on_before_wake() -> None:
 
 
 def _on_morning() -> None:
-    if _away_when_detached: return
+    if _no_track_for_detach: return
 
     read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))
 
 
 def _on_do_reduce_temp() -> None:
-    if should_track(): return
+    if should_skip_tracking(): return
 
     temp = read_temp()
     if temp is None: return
@@ -66,7 +69,7 @@ def _on_do_reduce_temp() -> None:
 
 def _on_eve() -> None:
     _update_routines()
-    if _away_when_detached: return
+    if _no_track_for_detach: return
 
     config = get_cashed()
     if not config: return
@@ -77,18 +80,17 @@ def _on_eve() -> None:
 
 def _on_latest_dinner() -> None:
     config = get_cashed()
-    if _away_when_detached or not config: return
+    if _no_track_for_detach or not config: return
 
     for task in config.tasks["latestDinner"]:
         a(task)
 
 
 def _on_detached() -> None:
-    global _away_when_detached, _voc
-    _away_when_detached = should_track()
+    global _no_track_for_detach, _voc
+    _no_track_for_detach = should_skip_tracking()
 
-    if _away_when_detached:
-        log(f"Was away for {_on_detached.__name__}")
+    if _no_track_for_detach:
         _voc = None
         return
 
@@ -147,7 +149,7 @@ _routines: dict[str, Routine] = {
 
 
 def get_away_for_eve() -> bool:
-    return _away_when_detached
+    return _no_track_for_detach
 
 
 def get_routines() -> dict[str, Routine]:

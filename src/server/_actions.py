@@ -2,7 +2,7 @@ from features.activity import start_activity, stop_activity, is_activity_running
 from features.menu import menu, rest_inputs
 from flask import jsonify, Blueprint
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
-from interfaces.actuators.tradfri import get_device, get_devices
+from interfaces.actuators.tradfri import get_device
 
 bp = Blueprint('actions', __name__)
 
@@ -36,17 +36,14 @@ def is_running_route():
 
 @bp.route('/dev/<string:name>/lvl/<int:level>')
 def level(name: str, level: int):
-    if name not in ['eve', 'day', 'read']:
-        return jsonify({"error": "Invalid device name"}), 400
-
     device = get_device(name)
     device.level(level)
 
-    return jsonify({"is_running": is_activity_running(), "devices": [text for text in get_devices()]})
+    return jsonify({"is_running": is_activity_running()})
 
 
 @bp.route('/c/<string:command>')
 def command(command: str):
     menu(command, rest_inputs)
 
-    return jsonify({"is_running": is_activity_running(), "devices": [text for text in get_devices()]})
+    return jsonify({"is_running": is_activity_running()})

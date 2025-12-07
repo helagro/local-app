@@ -6,7 +6,7 @@ from log import log
 
 
 @dataclass
-class Device:
+class Group:
     ids: list[int]
 
     def is_some_on(self):
@@ -44,18 +44,23 @@ class Device:
             _exec_cmd(id, 'level', str(level))
 
 
-_devices = {'eve': Device(ids=[65537]), 'day': Device(ids=[65541, 65542, 65543]), 'read': Device(ids=[65541])}
+_devices = {
+    'all': Group(ids=[65537, 65541, 65542, 65543]),
+    # Specifics:
+    'day': Group(ids=[65541, 65542, 65543]),
+    'out': Group(ids=[65537, 65541, 65543]),
+    # Singles:
+    'eve': Group(ids=[65537]),
+    'read': Group(ids=[65541]),
+    'plant': Group(ids=[65542]),
+}
 
 
-def get_device(name: Literal['eve', 'day', 'read'] | str) -> Device:
+def get_device(name: str) -> Group:
     if name not in _devices:
         raise ValueError(f"Device '{name}' not found")
 
     return _devices[name]
-
-
-def get_devices() -> dict[str, Device]:
-    return _devices
 
 
 def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: str | None = None) -> str | None:

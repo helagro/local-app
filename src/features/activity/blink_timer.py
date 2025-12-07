@@ -16,7 +16,6 @@ def start_blink_timer():
     _should_run = True
 
     if not _thread or not _thread.is_alive():
-        _alert(5)
         _thread = threading.Thread(target=_blink_timer, daemon=True)
         _thread.start()
 

@@ -49,11 +49,15 @@ def get_routine(name: str) -> str | None:
         return None
 
 
-def should_track() -> bool:
+def should_skip_tracking() -> bool:
     config = get_cashed()
     if not config: return False
-
     if not config.doTrack: return False
+
+    return _is_away()
+
+
+def _is_away() -> bool:
     headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
 
     try:
