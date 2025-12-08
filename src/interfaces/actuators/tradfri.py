@@ -75,7 +75,7 @@ def get_device(name: str) -> Group:
 
 
 def get_devices_string() -> str:
-    return json.dumps({name: device.ids for name, device in _devices.items()})
+    return json.dumps([name for name in _devices.items()])
 
 
 def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: str | None = None) -> str | None:

@@ -42,18 +42,40 @@ def level(name: str, level: int):
     return jsonify({"is_running": is_activity_running()})
 
 
-@bp.route('/t/<string:name>')
-def togge_group(name: str):
-    try:
-        device = get_device(name)
-        device.toggle()
-        return jsonify({"is_running": is_activity_running()})
-    except ValueError as e:
-        return jsonify({"available_devices": get_devices_string(), "error": str(e)}), 400
+@bp.route('/t/<path:rest>')
+def toggle_group(rest: str):
+    names = rest.split('/')
+
+    results = []
+    for name in names:
+        try:
+            device = get_device(name)
+            device.toggle()
+            results.append({"name": name, "ok": True})
+        except ValueError as e:
+            results.append({
+                "name": name,
+                "ok": False,
+                "error": str(e),
+                "available_devices": get_devices_string(),
+            })
+
+    return jsonify({
+        "is_running": is_activity_running(),
+        "results": results,
+    })
 
 
-@bp.route('/c/<string:command>')
-def command(command: str):
-    output = menu(command, rest_inputs)
+@bp.route('/c/<path:rest>')
+def command(rest: str):
+    commands = rest.split('/')
 
-    return jsonify({"is_running": is_activity_running(), "output": output})
+    outputs = []
+    for cmd in commands:
+        out = menu(cmd, [])
+        outputs.append({"command": cmd, "output": out})
+
+    return jsonify({
+        "is_running": is_activity_running(),
+        "results": outputs,
+    })
