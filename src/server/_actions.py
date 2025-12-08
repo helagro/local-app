@@ -2,7 +2,7 @@ from features.activity import start_activity, stop_activity, is_activity_running
 from features.menu import menu, rest_inputs
 from flask import jsonify, Blueprint
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
-from interfaces.actuators.tradfri import get_device
+from interfaces.actuators.tradfri import get_device, get_devices_string
 
 bp = Blueprint('actions', __name__)
 
@@ -40,6 +40,16 @@ def level(name: str, level: int):
     device.level(level)
 
     return jsonify({"is_running": is_activity_running()})
+
+
+@bp.route('/t/<string:name>')
+def togge_group(name: str):
+    try:
+        device = get_device(name)
+        device.toggle()
+        return jsonify({"is_running": is_activity_running()})
+    except ValueError as e:
+        return jsonify({"available_devices": get_devices_string(), "error": str(e)}), 400
 
 
 @bp.route('/c/<string:command>')

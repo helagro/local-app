@@ -3,6 +3,15 @@ from dataclasses import dataclass
 from typing import Literal
 import json
 from log import log
+from enum import Enum
+
+
+class Device(Enum):
+    ROOF = 65545
+    PLANT = 65542
+    READ = 65541
+    EVE = 65537
+    DESK = 65543
 
 
 @dataclass
@@ -45,15 +54,16 @@ class Group:
 
 
 _devices = {
-    'all': Group(ids=[65537, 65541, 65542, 65543]),
+    'all': Group(ids=[Device.EVE.value, Device.READ.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
     # Specifics:
-    'day': Group(ids=[65541, 65542, 65543]),
-    'out': Group(ids=[65537, 65541, 65543]),
-    'chill': Group(ids=[65537, 65542, 65543]),
+    'day': Group(ids=[Device.READ.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
+    'out': Group(ids=[Device.EVE.value, Device.READ.value, Device.DESK.value, Device.ROOF.value]),
+    'chill': Group(ids=[Device.EVE.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
     # Singles:
-    'eve': Group(ids=[65537]),
-    'read': Group(ids=[65541]),
-    'plant': Group(ids=[65542]),
+    'eve': Group(ids=[Device.EVE.value]),
+    'read': Group(ids=[Device.READ.value]),
+    'plant': Group(ids=[Device.PLANT.value]),
+    'roof': Group(ids=[Device.ROOF.value]),
 }
 
 
