@@ -72,7 +72,7 @@ def command(rest: str):
 
     outputs = []
     for cmd in commands:
-        out = menu(cmd, [])
+        out = menu(cmd, rest_inputs)
         outputs.append({"command": cmd, "output": out})
 
     return jsonify({
