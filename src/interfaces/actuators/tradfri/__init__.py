@@ -1,8 +1,6 @@
-from dataclasses import dataclass
 import json
 from interfaces.actuators.tradfri._device import Device, Group
 from interfaces.actuators.tradfri._preset import Preset
-from interfaces.api.config import get_cashed
 from log import log
 
 _devices = {
@@ -20,6 +18,7 @@ _devices = {
 
 
 def exec_preset_by_name(name: str):
+    from interfaces.api.config import get_cashed
     config = get_cashed()
     if not config:
         raise ValueError("No config found")
