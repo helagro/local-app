@@ -1,9 +1,10 @@
-import subprocess
 from dataclasses import dataclass
-from typing import Literal
-import json
-from log import log
 from enum import Enum
+import json
+import subprocess
+from typing import Literal
+
+from log import log
 
 
 class Device(Enum):
@@ -53,29 +54,7 @@ class Group:
             _exec_cmd(id, 'level', str(level))
 
 
-_devices = {
-    'all': Group(ids=[Device.EVE.value, Device.READ.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
-    # Specifics:
-    'day': Group(ids=[Device.READ.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
-    'out': Group(ids=[Device.EVE.value, Device.READ.value, Device.DESK.value, Device.ROOF.value]),
-    'chill': Group(ids=[Device.EVE.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
-    # Singles:
-    'eve': Group(ids=[Device.EVE.value]),
-    'read': Group(ids=[Device.READ.value]),
-    'plant': Group(ids=[Device.PLANT.value]),
-    'roof': Group(ids=[Device.ROOF.value]),
-}
-
-
-def get_device(name: str) -> Group:
-    if name not in _devices:
-        raise ValueError(f"Device '{name}' not found")
-
-    return _devices[name]
-
-
-def get_devices_string() -> str:
-    return json.dumps([name for name, _ in _devices.items()])
+# ================================== HELPERS ================================= #
 
 
 def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: str | None = None) -> str | None:
@@ -95,7 +74,3 @@ def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: 
         return result.stderr.strip()
     except Exception as e:
         print(f"Error executing command '{cmd}': {e}")
-
-
-if __name__ == '__main__':
-    _devices['lamp'].turn_off()

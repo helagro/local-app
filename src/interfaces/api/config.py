@@ -1,5 +1,6 @@
 import os
 import requests
+from interfaces.actuators.tradfri._preset import Preset
 from log import log
 from dataclasses import dataclass, field
 from typing import Dict, List, Literal
@@ -16,6 +17,8 @@ class Config:
     reduceHeatThreshold: float
     isSummerWeather: bool
     tempCompensation: float
+
+    presets: Dict[str, Preset] = field(default_factory=dict)
     tasks: Dict[Literal['eve', 'latestDinner'], List[str]] = field(default_factory=dict)
 
 

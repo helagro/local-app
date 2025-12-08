@@ -2,7 +2,7 @@ from features.activity import start_activity, stop_activity, is_activity_running
 from features.menu import menu, rest_inputs
 from flask import jsonify, Blueprint
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
-from interfaces.actuators.tradfri import get_device, get_devices_string
+from interfaces.actuators.tradfri import exec_preset_by_name, get_device, get_devices_string
 
 bp = Blueprint('actions', __name__)
 
@@ -79,3 +79,9 @@ def command(rest: str):
         "is_running": is_activity_running(),
         "results": outputs,
     })
+
+
+@bp.route('/p/<string:name>')
+def preset(name: str):
+    exec_preset_by_name(name)
+    return jsonify()
