@@ -56,7 +56,17 @@ def _run_scheduled_alert(config):
 
 
 def _alert(duration):
-    get_device('read').toggle()
+    config = get_cashed()
+    if not config:
+        log("No config found, skipping alert.")
+        return
+
+    alert_lamp = config.alertLamp
+    if not alert_lamp:
+        log("No alert lamp configured, skipping alert.")
+        return
+
+    get_device(alert_lamp).toggle()
 
     time.sleep(duration)
-    get_device('read').toggle()
+    get_device(alert_lamp).toggle()

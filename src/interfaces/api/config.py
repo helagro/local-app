@@ -11,6 +11,7 @@ class Config:
     doBlinkTimer: bool
     alertFrequency: int
     pauseDelay: int
+    alertLamp: str
 
     doTrack: bool
     kill: bool
