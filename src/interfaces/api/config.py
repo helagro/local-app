@@ -19,7 +19,10 @@ class Config:
     isSummerWeather: bool
     tempCompensation: float
 
+    devices: Dict[str, int] = field(default_factory=dict)
+    groups: Dict[str, List[str]] = field(default_factory=dict)
     presets: Dict[str, Preset] = field(default_factory=dict)
+
     tasks: Dict[Literal['eve', 'latestDinner'], List[str]] = field(default_factory=dict)
 
 

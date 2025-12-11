@@ -4,20 +4,13 @@ import json
 import subprocess
 from typing import Literal
 
+from interfaces.api.config import get_cashed
 from log import log
-
-
-class Device(Enum):
-    ROOF = 65545
-    PLANT = 65542
-    READ = 65541
-    EVE = 65537
-    DESK = 65543
 
 
 @dataclass
 class Group:
-    ids: list[int]
+    ids: list[str]
 
     def is_some_on(self):
         for id in self.ids:
@@ -57,7 +50,9 @@ class Group:
 # ================================== HELPERS ================================= #
 
 
-def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: str | None = None) -> str | None:
+def _exec_cmd(name: str, command: Literal['on', 'off', 'level', 'raw'], argument: str | None = None) -> str | None:
+    id = _get_id(name)
+
     cmd = f'tradfri {command} {id}'
     if argument:
         cmd += f' {argument}'
@@ -74,3 +69,16 @@ def _exec_cmd(id: int, command: Literal['on', 'off', 'level', 'raw'], argument: 
         return result.stderr.strip()
     except Exception as e:
         print(f"Error executing command '{cmd}': {e}")
+
+
+def _get_id(name: str) -> int:
+    config = get_cashed()
+    if not config:
+        raise ValueError("No config found")
+
+    devices: dict[str, int] = config.devices
+
+    if name not in devices:
+        raise ValueError(f"Device '{name}' not found in config")
+
+    return devices[name]

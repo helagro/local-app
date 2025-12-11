@@ -1,20 +1,8 @@
 import json
-from interfaces.actuators.tradfri._device import Device, Group
+from interfaces.actuators.tradfri._device import Group
 from interfaces.actuators.tradfri._preset import Preset
+from interfaces.api.config import get_cashed
 from log import log
-
-_devices = {
-    'all': Group(ids=[Device.EVE.value, Device.READ.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
-    # Specifics:
-    'day': Group(ids=[Device.READ.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
-    'out': Group(ids=[Device.EVE.value, Device.READ.value, Device.DESK.value, Device.ROOF.value]),
-    'chill': Group(ids=[Device.EVE.value, Device.PLANT.value, Device.DESK.value, Device.ROOF.value]),
-    # Singles:
-    'eve': Group(ids=[Device.EVE.value]),
-    'read': Group(ids=[Device.READ.value]),
-    'plant': Group(ids=[Device.PLANT.value]),
-    'roof': Group(ids=[Device.ROOF.value]),
-}
 
 
 def exec_preset_by_name(name: str):
@@ -33,13 +21,8 @@ def exec_preset_by_name(name: str):
 
 
 def _exec_preset(preset: Preset):
-
     for device_name, config in preset['values'].items():
-        if device_name not in _devices:
-            log(f"Device '{device_name}' not found in preset")
-            continue
-
-        device = _devices[device_name]
+        device = get_device(device_name)
 
         if 'state' in config:
             state = config['state']
@@ -58,17 +41,29 @@ def _exec_preset(preset: Preset):
 
 
 def get_device(name: str) -> Group:
-    if name not in _devices:
+    groups = _get_groups()
+
+    if name not in groups:
         raise ValueError(f"Device '{name}' not found")
 
-    return _devices[name]
+    return Group(groups[name])
+
+
+def _get_groups() -> dict[str, list[str]]:
+    config = get_cashed()
+    if not config:
+        raise ValueError("No config found")
+
+    groups: dict[str, list[str]] = config.groups
+    return groups
 
 
 def get_devices_string() -> str:
-    return json.dumps([name for name, _ in _devices.items()])
+    return json.dumps([name for name, _ in _get_groups().items()])
 
 
 # =================================== START ================================== #
 
 if __name__ == '__main__':
-    _devices['lamp'].turn_off()
+    pass
+    # _get_groups()['lamp'].turn_off()
