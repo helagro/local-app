@@ -7,7 +7,7 @@ try:
     from gpiozero import LED
 except Exception as e:
     log(f"Error initialising LEDS: {e}")
-    from interfaces.actuators._mocks import LED
+    from interfaces.actuators.led._mocks import LED
 
 
 @dataclass
