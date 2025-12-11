@@ -1,7 +1,6 @@
 import json
 from interfaces.actuators.tradfri._device import Group
 from interfaces.actuators.tradfri._preset import Preset
-from interfaces.api.config import get_cashed
 from log import log
 
 
@@ -50,6 +49,7 @@ def get_device(name: str) -> Group:
 
 
 def _get_groups() -> dict[str, list[str]]:
+    from interfaces.api.config import get_cashed
     config = get_cashed()
     if not config:
         raise ValueError("No config found")
