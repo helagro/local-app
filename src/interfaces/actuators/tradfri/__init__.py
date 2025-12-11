@@ -55,6 +55,11 @@ def _get_groups() -> dict[str, list[str]]:
         raise ValueError("No config found")
 
     groups: dict[str, list[str]] = config.groups
+    devices = config.devices
+
+    for device_name, _ in devices.items():
+        groups[device_name] = [device_name]
+
     return groups
 
 
