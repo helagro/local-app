@@ -4,7 +4,6 @@ import json
 import subprocess
 from typing import Literal
 
-from interfaces.api.config import get_cashed
 from log import log
 
 
@@ -72,6 +71,8 @@ def _exec_cmd(name: str, command: Literal['on', 'off', 'level', 'raw'], argument
 
 
 def _get_id(name: str) -> int:
+    from interfaces.api.config import get_cashed
+
     config = get_cashed()
     if not config:
         raise ValueError("No config found")
