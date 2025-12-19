@@ -2,14 +2,12 @@ import server
 import threading
 from features.routines import run_schedule
 from log import log
-from interfaces.peripheral import handle_input
 import threading
 
 ran_once = False
 
 schedule_thread = None
 server_thread = None
-peripheral_thread = None
 
 if __name__ == '__main__':
 
@@ -19,7 +17,6 @@ if __name__ == '__main__':
 
         schedule_thread = threading.Thread(target=run_schedule, daemon=True).start()
         server_thread = threading.Thread(target=server.start, daemon=True).start()
-        # peripheral_thread = threading.Thread(target=handle_input, daemon=True).start()
 
     threading.Event().wait()
 
@@ -27,5 +24,3 @@ if __name__ == '__main__':
         schedule_thread.join()
     if server_thread:
         server_thread.join()
-    if peripheral_thread:
-        peripheral_thread.join()

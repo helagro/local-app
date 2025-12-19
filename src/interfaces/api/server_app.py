@@ -1,6 +1,7 @@
 import os
 import subprocess
 import requests
+from features.activity import stop_activity
 from log import log
 from interfaces.api.config import get_cashed
 
@@ -67,7 +68,11 @@ def _is_away() -> bool:
         )
         response.raise_for_status()
 
-        return response.text == '1'
+        is_away = response.text == '1'
+        if is_away:
+            stop_activity(track=False)
+
+        return is_away
     except requests.exceptions.RequestException as e:
         log_to_server(f"/is_away - failed to check if away: {e}")
         return True
