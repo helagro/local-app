@@ -4,6 +4,9 @@ set -e
 SERVICE_NAME="local-app.service"
 SYSTEMD_DIR="/etc/systemd/system"
 
+# Stopping service
+sudo systemctl stop "$SERVICE_NAME" || true
+
 # Check if service file exists
 if [ ! -f "$SERVICE_NAME" ]; then
     echo "Error: $SERVICE_NAME not found in current directory."
