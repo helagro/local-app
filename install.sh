@@ -5,6 +5,7 @@ SERVICE_NAME="local-app.service"
 SYSTEMD_DIR="/etc/systemd/system"
 
 # Stopping service
+echo "Stopping existing service if running..."
 sudo systemctl stop "$SERVICE_NAME" || true
 
 # Check if service file exists
