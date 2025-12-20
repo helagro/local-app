@@ -10,12 +10,12 @@ EnvironmentFile=%h/.dotfiles/.zshrc/secret/local-app.env
 WorkingDirectory=%h/Developer/local-app
 
 # Pull latest code before starting
-ExecStartPre=/usr/bin/git pull --ff-only
+ExecStartPre=/usr/bin/git -C %h/Developer/local-app pull --ff-only
 
 # Run using the venv's python directly (no activate needed)
 ExecStart=%h/Developer/local-app/.venv/bin/python src
 
-Restart=always
+Restart=on-failure
 RestartSec=36000
 
 # Clean environment
