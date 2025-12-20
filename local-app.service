@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=pi
-EnvironmentFile=%h/.dotfiles/.zshrc/secret/local-app.env
+EnvironmentFile=%h/.dotfiles/scripts/secret/local-app.env
 WorkingDirectory=%h/Developer/local-app
 
 # Pull latest code before starting
