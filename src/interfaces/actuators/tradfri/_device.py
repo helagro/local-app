@@ -3,6 +3,8 @@ from enum import Enum
 import json
 import subprocess
 from typing import Literal
+import os
+from pathlib import Path
 
 from log import log
 
@@ -56,6 +58,10 @@ def _exec_cmd(name: str, command: Literal['on', 'off', 'level', 'raw'], argument
     if argument:
         cmd += f' {argument}'
 
+    venv_bin = str(Path.home() / "Developer/local-app/.venv/bin")
+    env = os.environ.copy()
+    env["PATH"] = f"{venv_bin}:{env.get('PATH','')}"
+
     try:
         result = subprocess.run(
             ['zsh', '-i', '-c', f'{cmd} >&2'],
@@ -64,6 +70,7 @@ def _exec_cmd(name: str, command: Literal['on', 'off', 'level', 'raw'], argument
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
+            env=env,
         )
         return result.stderr.strip()
     except Exception as e:

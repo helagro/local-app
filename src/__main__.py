@@ -1,3 +1,4 @@
+from interfaces.api.config import sync_config
 import server
 import threading
 from features.routines import run_schedule
@@ -14,6 +15,8 @@ if __name__ == '__main__':
     if not ran_once:
         ran_once = True
         log("Started")
+
+        sync_config()
 
         schedule_thread = threading.Thread(target=run_schedule, daemon=True).start()
         server_thread = threading.Thread(target=server.start, daemon=True).start()
