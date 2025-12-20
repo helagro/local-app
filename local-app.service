@@ -9,14 +9,18 @@ User=pi
 EnvironmentFile=%h/.dotfiles/scripts/secret/local-app.env
 WorkingDirectory=%h/Developer/local-app
 
+# Output
+StandardOutput=journal
+StandardError=journal
+
 # Pull latest code before starting
 ExecStartPre=/usr/bin/git -C %h/Developer/local-app pull --ff-only
 
 # Run using the venv's python directly (no activate needed)
-ExecStart=%h/Developer/local-app/.venv/bin/python src
+ExecStart=%h/Developer/local-app/.venv/bin/python -u src
 
 Restart=on-failure
-RestartSec=36000
+RestartSec=600
 
 # Clean environment
 Environment=PYTHONUNBUFFERED=1
