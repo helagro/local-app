@@ -8,6 +8,13 @@ HOSTED_FOLDER_PATH = '/media/pi/16_GB_USB/public'
 bp = Blueprint('files', __name__)
 
 
+@bp.route('/sync')
+def sync_files():
+    from features.sync import sync_folders
+    sync_folders()
+    return jsonify({"status": "Sync initiated"})
+
+
 @bp.route('/rand/<path:filename>')
 def random_file(filename):
     base_path = os.path.realpath(HOSTED_FOLDER_PATH)
@@ -58,8 +65,10 @@ def files(filename):
         if os.path.isdir(full_path):
             contents = [f for f in os.listdir(full_path) if not f.startswith('.')]
             return jsonify({
-                "path": filename,
-                "rand": url_for('files.random_file', filename=filename, _external=True),
+                "path":
+                filename,
+                "rand":
+                url_for('files.random_file', filename=filename, _external=True),
                 "contents": [{
                     f: url_for('files.files', filename=os.path.join(filename, f), _external=True)
                 } for f in contents]

@@ -1,3 +1,4 @@
+from features.sync import sync_folders
 from interfaces.actuators.tradfri import get_device
 from interfaces.api.config import sync_config
 from interfaces.api.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
@@ -73,6 +74,11 @@ def _on_eve() -> None:
 
     config = get_cashed()
     if not config: return
+
+    try:
+        sync_folders()
+    except Exception as e:
+        log_to_server(f"Error during /sync-folders in eve routine: {e}")
 
     for task in config.tasks["eve"]:
         a(task)
