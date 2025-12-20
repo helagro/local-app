@@ -5,22 +5,21 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-Environment=HOME=/home/pi
 User=pi
 
 # Directories
-EnvironmentFile=${HOME}/.dotfiles/scripts/secret/local-app.env
-WorkingDirectory=${HOME}/Developer/local-app
+EnvironmentFile=/home/pi/.dotfiles/scripts/secret/local-app.env
+WorkingDirectory=/home/pi/Developer/local-app
 
 # Output
 StandardOutput=journal
 StandardError=journal
 
 # Pull latest code before starting
-ExecStartPre=/usr/bin/git -C ${HOME}/Developer/local-app pull --ff-only
+ExecStartPre=/usr/bin/git -C /home/pi/Developer/local-app pull --ff-only
 
 # Run using the venv's python directly (no activate needed)
-ExecStart=${HOME}/Developer/local-app/.venv/bin/python -u src
+ExecStart=/home/pi/Developer/local-app/.venv/bin/python -u src
 
 Restart=on-failure
 RestartSec=600
