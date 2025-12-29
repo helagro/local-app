@@ -99,7 +99,8 @@ def a(content: str, do_exec=True) -> None:
         return
 
     script_path = os.path.expanduser('~/.dotfiles/scripts/path/task/a.sh')
-    result = subprocess.run([script_path, content], capture_output=True, text=True)
+    env = os.environ.copy()
+    result = subprocess.run([script_path, content], capture_output=True, text=True, env=env)
 
     if result.returncode != 0:
         log(f"Failed to send command, error: {result.stderr}")
