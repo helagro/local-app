@@ -106,4 +106,4 @@ def a(content: str, do_exec=True) -> None:
     if result.returncode != 0:
         log(f"Failed to send command, error: {result.stderr}")
     else:
-        log(f"A: {content}")
+        log(f"A: {content}, stdout: {result.stdout.strip()} stderr: {result.stderr.strip()}")
