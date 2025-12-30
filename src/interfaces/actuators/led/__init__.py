@@ -49,8 +49,10 @@ class Lamp:
 _lamps = {
     'blue': Lamp(17),
     'red': Lamp(27),
+    'green': Lamp(24),
+    'yellow': Lamp(23),
 }
 
 
-def get_lamp(pin: Literal['blue', 'red']) -> Lamp:
+def get_lamp(pin: str) -> Lamp:
     return _lamps[pin]
