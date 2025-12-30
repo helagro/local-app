@@ -49,6 +49,11 @@ def sync():
     return jsonify({"status": "Config synced"})
 
 
+@app.route('/health')
+def health():
+    return jsonify({"status": "ok"})
+
+
 # ================================ MIDDLEWARE ================================ #
 
 
