@@ -29,6 +29,13 @@ def toggle():
     return jsonify({"is_running": is_activity_running()})
 
 
+@bp.route('/log-test')
+def log_test():
+    from interfaces.api.server_app import log_to_server
+    log_to_server("Test log from /log-test endpoint")
+    return jsonify({"response": "Log sent"})
+
+
 @bp.route('/is-running')
 def is_running_route():
     return jsonify({"is_running": is_activity_running()})
