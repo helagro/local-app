@@ -18,7 +18,7 @@ class Config:
     reduceHeatThreshold: float
     isSummerWeather: bool
     tempCompensation: float
-    externalTempCompensation: float | None = None
+    externalTempCompensation: float
 
     devices: Dict[str, int] = field(default_factory=dict)
     groups: Dict[str, List[str]] = field(default_factory=dict)
