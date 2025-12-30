@@ -9,12 +9,16 @@ bp = Blueprint('readings', __name__)
 
 def all_readings():
     return {
-        "temp": read_temp(),
-        "hum": read_hum(),
+        "temp": read_temp(from_hat=False),
+        "hum": read_hum(from_hat=False),
         "light": read_light(),
         "uv": read_uv(),
         "pressure": read_pressure(),
-        "voc": get_last_voc()
+        "voc": get_last_voc(),
+        "from_hat": {
+            "temp": read_temp(from_hat=True),
+            "hum": read_hum(from_hat=True),
+        }
     }
 
 
@@ -37,12 +41,12 @@ def readings():
 
 @bp.route('/temp')
 def temp():
-    return f"{read_temp()}\n"
+    return f"{read_temp(from_hat=False)}\n"
 
 
 @bp.route('/hum')
 def hum():
-    return f"{read_hum()}\n"
+    return f"{read_hum(from_hat=False)}\n"
 
 
 @bp.route('/light')

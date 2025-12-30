@@ -24,7 +24,7 @@ _no_track_for_detach = should_skip_tracking()
 def _on_night() -> None:
     if _no_track_for_detach: return
 
-    temp = read_temp()
+    temp = read_temp(from_hat=False)
     if temp is not None:
         a(f"{TEMP_NIGHT} {temp} s #u")
 
@@ -38,9 +38,9 @@ def _on_before_wake() -> None:
         get_device('all').turn_off()
         return
 
-    temp = read_temp()
+    temp = read_temp(from_hat=False)
     if temp is not None:
-        a(f"{TEMP_EARLY} {read_temp()} s #u")
+        a(f"{TEMP_EARLY} {temp} s #u")
 
     callback = lambda x: a(f"{LIGHT_BEFORE_WAKE} {x} s #u")
     Thread(target=read_avg_light, args=(callback, ), kwargs={'max': MAX_NIGHT_LIGHT}).start()
@@ -55,7 +55,7 @@ def _on_morning() -> None:
 def _on_do_reduce_temp() -> None:
     if should_skip_tracking(): return
 
-    temp = read_temp()
+    temp = read_temp(from_hat=False)
     if temp is None: return
 
     config = get_cashed()
@@ -111,7 +111,7 @@ def _on_detached() -> None:
 
 
 def track_time_independents():
-    hum = read_hum()
+    hum = read_hum(from_hat=False)
     if hum is not None:
         a(f"{HUM} {hum / 100} s #u")
 
