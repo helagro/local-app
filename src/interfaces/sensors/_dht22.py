@@ -1,6 +1,11 @@
 import time
 import adafruit_dht
 import board
+from interfaces.config._config_loader import get_cashed
+
+cfg = get_cashed()
+TEMP_COMPENSATION = cfg.externalTempCompensation if cfg else 0.0
+del cfg
 
 _dht = adafruit_dht.DHT22(board.D22, use_pulseio=False)
 
