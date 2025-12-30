@@ -12,6 +12,7 @@ class Config:
     alertFrequency: int
     pauseDelay: int
     alertLamp: str
+    maxBreakMin: int
 
     doTrack: bool
     kill: bool
