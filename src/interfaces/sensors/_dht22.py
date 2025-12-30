@@ -3,16 +3,15 @@ import adafruit_dht
 import board
 from interfaces.api.config import get_cashed
 
-cfg = get_cashed()
-TEMP_COMPENSATION = cfg.externalTempCompensation if cfg else 0.0
-del cfg
-
 _dht = adafruit_dht.DHT22(board.D22, use_pulseio=False)
 
 MAX_ATTEMPTS = 10
 
 
 def read_temp() -> float:
+    cfg = get_cashed()
+    TEMP_COMPENSATION = cfg.externalTempCompensation if cfg else 0.0
+
     for _ in range(MAX_ATTEMPTS):
         try:
             return float(_dht.temperature) + (TEMP_COMPENSATION or 0.0)
