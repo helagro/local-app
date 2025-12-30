@@ -100,6 +100,7 @@ def a(content: str, do_exec=True) -> None:
 
     script_path = os.path.expanduser('~/.dotfiles/scripts/path/task/a.sh')
     env = os.environ.copy()
+    env["A75H"] = _AUTH_TOKEN or ""
     result = subprocess.run([script_path, content], capture_output=True, text=True, env=env)
 
     if result.returncode != 0:
