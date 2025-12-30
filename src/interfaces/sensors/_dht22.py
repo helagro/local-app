@@ -1,12 +1,25 @@
+import time
 import adafruit_dht
 import board
 
 _dht = adafruit_dht.DHT22(board.D22, use_pulseio=False)
 
+MAX_ATTEMPTS = 10
+
 
 def read_temp() -> float:
-    return float(_dht.temperature)
+    for _ in range(MAX_ATTEMPTS):
+        try:
+            return float(_dht.temperature)
+        except RuntimeError:
+            time.sleep(2.5)
+    raise RuntimeError("Failed to read from DHT22 sensor after multiple attempts")
 
 
 def read_hum() -> float:
-    return float(_dht.humidity)
+    for _ in range(MAX_ATTEMPTS):
+        try:
+            return float(_dht.humidity)
+        except RuntimeError:
+            time.sleep(2.5)
+    raise RuntimeError("Failed to read from DHT22 sensor after multiple attempts")
