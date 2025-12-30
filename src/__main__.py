@@ -13,7 +13,7 @@ server_thread = None
 
 
 def start_led_off():
-    led = get_lamp('blue')
+    led = get_lamp('yellow')
     led.off()
 
 
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     if not ran_once:
         ran_once = True
         log("Started")
-        get_lamp('blue').on()
+        get_lamp('yellow').on()
 
         sync_config()
 

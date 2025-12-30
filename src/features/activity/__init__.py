@@ -2,9 +2,12 @@ from features.activity.blink_timer import start_blink_timer, stop_blink_timer
 from log import log
 from interfaces.api.time_tracking import stop_tracking_activity, track_activity
 from interfaces.actuators.led import get_lamp
+import threading
 
-_lamp = get_lamp('red')
+_work_lamp = get_lamp('red')
+_break_lamp = get_lamp('green')
 _running = False
+_break_thread = None
 
 
 def is_activity_running() -> bool:
@@ -16,7 +19,9 @@ def start_activity(track=True):
     _running = True
     log("Started study timer")
 
-    _lamp.on()
+    if _break_thread:
+        _break_thread.cancel()
+    _work_lamp.on()
     start_blink_timer()
 
     if track:
@@ -28,8 +33,15 @@ def stop_activity(track=True):
     _running = False
     log("Stopped timer")
 
-    _lamp.off()
+    _work_lamp.off()
     stop_blink_timer()
 
     if track:
         stop_tracking_activity()
+
+    _break_lamp.on()
+    _thread = threading.Timer(
+        1800,
+        lambda: _break_lamp.off(),
+    )
+    _thread.start()
