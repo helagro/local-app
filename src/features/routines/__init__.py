@@ -1,4 +1,5 @@
 from features.sync import sync_folders
+from interfaces.actuators.led import get_lamp
 from interfaces.actuators.tradfri import get_device
 from interfaces.api.config import sync_config
 from interfaces.api.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
@@ -17,6 +18,7 @@ MAX_NIGHT_LIGHT = 0.2
 
 _voc: float | None = None
 _no_track_for_detach = should_skip_tracking()
+_eve_led = get_lamp('red')
 
 # ------------------------- ROUTINES ------------------------ #
 
@@ -92,7 +94,7 @@ def _on_latest_dinner() -> None:
         a(task)
 
 
-def _on_detached() -> None:
+def _on_full_detach() -> None:
     global _no_track_for_detach, _voc
     _no_track_for_detach = should_skip_tracking()
 
@@ -102,6 +104,7 @@ def _on_detached() -> None:
 
     # Called here to maxmize chance that "away" has been tracked
     track_time_independents()
+    _eve_led.on()
 
     callback = lambda x: a(f"{LIGHT_EVE} {x} s  #u")
     Thread(target=read_avg_light, args=(callback, )).start()
@@ -148,7 +151,8 @@ _routines: dict[str, Routine] = {
     "reduce_temp": SyncedRoutine(name="lower_heating", default_time="16:00", function=_on_do_reduce_temp),
     "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
     "latest_dinner": SyncedRoutine(name="latest_dinner", default_time="20:00", function=_on_latest_dinner),
-    "detached": SyncedRoutine(name="detached", default_time="21:00", function=_on_detached),
+    "full_detach": SyncedRoutine(name="full_detach", default_time="21:00", function=_on_full_detach),
+    "bed_time": SyncedRoutine(name="bed_time", default_time="22:00", function=lambda: _eve_led.off()),
 }
 
 # -------------------------- GETTERS ------------------------- #

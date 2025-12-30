@@ -5,7 +5,7 @@ from interfaces.api.time_tracking import stop_tracking_activity, track_activity
 from interfaces.actuators.led import get_lamp
 import threading
 
-_work_lamp = get_lamp('red')
+_work_lamp = get_lamp('blue')
 _break_lamp = get_lamp('green')
 _running = False
 _break_thread = None
