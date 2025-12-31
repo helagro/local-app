@@ -20,14 +20,11 @@ def menu(command: str, input_set: list[str]) -> str | None:
         case 1:
             exec_preset_by_name('chill')
         case 2:
-            exec_preset_by_name('focus')
+            exec_preset_by_name('work')
         case 3:
             get_device('out').toggle()
         case 4:
-            print("Side button action")
-            stop_tracking_activity()
-        case 5:
             toggle_activity()
         case _:
-            print(f"Unhandled command: {command}")
+            log(f"Unhandled command: {command}")
             return
