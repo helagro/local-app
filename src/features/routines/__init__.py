@@ -110,6 +110,11 @@ def _on_full_detach() -> None:
     Thread(target=read_avg_light, args=(callback, )).start()
 
 
+def _on_bedtime():
+    _eve_led.off()
+    get_lamp('green').off()
+
+
 # -------------------------- OTHER ------------------------- #
 
 
@@ -152,7 +157,7 @@ _routines: dict[str, Routine] = {
     "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
     "latest_dinner": SyncedRoutine(name="latest_dinner", default_time="20:00", function=_on_latest_dinner),
     "full_detach": SyncedRoutine(name="full_detach", default_time="21:00", function=_on_full_detach),
-    "bed_time": SyncedRoutine(name="bed_time", default_time="22:00", function=lambda: _eve_led.off()),
+    "bed_time": SyncedRoutine(name="bed_time", default_time="22:00", function=_on_bedtime),
 }
 
 # -------------------------- GETTERS ------------------------- #

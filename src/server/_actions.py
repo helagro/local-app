@@ -1,6 +1,6 @@
 from features.activity import start_activity, stop_activity, is_activity_running
 from features.menu import menu, rest_inputs
-from flask import jsonify, Blueprint
+from flask import jsonify, Blueprint, request
 from interfaces.actuators.led import get_lamp
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
 from interfaces.actuators.tradfri import exec_preset_by_name, get_device, get_devices_string
@@ -45,7 +45,15 @@ def is_running_route():
 @bp.route('/led/<string:name>')
 def led(name: str):
     lamp = get_lamp(name)
-    lamp.toggle()
+
+    action = request.args.get('a', default='toggle').lower()
+
+    if action == 'on':
+        lamp.on()
+    elif action == 'off':
+        lamp.off()
+    else:
+        lamp.toggle()
 
     return jsonify("ok")
 

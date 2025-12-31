@@ -15,14 +15,22 @@ def is_activity_running() -> bool:
     return _running
 
 
+def toggle_activity(track=True):
+    if _running:
+        stop_activity(track=track)
+    else:
+        start_activity(track=track)
+
+
 def start_activity(track=True):
-    global _running
+    global _running, _break_thread
     _running = True
     log("Started study timer")
 
     if _break_thread:
         _break_lamp.off()
         _break_thread.cancel()
+        _break_thread = None
 
     _work_lamp.on()
     start_blink_timer()
@@ -49,10 +57,14 @@ def start_break():
     global _break_thread
     config = get_cashed()
 
+    if _break_thread is not None:
+        _break_thread.cancel()
+
     if config and config.maxBreakMin:
         _break_lamp.on()
         _break_thread = threading.Timer(
             config.maxBreakMin * 60,
             lambda: _break_lamp.off(),
         )
+        _break_thread.daemon = True
         _break_thread.start()

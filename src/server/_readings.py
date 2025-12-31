@@ -34,7 +34,7 @@ def do_track():
 # -------------------------- SENSOR ROUTES -------------------------- #
 
 
-@bp.route('/readings')
+@bp.route('/')
 def readings():
     return jsonify(all_readings())
 
