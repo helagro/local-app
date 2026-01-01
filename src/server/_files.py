@@ -17,12 +17,13 @@ def sync_files():
 
 @bp.route('/rand-path/<path:filename>')
 def random_path(filename):
-    return get_random_file_url(filename)
+    rand_path = get_random_file_url(filename)
+    rand_url = url_for('files.files', filename=rand_path, _external=True)
+    return rand_url
 
 
 @bp.route('/rand/<path:filename>')
 def random_file(filename):
-    # ✅ Redirect to the main /<path:filename> route
     return redirect(url_for('files.files', filename=get_random_file_url(filename)))
 
 
