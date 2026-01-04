@@ -55,3 +55,7 @@ _lamps = {
 
 def get_lamp(pin: str) -> Lamp:
     return _lamps[pin]
+
+
+def get_lamps() -> dict[str, Lamp]:
+    return _lamps
