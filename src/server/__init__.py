@@ -46,12 +46,12 @@ def quit():
 @app.route('/sync')
 def sync():
     sync_config()
-    return jsonify({"status": "Config synced"})
+    return "ok"
 
 
 @app.route('/health')
 def health():
-    return jsonify({"status": "ok"})
+    return "ok"
 
 
 # ================================ MIDDLEWARE ================================ #

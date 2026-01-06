@@ -11,13 +11,13 @@ bp = Blueprint('actions', __name__)
 @bp.route('/start')
 def start():
     start_activity(track=False)
-    return jsonify({"is_running": is_activity_running()})
+    return "ok"
 
 
 @bp.route('/stop')
 def stop():
     stop_activity(track=False)
-    return jsonify({"is_running": is_activity_running()})
+    return "ok"
 
 
 @bp.route('/toggle')
@@ -27,7 +27,7 @@ def toggle():
     else:
         track_activity()
 
-    return jsonify({"is_running": is_activity_running()})
+    return "ok"
 
 
 @bp.route('/log-test')
@@ -63,7 +63,7 @@ def level(name: str, level: int):
     device = get_device(name)
     device.level(level)
 
-    return jsonify({"is_running": is_activity_running()})
+    return "ok"
 
 
 @bp.route('/t/<path:rest>')
@@ -84,10 +84,7 @@ def toggle_group(rest: str):
                 "available_devices": get_devices_string(),
             })
 
-    return jsonify({
-        "is_running": is_activity_running(),
-        "results": results,
-    })
+    return "ok"
 
 
 @bp.route('/c/<path:rest>')
