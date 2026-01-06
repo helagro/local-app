@@ -94,6 +94,16 @@ def _on_latest_dinner() -> None:
         a(task)
 
 
+def _on_detach():
+    if _no_track_for_detach: return
+
+    exec_preset_by_name("chill", state_mode='keep')
+
+    get_device('plant').toggle()
+    time.sleep(0.2)
+    get_device('plant').toggle()
+
+
 def _on_full_detach() -> None:
     global _no_track_for_detach, _voc
     _no_track_for_detach = should_skip_tracking()
@@ -152,12 +162,13 @@ def _update_routines() -> None:
 # --------------------------- SCHEDULES -------------------------- #
 
 _routines: dict[str, Routine] = {
-    "night": Routine(name="night", time="02:00", function=_on_night),
-    "before_wake": SyncedRoutine(name="before_wake", default_time="07:00", function=_on_before_wake),
+    "night": Routine(name="night", time="01:30", function=_on_night),
+    "before_wake": Routine(name="before_wake", time="04:30", function=_on_before_wake),
     "after_wake": SyncedRoutine(name="after_wake", default_time="09:00", function=_on_morning),
     "reduce_temp": SyncedRoutine(name="lower_heating", default_time="16:00", function=_on_do_reduce_temp),
     "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
     "latest_dinner": SyncedRoutine(name="latest_dinner", default_time="20:00", function=_on_latest_dinner),
+    "detach": SyncedRoutine(name="detach", default_time="21:00", function=_on_detach),
     "full_detach": SyncedRoutine(name="full_detach", default_time="21:00", function=_on_full_detach),
     "bed_time": SyncedRoutine(name="bed_time", default_time="22:00", function=_on_bedtime),
 }
