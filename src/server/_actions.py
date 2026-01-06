@@ -107,7 +107,7 @@ def command(rest: str):
 
 @bp.route('/p/<string:name>')
 def preset(name: str):
-    state_mode = request.args.get('m', default=None).lower()
+    state_mode = request.args.get('m', default=None)
 
     exec_preset_by_name(name, state_mode=state_mode)
     return "ok"
