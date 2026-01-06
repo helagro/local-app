@@ -1,6 +1,6 @@
 from features.sync import sync_folders
 from interfaces.actuators.led import get_lamp
-from interfaces.actuators.tradfri import get_device
+from interfaces.actuators.tradfri import exec_preset_by_name, get_device
 from interfaces.api.config import sync_config
 from interfaces.api.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
 import schedule
@@ -104,7 +104,9 @@ def _on_full_detach() -> None:
 
     # Called here to maxmize chance that "away" has been tracked
     track_time_independents()
+
     _eve_led.on()
+    exec_preset_by_name("dark", state_mode='keep')
 
     callback = lambda x: a(f"{LIGHT_EVE} {x} s  #u")
     Thread(target=read_avg_light, args=(callback, )).start()
