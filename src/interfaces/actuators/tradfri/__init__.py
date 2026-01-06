@@ -22,6 +22,12 @@ def exec_preset_by_name(name: str):
 def _exec_preset(preset: Preset):
     for device_name, config in preset['values'].items():
         device = get_device(device_name)
+        was_on = device.is_some_on()
+
+        if 'level' in config:
+            level = config['level']
+            if level:
+                device.level(level)
 
         if 'state' in config:
             state = config['state']
@@ -29,11 +35,8 @@ def _exec_preset(preset: Preset):
                 device.turn_on()
             elif state == 'off':
                 device.turn_off()
-
-        if 'level' in config:
-            level = config['level']
-            if level:
-                device.level(level)
+            elif state == 'keep' and not was_on:
+                device.turn_off()
 
 
 # get device(s) ----------------------------------------------------------------- #
