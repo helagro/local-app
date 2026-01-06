@@ -4,7 +4,7 @@ from interfaces.actuators.tradfri._preset import Preset
 from log import log
 
 
-def exec_preset_by_name(name: str):
+def exec_preset_by_name(name: str, state_mode: str | None = None):
     from interfaces.api.config import get_cashed
     config = get_cashed()
     if not config:
@@ -16,10 +16,10 @@ def exec_preset_by_name(name: str):
         raise ValueError(f"Preset '{name}' not found in config")
 
     log(f"Executing preset: {name}")
-    _exec_preset(preset)
+    _exec_preset(preset, state_mode)
 
 
-def _exec_preset(preset: Preset):
+def _exec_preset(preset: Preset, state_mode: str | None):
     for device_name, config in preset['values'].items():
         device = get_device(device_name)
         was_on = device.is_some_on()
@@ -35,7 +35,7 @@ def _exec_preset(preset: Preset):
                 device.turn_on()
             elif state == 'off':
                 device.turn_off()
-            elif state == 'keep' and not was_on:
+            elif (state == 'keep' or state_mode == 'keep') and not was_on:
                 device.turn_off()
 
 

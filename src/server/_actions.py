@@ -107,5 +107,7 @@ def command(rest: str):
 
 @bp.route('/p/<string:name>')
 def preset(name: str):
-    exec_preset_by_name(name)
+    state_mode = request.args.get('m', default=None).lower()
+
+    exec_preset_by_name(name, state_mode=state_mode)
     return jsonify()
