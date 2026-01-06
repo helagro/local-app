@@ -31,11 +31,11 @@ def _exec_preset(preset: Preset, state_mode: str | None):
 
         if 'state' in config:
             state = config['state']
-            if state == 'on':
-                device.turn_on()
-            elif state == 'off':
+            if (state == 'keep' or state_mode == 'keep') and not was_on:
                 device.turn_off()
-            elif (state == 'keep' or state_mode == 'keep') and not was_on:
+            elif state == 'on' and not was_on:
+                device.turn_on()
+            elif state == 'off' and was_on:
                 device.turn_off()
 
 
