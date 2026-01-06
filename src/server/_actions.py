@@ -34,7 +34,7 @@ def toggle():
 def log_test():
     from interfaces.api.server_app import log_to_server
     log_to_server("Test log from /log-test endpoint")
-    return jsonify("ok")
+    return "ok"
 
 
 @bp.route('/is-running')
@@ -55,7 +55,7 @@ def led(name: str):
     else:
         lamp.toggle()
 
-    return jsonify("ok")
+    return "ok"
 
 
 @bp.route('/dev/<string:name>/lvl/<int:level>')
@@ -110,4 +110,4 @@ def preset(name: str):
     state_mode = request.args.get('m', default=None).lower()
 
     exec_preset_by_name(name, state_mode=state_mode)
-    return jsonify()
+    return "ok"
