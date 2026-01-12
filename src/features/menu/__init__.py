@@ -27,7 +27,7 @@ def menu(command: str, input_set: list[str]) -> str | None:
 
             leds = get_lamps()
             for led in leds.values():
-                led.toggle()
+                led.off()
         case 4:
             toggle_activity()
         case _:
