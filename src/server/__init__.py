@@ -8,6 +8,7 @@ from ._actions import bp as actions_bp
 from ._files import bp as files_bp
 from os import _exit
 from interfaces.api.config import sync_config
+from interfaces.os import shutdown as os_shutdown
 
 startup_date = date.today()
 
@@ -52,6 +53,16 @@ def sync():
 @app.route('/health')
 def health():
     return "ok"
+
+
+@app.route('/shutdown')
+def shutdown():
+    log("Shutting down system...")
+    err = os_shutdown()
+    if err:
+        log(f"Shutdown command error: {err}")
+        abort(500, description=f"Shutdown command error: {err}")
+    return "Shutting down..."
 
 
 # ================================ MIDDLEWARE ================================ #

@@ -1,3 +1,4 @@
+from datetime import datetime
 from features.activity.blink_timer import start_blink_timer, stop_blink_timer
 from interfaces.api.config import get_cashed
 from log import log
@@ -22,7 +23,7 @@ def toggle_activity(track=True):
         start_activity(track=track)
 
 
-def start_activity(track=True):
+def start_activity(track=True, blink_frequency=None):
     global _running, _break_thread
     _running = True
     log("Started study timer")
@@ -33,7 +34,7 @@ def start_activity(track=True):
         _break_thread = None
 
     _work_lamp.on()
-    start_blink_timer()
+    start_blink_timer(blink_frequency)
 
     if track:
         track_activity()
@@ -60,7 +61,8 @@ def start_break():
     if _break_thread is not None:
         _break_thread.cancel()
 
-    if config and config.maxBreakMin:
+    cur_hour = datetime.now().hour
+    if config and config.maxBreakMin and cur_hour >= 8 and cur_hour < 20:
         _break_lamp.on()
         _break_thread = threading.Timer(
             config.maxBreakMin * 60,

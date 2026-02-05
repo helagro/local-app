@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 from log import log
 from interfaces.api.config import get_cashed
@@ -10,13 +11,13 @@ _thread = None
 # ================================== PUBLIC ================================== #
 
 
-def start_blink_timer():
+def start_blink_timer(blink_frequency=None):
     log("Starting blink timer routine.")
     global _should_run, _thread
     _should_run = True
 
     if not _thread or not _thread.is_alive():
-        _thread = threading.Thread(target=_blink_timer, daemon=True)
+        _thread = threading.Thread(target=_blink_timer, args=(blink_frequency, ), daemon=True)
         _thread.start()
 
 
@@ -29,16 +30,16 @@ def stop_blink_timer():
 # ================================== PRIVATE ================================= #
 
 
-def _blink_timer():
+def _blink_timer(alert_frequency=None):
     config = get_cashed()
     if not config:
         log("No config found, skipping blink timer routine.")
         return
 
-    while _should_run:
-        alertFrequency = config.alertFrequency
-        time.sleep(alertFrequency * 60)
+    alert_frequency = alert_frequency or config.alertFrequency
 
+    while _should_run:
+        time.sleep(alert_frequency * 60)
         _run_scheduled_alert(config)
 
 
@@ -66,7 +67,24 @@ def _alert(duration):
         log("No alert lamp configured, skipping alert.")
         return
 
-    get_device(alert_lamp).toggle()
+    cur_hour = datetime.now().hour
+    if cur_hour < 4:
+        log("Current time is outside of alert hours, skipping alert.")
+        return
+
+    device = get_device(alert_lamp)
+    if not device:
+        log(f"Alert lamp {alert_lamp} not found, skipping alert.")
+        return
+
+    state = device.is_some_on()
+    device.toggle()
+
+    # Note - Waits for lamps to react
+    for _ in range(20):
+        time.sleep(0.5)
+        if state != device.is_some_on():
+            break
 
     time.sleep(duration)
-    get_device(alert_lamp).toggle()
+    device.toggle()

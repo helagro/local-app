@@ -10,7 +10,9 @@ bp = Blueprint('actions', __name__)
 
 @bp.route('/start')
 def start():
-    start_activity(track=False)
+    alert_frequency = request.args.get('alert_frequency', default=None, type=float)
+
+    start_activity(track=False, blink_frequency=alert_frequency)
     return "ok"
 
 
