@@ -4,7 +4,7 @@ import subprocess
 def shutdown():
     try:
         result = subprocess.run(
-            ['zsh', '-c', f'shutdown -h now >&2'],
+            ['zsh', '-c', f'sudo shutdown -h now >&2'],
             stdin=subprocess.DEVNULL,
             timeout=5,
             stdout=subprocess.PIPE,
