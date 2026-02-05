@@ -13,18 +13,19 @@ from log import log
 class Group:
     ids: list[str]
 
+    def amt_on(self) -> int:
+        count = 0
+        for id in self.ids:
+            if _is_on(id):
+                count += 1
+
+        return count
+
     def is_some_on(self):
         for id in self.ids:
-            res = _exec_cmd(id, 'raw')
-            if res:
-                try:
-                    json_res = json.loads(res)
-                    control = '3312' if '3312' in json_res else '3311'
+            if _is_on(id):
+                return True
 
-                    if json_res.get(control)[0].get('5850') == 1:
-                        return True
-                except Exception as e:
-                    log(f"Error parsing response for device {id}: {e}, response: {res}")
         return False
 
     def turn_on(self):
@@ -42,6 +43,13 @@ class Group:
             self.turn_off()
         else:
             self.turn_on()
+
+    def toggle_individually(self):
+        for id in self.ids:
+            if _is_on(id):
+                _exec_cmd(id, 'off')
+            else:
+                _exec_cmd(id, 'on')
 
     def level(self, level: int):
         for id in self.ids:
@@ -75,6 +83,21 @@ def _exec_cmd(name: str, command: Literal['on', 'off', 'level', 'raw'], argument
         return result.stderr.strip()
     except Exception as e:
         print(f"Error executing command '{cmd}': {e}")
+
+
+def _is_on(id: str) -> bool:
+    res = _exec_cmd(id, 'raw')
+    if res:
+        try:
+            json_res = json.loads(res)
+            control = '3312' if '3312' in json_res else '3311'
+
+            if json_res.get(control)[0].get('5850') == 1:
+                return True
+        except Exception as e:
+            log(f"Error parsing response for device {id}: {e}, response: {res}")
+
+    return False
 
 
 def _get_id(name: str) -> int:

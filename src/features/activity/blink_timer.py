@@ -77,14 +77,14 @@ def _alert(duration):
         log(f"Alert lamp {alert_lamp} not found, skipping alert.")
         return
 
-    state = device.is_some_on()
-    device.toggle()
+    amt_on = device.amt_on()
+    device.toggle_individually()
 
     # Note - Waits for lamps to react
     for _ in range(20):
         time.sleep(0.5)
-        if state != device.is_some_on():
+        if amt_on != device.amt_on():
             break
 
     time.sleep(duration)
-    device.toggle()
+    device.toggle_individually()
