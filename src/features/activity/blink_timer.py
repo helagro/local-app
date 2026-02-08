@@ -79,12 +79,16 @@ def _alert(duration):
 
     amt_on = device.amt_on()
     device.toggle_individually()
+    start_time = time.time()
 
     # Note - Waits for lamps to react
     for _ in range(20):
-        time.sleep(0.5)
+        time.sleep(1)
         if amt_on != device.amt_on():
             break
 
     time.sleep(duration)
+    end_time = time.time()
     device.toggle_individually()
+
+    log(f"{duration} alert ran for {end_time - start_time:.2f} seconds")
