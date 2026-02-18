@@ -18,6 +18,8 @@ MAX_NIGHT_LIGHT = 0.2
 
 _voc: float | None = None
 _no_track_for_detach = should_skip_tracking()
+
+_detach_led = get_lamp('orange')
 _eve_led = get_lamp('red')
 
 # ------------------------- ROUTINES ------------------------ #
@@ -103,6 +105,8 @@ def _on_detach():
     time.sleep(0.2)
     get_device('plant').toggle()
 
+    _detach_led.on()
+
 
 def _on_full_detach() -> None:
     global _no_track_for_detach, _voc
@@ -115,6 +119,7 @@ def _on_full_detach() -> None:
     # Called here to maxmize chance that "away" has been tracked
     track_time_independents()
 
+    _detach_led.off()
     _eve_led.on()
     exec_preset_by_name("dark", state_mode='keep')
 
@@ -123,6 +128,7 @@ def _on_full_detach() -> None:
 
 
 def _on_bedtime():
+    _detach_led.off()
     _eve_led.off()
     get_lamp('green').off()
 
