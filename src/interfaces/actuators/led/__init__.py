@@ -50,6 +50,7 @@ _lamps = {
     'red': Lamp(27),
     'green': Lamp(24),
     'yellow': Lamp(23),
+    'orange': Lamp(25),
 }
 
 
