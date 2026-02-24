@@ -37,6 +37,7 @@ class Group:
             _exec_cmd(id, 'on')
 
     def turn_off(self):
+        log(f"Turning off group with ids: {self.ids}")
         for id in self.ids:
             _exec_cmd(id, 'off')
 

@@ -2,7 +2,7 @@ import os
 import subprocess
 import requests
 from features.activity import stop_activity
-from log import log
+from log import get_file_path, log
 from interfaces.api.config import get_cashed
 
 # ============================== TRACKING VALUES ============================= #
@@ -83,9 +83,9 @@ def _is_away() -> bool:
 
 
 def log_to_server(content: str):
-    """ prepend (location context) and space """
     log(content)
-    a(f"local-app{content} @rm")
+    relative_path = get_file_path(depth=2)
+    a(f"local-app - [{relative_path}] - {content} @rm")
 
 
 def a(content: str, do_exec=True) -> None:
