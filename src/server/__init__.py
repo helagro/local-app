@@ -68,7 +68,7 @@ def shutdown():
 # ================================ MIDDLEWARE ================================ #
 
 
-@app.after_request
+@app.before_request
 def before_request_func(response):
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
     log(f"REQ TO {request.path} FROM {ip}")
