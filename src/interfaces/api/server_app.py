@@ -70,6 +70,7 @@ def _is_away() -> bool:
 
         is_away = response.text == '1'
         if is_away:
+            log('Stop because is away')
             stop_activity(track=False)
 
         return is_away

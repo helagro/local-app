@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import Enum
 import json
 import subprocess
 from typing import Literal
@@ -13,6 +12,8 @@ from log import log
 class Group:
     ids: list[str]
 
+    # getters -------------------------------------------------------------------- #
+
     def amt_on(self) -> int:
         count = 0
         for id in self.ids:
@@ -21,14 +22,17 @@ class Group:
 
         return count
 
-    def is_some_on(self):
+    def is_some_on(self) -> bool:
         for id in self.ids:
             if _is_on(id):
                 return True
 
         return False
 
+    # actions -------------------------------------------------------------------- #
+
     def turn_on(self):
+        log(f"Turning on group with ids: {self.ids}")
         for id in self.ids:
             _exec_cmd(id, 'on')
 
@@ -45,6 +49,7 @@ class Group:
             self.turn_on()
 
     def toggle_individually(self):
+        log(f"Toggling group individually with ids: {self.ids}")
         for id in self.ids:
             if _is_on(id):
                 _exec_cmd(id, 'off')
@@ -52,6 +57,7 @@ class Group:
                 _exec_cmd(id, 'on')
 
     def level(self, level: int):
+        log(f"Setting level {level} for group with ids: {self.ids}")
         for id in self.ids:
             _exec_cmd(id, 'level', str(level))
 

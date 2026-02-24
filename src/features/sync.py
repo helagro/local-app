@@ -20,13 +20,13 @@ def sync_folders():
         src = os.path.join(folder_a, f)
         dst = os.path.join(HOSTED_FOLDER_PATH, f)
         shutil.copy2(src, dst)
-        log(f"/sync copied: {f}")
+        log(f"copied: {f}")
 
     # 3️⃣ Optionally delete files in B that are not in A
     for f in files_b - files_a:
         dst = os.path.join(HOSTED_FOLDER_PATH, f)
         os.remove(dst)
-        log(f"/sync deleted: {f}")
+        log(f"deleted: {f}")
 
     log("Sync complete.")
 
