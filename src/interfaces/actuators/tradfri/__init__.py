@@ -38,6 +38,11 @@ def _exec_preset(preset: Preset, state_mode: str | None):
             elif state == 'off' and was_on:
                 device.turn_off()
 
+        if 'color' in config:
+            color = config['color']
+            if color:
+                device.color(color)
+
 
 # get device(s) ----------------------------------------------------------------- #
 

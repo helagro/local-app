@@ -22,7 +22,8 @@ def log(message):
 def get_file_path(depth=1):
     frame_info = inspect.stack()[depth]
     full_path = Path(frame_info.frame.f_code.co_filename).resolve()
-    return full_path.relative_to(SRC_FOLDER)
+    relative_path = full_path.relative_to(SRC_FOLDER)
+    return relative_path
 
 
 def get_logs():

@@ -62,6 +62,12 @@ class Group:
         for id in self.ids:
             _exec_cmd(id, 'level', str(level))
 
+    def color(self, color: str):
+        log(f"Setting color {color} for group with ids: {self.ids}")
+        for id in self.ids:
+            uri = f"15001/{id}"
+            _exec_cmd_by_args(['put', uri, f"'{{\"3311\":[{{\"5706\":\"{color}\"}}]}}'"])
+
 
 # ================================== HELPERS ================================= #
 
@@ -69,9 +75,15 @@ class Group:
 def _exec_cmd(name: str, command: Literal['on', 'off', 'level', 'raw'], argument: str | None = None) -> str | None:
     id = _get_id(name)
 
-    cmd = f'tradfri {command} {id}'
+    cmd = [command, str(id)]
     if argument:
-        cmd += f' {argument}'
+        cmd += [argument]
+
+    return _exec_cmd_by_args(cmd)
+
+
+def _exec_cmd_by_args(tradfri_args: list[str]) -> str | None:
+    cmd = "tradfri " + " ".join(tradfri_args)
 
     venv_bin = str(Path.home() / "Developer/local-app/.venv/bin")
     env = os.environ.copy()
