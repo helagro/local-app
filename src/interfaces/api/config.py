@@ -21,6 +21,8 @@ class Config:
     tempCompensation: float
     externalTempCompensation: float
 
+    colors: Dict[str, str] = field(default_factory=dict)
+
     devices: Dict[str, int] = field(default_factory=dict)
     groups: Dict[str, List[str]] = field(default_factory=dict)
     presets: Dict[str, Preset] = field(default_factory=dict)

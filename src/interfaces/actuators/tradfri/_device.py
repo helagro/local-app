@@ -59,11 +59,16 @@ class Group:
             _exec_cmd(id, 'level', str(level))
 
     def color(self, color: str):
+        from interfaces.api.config import get_cashed
+        config = get_cashed()
+
+        color_code = config.colors.get(color, color) if (config and color in config.colors) else color
+
         for id in self.ids:
             device_id = _get_id(id)
 
             uri = f"15001/{device_id}"
-            _exec_cmd_by_args(['put', uri, f"'{{\"3311\":[{{\"5706\":\"{color}\"}}]}}'"])
+            _exec_cmd_by_args(['put', uri, f"'{{\"3311\":[{{\"5706\":\"{color_code}\"}}]}}'"])
 
 
 # ================================== HELPERS ================================= #

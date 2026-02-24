@@ -1,5 +1,6 @@
 from datetime import datetime
 from features.activity.blink_timer import start_blink_timer, stop_blink_timer
+from interfaces.actuators.tradfri import get_device
 from interfaces.api.config import get_cashed
 from log import log
 from interfaces.api.time_tracking import stop_tracking_activity, track_activity
@@ -8,6 +9,8 @@ import threading
 
 _work_lamp = get_lamp('yellow')
 _break_lamp = get_lamp('green')
+_colored_devices = get_device('colored')
+
 _running = False
 _break_thread = None
 
@@ -34,6 +37,7 @@ def start_activity(track=True, blink_frequency=None):
         _break_thread = None
 
     _work_lamp.on()
+    _colored_devices.color('work')
     start_blink_timer(blink_frequency)
 
     if track:
@@ -46,6 +50,7 @@ def stop_activity(track=True):
     log("Stopped timer")
 
     _work_lamp.off()
+    _colored_devices.color('chill')
     stop_blink_timer()
 
     if track:

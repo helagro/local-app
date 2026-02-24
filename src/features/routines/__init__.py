@@ -51,6 +51,8 @@ def _on_before_wake() -> None:
 
 
 def _on_morning() -> None:
+    get_device('colored').color('chill')
+
     if _no_track_for_detach: return
 
     read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))
@@ -97,6 +99,8 @@ def _on_latest_dinner() -> None:
 
 
 def _on_detach():
+    get_device('colored').color('eve')
+
     if _no_track_for_detach: return
 
     exec_preset_by_name("chill", state_mode='keep')
@@ -111,6 +115,8 @@ def _on_detach():
 def _on_full_detach() -> None:
     global _no_track_for_detach, _voc
     _no_track_for_detach = should_skip_tracking()
+
+    get_device('colored').color('night')
 
     if _no_track_for_detach:
         _voc = None
