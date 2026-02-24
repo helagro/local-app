@@ -32,12 +32,10 @@ class Group:
     # actions -------------------------------------------------------------------- #
 
     def turn_on(self):
-        log(f"Turning on group with ids: {self.ids}")
         for id in self.ids:
             _exec_cmd(id, 'on')
 
     def turn_off(self):
-        log(f"Turning off group with ids: {self.ids}")
         for id in self.ids:
             _exec_cmd(id, 'off')
 
@@ -50,7 +48,6 @@ class Group:
             self.turn_on()
 
     def toggle_individually(self):
-        log(f"Toggling group individually with ids: {self.ids}")
         for id in self.ids:
             if _is_on(id):
                 _exec_cmd(id, 'off')
@@ -58,14 +55,14 @@ class Group:
                 _exec_cmd(id, 'on')
 
     def level(self, level: int):
-        log(f"Setting level {level} for group with ids: {self.ids}")
         for id in self.ids:
             _exec_cmd(id, 'level', str(level))
 
     def color(self, color: str):
-        log(f"Setting color {color} for group with ids: {self.ids}")
         for id in self.ids:
-            uri = f"15001/{id}"
+            device_id = _get_id(id)
+
+            uri = f"15001/{device_id}"
             _exec_cmd_by_args(['put', uri, f"'{{\"3311\":[{{\"5706\":\"{color}\"}}]}}'"])
 
 
@@ -84,6 +81,7 @@ def _exec_cmd(name: str, command: Literal['on', 'off', 'level', 'raw'], argument
 
 def _exec_cmd_by_args(tradfri_args: list[str]) -> str | None:
     cmd = "tradfri " + " ".join(tradfri_args)
+    log(cmd)
 
     venv_bin = str(Path.home() / "Developer/local-app/.venv/bin")
     env = os.environ.copy()
