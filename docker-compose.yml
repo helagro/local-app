@@ -39,6 +39,6 @@ services:
       - /media/pi/:/shares/data
     environment:
       - SAMBA_CONF=/etc/samba/smb.conf
-      - ACCOUNT_smbuser=smbuser:${SAMBA_PASSWORD}
+      - ACCOUNT_smbuser=${SAMBA_PASSWORD}
       - UID_smbuser=1000
     restart: unless-stopped
