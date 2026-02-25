@@ -38,8 +38,8 @@ services:
       # - ./config/smb.conf:/etc/samba/smb.conf:ro
       - /media/pi/:/shares/data
     environment:
-      - ACCOUNT_smbuser=${SAMBA_PASSWORD}
-      - UID_smbuser=1000
+      - ACCOUNT_smbuser: ${SAMBA_PASSWORD}
+      - UID_smbuser: 1000
       - SAMBA_VOLUME_CONFIG_shared: >
           [shared];
           path = /shares/data;
