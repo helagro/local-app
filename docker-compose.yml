@@ -40,5 +40,5 @@ services:
     environment:
       - SAMBA_CONF=/etc/samba/smb.conf
       - ACCOUNT_smbuser=smbuser:${SAMBA_PASSWORD}
-      - UID_username=1000
+      - UID_smbuser=1000
     restart: unless-stopped
