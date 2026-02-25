@@ -1,13 +1,13 @@
 version: '0.1'
 
 services:
-  myapp:
-    image: 3henrikl/local-app
-    container_name: local-app
-    ports:
-      - "8004:8004"
-    stdin_open: true    # equivalent to -i (interactive)
-    tty: true           # equivalent to -t (pseudo-TTY)
+  # myapp:
+  #   image: 3henrikl/local-app
+  #   container_name: local-app
+  #   ports:
+  #     - "8004:8004"
+  #   stdin_open: true    # equivalent to -i (interactive)
+  #   tty: true           # equivalent to -t (pseudo-TTY)
 
   watchtower:
     image: containrrr/watchtower
@@ -17,3 +17,29 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/h/.docker/config.json:/config.json
     command: --interval 300 --label-enable --cleanup --stop-timeout 30s
+
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    network_mode: host
+    volumes:
+      - ./config/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+
+  samba:
+    image: servercontainers/samba
+    container_name: samba
+    network_mode: bridge
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - ./config/smb.conf:/etc/samba/smb.conf:ro
+      - /media/pi/:/shares/data
+    environment:
+      - SAMBA_CONF=/etc/samba/smb.conf
+      - UID=1000
+      - GID=1000
+      - SAMBA_USERS=pi:${SAMBA_PASSWORD}
+    restart: unless-stopped

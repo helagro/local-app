@@ -1,6 +1,5 @@
 from datetime import datetime
 from features.activity.blink_timer import start_blink_timer, stop_blink_timer
-from interfaces.actuators.tradfri import get_device
 from interfaces.api.config import get_cashed
 from log import log
 from interfaces.api.time_tracking import stop_tracking_activity, track_activity
