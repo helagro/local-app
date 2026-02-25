@@ -35,10 +35,18 @@ services:
       - "139:139"
       - "445:445"
     volumes:
-      - ./config/smb.conf:/etc/samba/smb.conf:ro
+      # - ./config/smb.conf:/etc/samba/smb.conf:ro
       - /media/pi/:/shares/data
     environment:
-      - SAMBA_CONF=/etc/samba/smb.conf
       - ACCOUNT_smbuser=${SAMBA_PASSWORD}
       - UID_smbuser=1000
+      - SAMBA_VOLUME_CONFIG_<SHARENAME>: |
+          [shared]
+          path = /shares/data
+          writeable = yes
+          force user = smbuser
+          valid users = smbuser 
+          guest ok = yes
+          browseable = yes
+          read only = no
     restart: unless-stopped
