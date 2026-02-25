@@ -3,7 +3,7 @@ from features.menu import menu, rest_inputs
 from flask import jsonify, Blueprint, request
 from interfaces.actuators.led import get_lamp
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
-from interfaces.actuators.tradfri import exec_preset_by_name, get_device, get_devices_string
+from interfaces.home import exec_preset_by_name, get_device, get_devices_string
 
 bp = Blueprint('actions', __name__)
 

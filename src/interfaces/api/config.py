@@ -1,6 +1,6 @@
 import os
 import requests
-from interfaces.actuators.tradfri._preset import Preset
+from interfaces.home._preset import Preset
 from log import log
 from dataclasses import dataclass, field
 from typing import Dict, List, Literal
@@ -23,7 +23,7 @@ class Config:
 
     colors: Dict[str, str] = field(default_factory=dict)
 
-    devices: Dict[str, int] = field(default_factory=dict)
+    devices: Dict[str, str] = field(default_factory=dict)
     groups: Dict[str, List[str]] = field(default_factory=dict)
     presets: Dict[str, Preset] = field(default_factory=dict)
 

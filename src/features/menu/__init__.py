@@ -1,7 +1,7 @@
 from features.activity import toggle_activity
 from interfaces.actuators.led import get_lamps
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
-from interfaces.actuators.tradfri import exec_preset_by_name, get_device
+from interfaces.home import exec_preset_by_name, get_device
 from log import log
 
 rest_inputs = ['0', '1', '2', '3', '4']

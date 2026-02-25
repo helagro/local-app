@@ -1,6 +1,6 @@
 import json
-from interfaces.actuators.tradfri._device import Group
-from interfaces.actuators.tradfri._preset import Preset
+from interfaces.home._device import Group
+from interfaces.home._preset import Preset
 from log import log
 
 

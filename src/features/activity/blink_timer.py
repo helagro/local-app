@@ -3,7 +3,7 @@ import time
 from interfaces.actuators.led import get_lamp
 from log import log
 from interfaces.api.config import get_cashed
-from interfaces.actuators.tradfri import get_device
+from interfaces.home import get_device
 import threading
 
 _should_run = False
