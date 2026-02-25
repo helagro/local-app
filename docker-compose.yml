@@ -49,4 +49,14 @@ services:
         browseable = yes;
         read only = no;
         fruit:time machine = yes
+
+        [timemachine];
+        path = /shares/data/tb-hdd;
+        writeable = yes;
+        force user = smbuser;
+        valid users = smbuser;
+        guest ok = no;
+        browseable = yes;
+        read only = no;
+        fruit:time machine = yes
     restart: unless-stopped
