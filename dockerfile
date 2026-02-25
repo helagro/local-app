@@ -3,7 +3,7 @@ FROM python:3.13
 # ------------------------ SETUP FILES ----------------------- #
 
 WORKDIR /app
-COPY requirements.txt /app/
+COPY config/requirements.txt /app/
 COPY src /app/src
 
 # ---------------------- INSTALL DEPENDENCIES ---------------------- #

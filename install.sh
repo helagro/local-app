@@ -9,13 +9,13 @@ echo "Stopping existing service if running..."
 sudo systemctl stop "$SERVICE_NAME" || true
 
 # Check if service file exists
-if [ ! -f "$SERVICE_NAME" ]; then
-    echo "Error: $SERVICE_NAME not found in current directory."
+if [ ! -f "config/$SERVICE_NAME" ]; then
+    echo "Error: $SERVICE_NAME not found in config directory."
     exit 1
 fi
 
 echo "Copying $SERVICE_NAME to $SYSTEMD_DIR..."
-sudo cp "$SERVICE_NAME" "$SYSTEMD_DIR/"
+sudo cp "config/$SERVICE_NAME" "$SYSTEMD_DIR/"
 
 echo "Setting correct permissions..."
 sudo chmod 644 "$SYSTEMD_DIR/$SERVICE_NAME"
@@ -32,6 +32,7 @@ sudo systemctl start "$SERVICE_NAME"
 echo "Done! Check status with:"
 echo "  systemctl status $SERVICE_NAME"
 
+# TODO - Remove
 # =================================== SAMBA ================================== #
 
 if ask "Setup samba?"; then

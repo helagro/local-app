@@ -1,4 +1,4 @@
-version: '0.1'
+version: '3.9'
 
 services:
   # myapp:
@@ -9,14 +9,14 @@ services:
   #   stdin_open: true    # equivalent to -i (interactive)
   #   tty: true           # equivalent to -t (pseudo-TTY)
 
-  watchtower:
-    image: containrrr/watchtower
-    restart: unless-stopped
-    privileged: true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /home/h/.docker/config.json:/config.json
-    command: --interval 300 --label-enable --cleanup --stop-timeout 30s
+  # watchtower:
+  #   image: containrrr/watchtower
+  #   restart: unless-stopped
+  #   privileged: true
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - /home/h/.docker/config.json:/config.json
+  #   command: --interval 3600 --label-enable --cleanup --stop-timeout 30s
 
   homeassistant:
     container_name: homeassistant
@@ -39,7 +39,5 @@ services:
       - /media/pi/:/shares/data
     environment:
       - SAMBA_CONF=/etc/samba/smb.conf
-      - UID=1000
-      - GID=1000
-      - SAMBA_USERS=pi:${SAMBA_PASSWORD}
+      - SAMBA_USERS=smbuser:${SAMBA_PASSWORD}:1000
     restart: unless-stopped
