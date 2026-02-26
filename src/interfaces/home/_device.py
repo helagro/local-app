@@ -17,14 +17,6 @@ class Group:
 
     # getters -------------------------------------------------------------------- #
 
-    def amt_on(self) -> int:
-        count = 0
-        for id in self.device_ids:
-            if api.is_on(id):
-                count += 1
-
-        return count
-
     def is_some_on(self) -> bool:
         for id in self.device_ids:
             if api.is_on(id):
