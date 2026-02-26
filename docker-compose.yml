@@ -34,8 +34,6 @@ services:
     environment:
       ACCOUNT_smbuser: ${SAMBA_PASSWORD}
       UID_smbuser: 1000
-      GROUP_mygroup: 1000
-      GROUPS_smbuser: mygroup
       SAMBA_VOLUME_CONFIG_shared: >
         [shared];
         path = /shares/data;
