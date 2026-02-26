@@ -70,11 +70,18 @@ def color(entity_id: str, color: str | int):
             'color_n': color_rgb,
         }
 
-    if not is_on(entity_id):
+    is_on_val = is_on(entity_id)
+
+    if not is_on_val:
         data['brightness'] = 1
         data['transition'] = 0
 
-    return _api('/services/light/turn_on', method='post', data=data)
+    res = _api('/services/light/turn_on', method='post', data=data)
+
+    if not is_on_val:
+        switch(entity_id, 'off')
+
+    return res
 
 
 # ================================== HELPERS ================================= #
