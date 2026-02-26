@@ -1,6 +1,7 @@
 from typing import Any
+from features.routines._api import get_routine
 from log import log
-from interfaces.api.server_app import get_routine
+from interfaces.api.server_app import get_routines
 from collections.abc import Callable
 import schedule
 

@@ -1,3 +1,4 @@
+from features.routines._api import sync_routines
 from features.sync import sync_folders
 from interfaces.actuators.led import get_lamp
 from interfaces.home import exec_preset_by_name, get_device
@@ -5,8 +6,7 @@ from interfaces.api.config import sync_config
 from interfaces.api.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
 import schedule
 import time
-from interfaces.api import *
-from features.routines.routine import Routine, SyncedRoutine
+from features.routines._routine import Routine, SyncedRoutine
 from interfaces.sensors import *
 from threading import Thread
 from typing import cast
@@ -166,6 +166,8 @@ def _update_routines() -> None:
     if (config and config.kill == True):
         log("Killing local app from config")
         exit(0)
+
+    sync_routines()
 
     for routine in _routines.values():
         routine.update()

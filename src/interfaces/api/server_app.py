@@ -32,19 +32,19 @@ if not _AUTH_TOKEN:
 # ================================== GETTING ================================= #
 
 
-def get_routine(name: str) -> str | None:
+def get_routines() -> dict | None:
     headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
     params = {"sep": ":", "sec": "false"}
 
     try:
         response = requests.get(
-            f"{_ROUTINE_ENDPOINT}/{name}/start",
+            f"{_ROUTINE_ENDPOINT}",
             params=params,
             headers=headers,
         )
         response.raise_for_status()
 
-        return response.text
+        return response.json().routines
     except requests.exceptions.RequestException as e:
         log_to_server(f"Failed to fetch routine: {e}")
         return None

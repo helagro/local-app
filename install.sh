@@ -31,15 +31,3 @@ sudo systemctl start "$SERVICE_NAME"
 
 echo "Done! Check status with:"
 echo "  systemctl status $SERVICE_NAME"
-
-# TODO - Remove
-# =================================== SAMBA ================================== #
-
-if ask "Setup samba?"; then
-    echo "Installing samba..."
-    sudo apt-get update
-    sudo apt-get install -y samba
-
-    sudo smbpasswd -a pi
-    sudo smbpasswd -e pi
-fi
