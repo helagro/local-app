@@ -34,7 +34,9 @@ services:
     ports:
       - "139:139"
       - "445:445"
+    privileged: true
     volumes:
+      - /var/run/dbus:/var/run/dbus # Required for BlueZ communication
       - /media/pi/:/shares/data
     environment:
       ACCOUNT_smbuser: ${SAMBA_PASSWORD}
