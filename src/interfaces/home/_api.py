@@ -90,13 +90,13 @@ def _api(endpoint: str, method: str = 'get', data: dict | None = None, log_respo
 
     full_url = url + endpoint
     response = request(method, full_url, headers=headers, json=data)
-    log(f"{method.upper()} {full_url} gave status {response.status_code}")
+    log(f"{method} TO {full_url} YIELDED {response.status_code}")
 
     if response.status_code in [200, 201, 204]:
         if response.content:
             json_response = response.json()
             if log_response:
-                log(f"Response from {endpoint}: {json.dumps(json_response, indent=2)}")
+                log(f"{endpoint} RESPONDED: {json.dumps(json_response, indent=2)}")
 
             return json_response
         return None
