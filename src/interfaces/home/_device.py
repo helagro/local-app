@@ -52,7 +52,7 @@ class Group:
         for id in self.device_ids:
             api.brightness(id, level)
 
-    def color(self, color: str):
+    def color(self, color: str | int):
         from interfaces.api.config import get_cashed
         config = get_cashed()
 

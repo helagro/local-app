@@ -4,7 +4,7 @@ from typing import Literal, TypedDict
 class PresetValue(TypedDict):
     level: int | None
     state: Literal['on', 'off', 'keep']
-    color: str | None
+    color: str | int | None
 
 
 class Preset(TypedDict):

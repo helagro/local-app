@@ -56,13 +56,19 @@ def brightness(entity_id: str, level: int):
     return _api(f'/services/light/turn_on', method='post', data={'entity_id': entity_id, 'brightness': level})
 
 
-def color(entity_id: str, color: str):
-    color_rgb = _hex_to_rgb(color)
+def color(entity_id: str, color: str | int):
+    if isinstance(color, int):
+        data = {
+            'entity_id': entity_id,
+            'color_temp_kelvin': color,
+        }
+    else:
+        color_rgb = _hex_to_rgb(color)
 
-    data = {
-        'entity_id': entity_id,
-        'rgb_color': color_rgb,
-    }
+        data = {
+            'entity_id': entity_id,
+            'color_n': color_rgb,
+        }
 
     if not is_on(entity_id):
         data['brightness'] = 1
