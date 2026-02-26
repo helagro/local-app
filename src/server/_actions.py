@@ -76,6 +76,14 @@ def color(name: str, color: str):
     return "ok"
 
 
+@bp.route('/dev/<string:name>/color/<int:color>')
+def color_int(name: str, color: int):
+    device = get_device(name)
+    device.color(color)
+
+    return "ok"
+
+
 @bp.route('/t/<path:rest>')
 def toggle_group(rest: str):
     names = rest.split('/')
