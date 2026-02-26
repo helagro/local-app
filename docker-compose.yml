@@ -76,7 +76,7 @@ services:
       - apparmor:unconfined
     volumes:
       # Create an .env file that sets the USERDIR environment variable.
-      - ${USERDIR:-$HOME}/docker/matter-server/data:/data/
+      - ./config/matter_server:/data/
       # Required for Bluetooth via D-Bus
       - /run/dbus:/run/dbus:ro
     # If you adjust command line, make sure to pass the default CMD arguments too:
