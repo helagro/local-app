@@ -43,7 +43,7 @@ def switch(entity_id: str, state: Literal['on', 'off', 'toggle']):
     if state not in ['on', 'off', 'toggle']:
         raise ValueError("State must be 'on', 'off', or 'toggle'")
 
-    service = 'turn_on' if state == 'on' else 'turn_off'
+    service = service = ('turn_on' if state == 'on' else 'turn_off' if state == 'off' else 'toggle')
     domain = entity_id.split('.')[0]
 
     return _api(f'/services/{domain}/{service}', method='post', data={'entity_id': entity_id})

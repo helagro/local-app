@@ -86,6 +86,7 @@ def _alert(duration):
     start_time = time.time()
 
     time.sleep(duration)
+
     end_time = time.time()
     device.toggle_individually()
 
