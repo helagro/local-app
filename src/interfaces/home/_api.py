@@ -67,7 +67,7 @@ def color(entity_id: str, color: str | int):
 
         data = {
             'entity_id': entity_id,
-            'color_n': color_rgb,
+            'rgb_color': color_rgb,
         }
 
     is_on_val = is_on(entity_id)
