@@ -2,7 +2,7 @@ import json
 from interfaces.home._device import Group
 from interfaces.home._preset import Preset
 from log import log
-import _api as api
+import interfaces.home._api as api
 
 
 def exec_preset_by_name(name: str, state_mode: str | None = None):
