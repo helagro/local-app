@@ -60,3 +60,7 @@ class Group:
 
         for id in self.device_ids:
             api.color(id, color_code)
+
+    def switch_custom(self, state: api.DeviceState, payload: api.Payload):
+        for id in self.device_ids:
+            api.switch_custom(id, state, payload)

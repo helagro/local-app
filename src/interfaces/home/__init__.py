@@ -2,6 +2,7 @@ import json
 from interfaces.home._device import Group
 from interfaces.home._preset import Preset
 from log import log
+import _api as api
 
 
 def exec_preset_by_name(name: str, state_mode: str | None = None):
@@ -24,24 +25,24 @@ def _exec_preset(preset: Preset, state_mode: str | None):
         device = get_device(device_name)
         was_on = device.is_some_on()
 
-        if 'level' in config:
-            level = config['level']
-            if level:
-                device.level(level)
+        level = config.get('level')
+        state = config.get('state')
+        color = config.get('color')
 
-        if 'state' in config:
-            state = config['state']
-            if (state == 'keep' or state_mode == 'keep') and not was_on:
-                device.turn_off()
-            elif state == 'on' and not was_on:
-                device.turn_on()
-            elif state == 'off' and was_on:
-                device.turn_off()
+        if state_mode == 'keep':
+            should_be_on = was_on
+        else:
+            should_be_on: bool = (state == 'on' or level is not None)
 
-        if 'color' in config:
-            color = config['color']
-            if color:
-                device.color(color)
+        state_string = 'on' if should_be_on else 'off'
+        payload: api.Payload = {}
+
+        if level is not None:
+            payload['brightness'] = level
+        if color is not None:
+            payload.update(api.get_color_dict(color))
+
+        device.switch_custom(state_string, payload)
 
 
 # get device(s) ----------------------------------------------------------------- #
