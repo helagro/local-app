@@ -16,7 +16,8 @@ except ImportError:
 
 # =================================== TYPES ================================== #
 
-type DeviceState = Literal['on', 'off', 'toggle']
+DeviceState = Literal['on', 'off', 'toggle']
+
 
 class Payload(TypedDict, total=False):
     entity_id: str
@@ -99,6 +100,7 @@ def color(entity_id: str, color: str | int):
 
 
 # ================================== HELPERS ================================= #
+
 
 def get_color_dict(color: str | int) -> dict:
     if isinstance(color, int):
