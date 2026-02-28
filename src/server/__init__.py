@@ -8,7 +8,7 @@ from ._actions import bp as actions_bp
 from ._files import bp as files_bp
 from os import _exit
 from interfaces.api.config import sync_config
-from interfaces.os import shutdown as os_shutdown
+from interfaces.os import shutdown as os_shutdown, restart as os_restart
 
 startup_date = date.today()
 
@@ -63,6 +63,16 @@ def shutdown():
         log(f"Shutdown command error: {err}")
         abort(500, description=f"Shutdown command error: {err}")
     return "Shutting down..."
+
+
+@app.route('/restart')
+def restart():
+    log("Restarting system...")
+    err = os_restart()
+    if err:
+        log(f"Restart command error: {err}")
+        abort(500, description=f"Restart command error: {err}")
+    return "Restarting..."
 
 
 # ================================ MIDDLEWARE ================================ #
