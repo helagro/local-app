@@ -40,7 +40,11 @@ def _exec_preset(preset: Preset, state_mode: str | None):
         if level is not None:
             payload['brightness'] = level
         if color is not None:
-            payload.update(api.get_color_dict(color))
+            from interfaces.api.config import get_cashed
+            config = get_cashed()
+
+            color_code = config.colors.get(color, color) if (config and color in config.colors) else color
+            payload.update(api.get_color_dict(color_code))
 
         device.switch_custom(state_string, payload)
 
