@@ -20,14 +20,55 @@ services:
 
 
 
+
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    network_mode: host
+    volumes:
+      - ./config/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+
+  matter-server:
+    image: ghcr.io/matter-js/python-matter-server:stable
+    container_name: matter-server
+    restart: unless-stopped
+    # Required for mDNS to work correctly
+    network_mode: host
+    security_opt:
+      # Needed for Bluetooth via dbus
+      - apparmor:unconfined
+    volumes:
+      # Create an .env file that sets the USERDIR environment variable.
+      - ./config/matter_server:/data/
+      # Required for Bluetooth via D-Bus
+      - /run/dbus:/run/dbus:ro
+    # If you adjust command line, make sure to pass the default CMD arguments too:
+    #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
+
+  # samba -------------------------------------------------------------------- #
+
+  delay:
+    image: alpine
+    command: sleep 30
+    healthcheck:
+      test: ["CMD", "true"]
+      start_period: 30s
+      interval: 1s
+      retries: 1
+
   samba:
     image: servercontainers/samba
     container_name: samba
     network_mode: bridge
+    privileged: true
+    depends_on:
+      delay:
+        condition: service_healthy
     ports:
       - "139:139"
       - "445:445"
-    privileged: true
     volumes:
       - /var/run/dbus:/var/run/dbus # Required for BlueZ communication
       - /media/pi/:/shares/data
@@ -55,29 +96,3 @@ services:
         read only = no;
         fruit:time machine = yes
     restart: unless-stopped
-
-  homeassistant:
-    container_name: homeassistant
-    image: ghcr.io/home-assistant/home-assistant:stable
-    network_mode: host
-    volumes:
-      - ./config/homeassistant:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
-
-  matter-server:
-    image: ghcr.io/matter-js/python-matter-server:stable
-    container_name: matter-server
-    restart: unless-stopped
-    # Required for mDNS to work correctly
-    network_mode: host
-    security_opt:
-      # Needed for Bluetooth via dbus
-      - apparmor:unconfined
-    volumes:
-      # Create an .env file that sets the USERDIR environment variable.
-      - ./config/matter_server:/data/
-      # Required for Bluetooth via D-Bus
-      - /run/dbus:/run/dbus:ro
-    # If you adjust command line, make sure to pass the default CMD arguments too:
-    #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
