@@ -51,6 +51,7 @@ def _on_before_wake() -> None:
 
 
 def _on_morning() -> None:
+    log("routine - morning")
     get_device('colored').color('chill')
 
     if _no_track_for_detach: return
@@ -99,6 +100,7 @@ def _on_latest_dinner() -> None:
 
 
 def _on_detach():
+    log("routine - detach")
     get_device('colored').color('eve')
 
     if _no_track_for_detach: return
@@ -208,4 +210,4 @@ def get_routine_strings() -> list[str]:
 def run_schedule():
     while True:
         schedule.run_pending()
-        time.sleep(20)
+        time.sleep(1)
