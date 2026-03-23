@@ -19,8 +19,6 @@ services:
   #   command: --interval 3600 --label-enable --cleanup --stop-timeout 30s
 
 
-
-
   homeassistant:
     container_name: homeassistant
     image: ghcr.io/home-assistant/home-assistant:stable

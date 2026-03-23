@@ -1,5 +1,4 @@
 from features.activity import start_activity, stop_activity, is_activity_running
-from features.menu import menu, rest_inputs
 from flask import jsonify, Blueprint, request
 from interfaces.actuators.led import get_lamp
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
@@ -103,21 +102,6 @@ def toggle_group(rest: str):
             })
 
     return "ok"
-
-
-@bp.route('/c/<path:rest>')
-def command(rest: str):
-    commands = rest.split('/')
-
-    outputs = []
-    for cmd in commands:
-        out = menu(cmd, rest_inputs)
-        outputs.append({"command": cmd, "output": out})
-
-    return jsonify({
-        "is_running": is_activity_running(),
-        "results": outputs,
-    })
 
 
 @bp.route('/p/<string:name>')

@@ -1,4 +1,4 @@
-from features.routines._api import sync_routines
+from features.routines._api import sync_routine_times
 from features.sync import sync_folders
 from interfaces.actuators.led import get_lamp
 from interfaces.home import exec_preset_by_name, get_device
@@ -76,7 +76,7 @@ def _on_do_reduce_temp() -> None:
 
 
 def _on_eve() -> None:
-    _update_routines()
+    update_routines()
     if _no_track_for_detach: return
 
     config = get_cashed()
@@ -162,14 +162,14 @@ def track_time_independents():
             a(f"#b open window - voc ({_voc} > 100)")
 
 
-def _update_routines() -> None:
+def update_routines() -> None:
     config = sync_config()
 
     if (config and config.kill == True):
         log("Killing local app from config")
         exit(0)
 
-    sync_routines()
+    sync_routine_times()
 
     for routine in _routines.values():
         routine.update()
@@ -185,7 +185,7 @@ _routines: dict[str, Routine] = {
     "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
     "latest_dinner": SyncedRoutine(name="latest_dinner", default_time="20:00", function=_on_latest_dinner),
     "detach": SyncedRoutine(name="detach", default_time="21:00", function=_on_detach),
-    "full_detach": SyncedRoutine(name="full_detach", default_time="21:00", function=_on_full_detach),
+    "full_detach": SyncedRoutine(name="full_detach", default_time="21:30", function=_on_full_detach),
     "bed_time": SyncedRoutine(name="bed_time", default_time="22:00", function=_on_bedtime),
 }
 

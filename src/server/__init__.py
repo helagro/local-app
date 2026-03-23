@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, send_from_directory, abort
 from log import log
 from interfaces.api.config import get_cashed
 from datetime import date
-from features.routines import get_away_for_eve, get_routine_strings
+from features.routines import get_away_for_eve, get_routine_strings, update_routines
 from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as actions_bp
 from ._files import bp as files_bp
@@ -47,6 +47,7 @@ def quit():
 @app.route('/sync')
 def sync():
     sync_config()
+    update_routines()
     return "ok"
 
 

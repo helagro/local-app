@@ -44,7 +44,7 @@ def get_routines() -> dict | None:
         )
         response.raise_for_status()
 
-        return response.json().routines
+        return response.json()["routines"]
     except requests.exceptions.RequestException as e:
         log_to_server(f"Failed to fetch routine: {e}")
         return None

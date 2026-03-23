@@ -1,5 +1,5 @@
 from typing import Any
-from features.routines._api import get_routine
+from features.routines._api import get_routine_time
 from log import log
 from interfaces.api.server_app import get_routines
 from collections.abc import Callable
@@ -25,11 +25,11 @@ class Routine:
 class SyncedRoutine(Routine):
 
     def __init__(self, name: str, default_time: str, function: Callable) -> None:
-        time = get_routine(name) or default_time
+        time = get_routine_time(name) or default_time
         super().__init__(name, time, function)
 
     def update(self) -> None:
-        new_time = get_routine(self.name)
+        new_time = get_routine_time(self.name)
         if not new_time:
             log(f"Routine {self.name} could not be fetched")
             return

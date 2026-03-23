@@ -3,11 +3,11 @@ from interfaces.api.server_app import get_routines
 _routines = {}
 
 
-def get_routine(name: str) -> str | None:
+def get_routine_time(name: str) -> str | None:
     return _routines.get(name)
 
 
-def sync_routines():
+def sync_routine_times():
     global _routines
 
     routines = get_routines()
