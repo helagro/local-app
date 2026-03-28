@@ -52,8 +52,6 @@ def _on_before_wake() -> None:
 
 def _on_morning() -> None:
     log("routine - morning")
-    get_device('colored').color('chill')
-
     if _no_track_for_detach: return
 
     read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))
