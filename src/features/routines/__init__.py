@@ -127,7 +127,6 @@ def _on_full_detach() -> None:
 
     _detach_led.off()
     _eve_led.on()
-    exec_preset_by_name("dark", state_mode='keep')
 
     callback = lambda x: a(f"{LIGHT_EVE} {x} s  #u")
     Thread(target=read_avg_light, args=(callback, )).start()
