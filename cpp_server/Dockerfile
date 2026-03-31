@@ -1,5 +1,8 @@
-# -------- Stage 1: Build --------
+# ============================== STAGE 1 - BUILD ============================= #
+
 FROM gcc:13 AS builder
+
+RUN apt-get update && apt-get install -y cmake
 
 # Set working directory
 WORKDIR /app
@@ -7,20 +10,23 @@ WORKDIR /app
 # Copy source code
 COPY . .
 
-# Build the project
+# build ---------------------------------------------------------------------- #
+
+RUN cmake . 
 RUN make
 
-# -------- Stage 2: Runtime --------
+# =============================== STAGE 2 - RUN ============================== #
+
 FROM debian:bookworm-slim
 
 # Set working directory
 WORKDIR /app
 
 # Copy only the built binary from builder stage
-COPY --from=builder /app/my_app .
+COPY --from=builder /app/main .
 
 # (Optional) Make sure it's executable
-RUN chmod +x my_app
+RUN chmod +x main
 
 # Run the binary
-CMD ["./my_app"]
+CMD ["./main"]
