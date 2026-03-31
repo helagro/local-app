@@ -9,7 +9,7 @@ User=pi
 
 # Directories
 EnvironmentFile=/home/pi/.dotfiles/scripts/secret/local-app.env
-WorkingDirectory=/home/pi/Developer/local-app
+WorkingDirectory=/home/pi/Developer/local-app/python_server
 
 # Output
 StandardOutput=journal
