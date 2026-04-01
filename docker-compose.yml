@@ -18,6 +18,14 @@ services:
   #     - /home/h/.docker/config.json:/config.json
   #   command: --interval 3600 --label-enable --cleanup --stop-timeout 30s
 
+  cpp_server:
+    build: ./cpp_server
+    container_name: cpp_server
+    ports:
+      - "8008:8008"
+    restart: unless-stopped
+
+  # =============================== SMART HOME =============================== #
 
   homeassistant:
     container_name: homeassistant
@@ -45,7 +53,7 @@ services:
     # If you adjust command line, make sure to pass the default CMD arguments too:
     #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
 
-  # samba -------------------------------------------------------------------- #
+  # ================================== SAMBA ================================= #
 
   delay:
     image: alpine
