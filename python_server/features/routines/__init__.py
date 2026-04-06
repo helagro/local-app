@@ -1,7 +1,7 @@
 from features.routines._api import sync_routine_times
 from features.file_sync import sync_folders
 from interfaces.actuators.led import get_lamp
-from interfaces.home import exec_preset_by_name, get_device
+from interfaces.home import get_device
 from interfaces.api.config import sync_config
 from interfaces.api.server_app import HUM, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
 import schedule
@@ -102,8 +102,6 @@ def _on_detach():
     get_device('colored').color('eve')
 
     if _no_track_for_detach: return
-
-    exec_preset_by_name("chill", state_mode='keep')
 
     get_device('plant').toggle()
     time.sleep(0.2)
