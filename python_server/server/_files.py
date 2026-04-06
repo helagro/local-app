@@ -10,7 +10,7 @@ bp = Blueprint('files', __name__)
 
 @bp.route('/sync')
 def sync_files():
-    from features.sync import sync_folders
+    from features.file_sync import sync_folders
     sync_folders()
     return jsonify({"status": "Sync initiated"})
 

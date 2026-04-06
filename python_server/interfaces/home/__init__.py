@@ -24,29 +24,36 @@ def _exec_preset(preset: Preset, state_mode: str | None):
     for device_name, config in preset['values'].items():
         device = get_device(device_name)
         was_on = device.is_some_on()
-
         level = config.get('level')
-        state = config.get('state')
-        color = config.get('color')
 
         if state_mode == 'keep':
             should_be_on = was_on
         else:
+            state = config.get('state')
             should_be_on: bool = (state == 'on' or level is not None)
 
-        state_string = 'on' if should_be_on else 'off'
         payload: api.Payload = {}
 
+        # Sets brightness
         if level is not None:
             payload['brightness'] = level
-        if color is not None:
+
+        # Sets color
+        if (color := config.get('color')) is not None:
             from interfaces.api.config import get_cashed
             config = get_cashed()
 
             color_code = config.colors.get(color, color) if (config and color in config.colors) else color
             payload.update(api.get_color_dict(color_code))
 
-        device.switch_custom(state_string, payload)
+        # Sends a turn on command first if parameters require it
+        if not should_be_on and (level is not None or color is not None):
+            device.switch_custom('on', payload)
+            device.turn_off()
+        # Simply use the command requested
+        else:
+            state_string = 'on' if should_be_on else 'off'
+            device.switch_custom(state_string, payload)
 
 
 # get device(s) ----------------------------------------------------------------- #

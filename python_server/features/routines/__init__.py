@@ -1,5 +1,5 @@
 from features.routines._api import sync_routine_times
-from features.sync import sync_folders
+from features.file_sync import sync_folders
 from interfaces.actuators.led import get_lamp
 from interfaces.home import exec_preset_by_name, get_device
 from interfaces.api.config import sync_config
