@@ -1,0 +1,95 @@
+from flask import Flask, jsonify, request, send_from_directory, abort
+from log import log
+from interfaces.api.config import get_cashed
+from datetime import date
+from features.routines import get_away_for_eve, get_routine_strings, update_routines
+from ._readings import all_readings, bp as readings_bp
+from ._actions import bp as actions_bp
+from ._files import bp as files_bp
+from os import _exit
+from interfaces.api.config import sync_config
+from interfaces.os import shutdown as os_shutdown, restart as os_restart
+
+startup_date = date.today()
+
+app = Flask(__name__)
+app.register_blueprint(readings_bp, url_prefix='/sens')
+app.register_blueprint(files_bp, url_prefix='/files')
+app.register_blueprint(actions_bp)
+
+# ================================== ROUTES ================================== #
+
+
+@app.route('/')
+def all():
+    return jsonify({
+        "version": "1.0",
+        "startup_date": startup_date,
+        "away_for_eve": get_away_for_eve(),
+        "config": get_cashed(),
+        "routines": get_routine_strings(),
+        "readings": all_readings()
+    })
+
+
+@app.route('/logs')
+def logs():
+    from log import get_logs
+    return jsonify({"logs": get_logs()})
+
+
+@app.route('/quit')
+def quit():
+    log("Shutting down server...")
+    _exit(0)
+
+
+@app.route('/sync')
+def sync():
+    sync_config()
+    update_routines()
+    return "ok"
+
+
+@app.route('/health')
+def health():
+    return "ok"
+
+
+@app.route('/shutdown')
+def shutdown():
+    log("Shutting down system...")
+    err = os_shutdown()
+    if err:
+        log(f"Shutdown command error: {err}")
+        abort(500, description=f"Shutdown command error: {err}")
+    return "Shutting down..."
+
+
+@app.route('/restart')
+def restart():
+    log("Restarting system...")
+    err = os_restart()
+    if err:
+        log(f"Restart command error: {err}")
+        abort(500, description=f"Restart command error: {err}")
+    return "Restarting..."
+
+
+# ================================ MIDDLEWARE ================================ #
+
+
+@app.before_request
+def before_request_func():
+    if request.path in ['/health', '/is-running']:
+        return
+
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    log(f"REQ TO {request.path} FROM {ip}")
+
+
+# ================================== CONTROL ================================= #
+
+
+def start():
+    app.run(debug=True, host='0.0.0.0', port=8004, use_reloader=False)

@@ -1,0 +1,31 @@
+[Unit]
+Description=Local Python app
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+
+# Directories
+EnvironmentFile=/home/pi/.dotfiles/scripts/secret/local-app.env
+WorkingDirectory=/home/pi/Developer/local-app/python_server
+
+# Output
+StandardOutput=journal
+StandardError=journal
+
+# Pull latest code before starting
+ExecStartPre=/usr/bin/git -C /home/pi/Developer/local-app pull --ff-only
+
+# Run using the venv's python directly (no activate needed)
+ExecStart=/home/pi/Developer/local-app/python_server/.venv/bin/python -u .
+
+Restart=on-failure
+RestartSec=600
+
+# Clean environment
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

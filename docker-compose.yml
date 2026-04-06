@@ -1,0 +1,104 @@
+version: '3.9'
+
+services:
+  # myapp:
+  #   image: 3henrikl/local-app
+  #   container_name: local-app
+  #   ports:
+  #     - "8004:8004"
+  #   stdin_open: true    # equivalent to -i (interactive)
+  #   tty: true           # equivalent to -t (pseudo-TTY)
+
+  # watchtower:
+  #   image: containrrr/watchtower
+  #   restart: unless-stopped
+  #   privileged: true
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - /home/h/.docker/config.json:/config.json
+  #   command: --interval 3600 --label-enable --cleanup --stop-timeout 30s
+
+  cpp_server:
+    build: ./cpp_server
+    container_name: cpp_server
+    ports:
+      - "8008:8008"
+    restart: unless-stopped
+
+  # =============================== SMART HOME =============================== #
+
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    network_mode: host
+    volumes:
+      - ./config/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+
+  matter-server:
+    image: ghcr.io/matter-js/python-matter-server:stable
+    container_name: matter-server
+    restart: unless-stopped
+    # Required for mDNS to work correctly
+    network_mode: host
+    security_opt:
+      # Needed for Bluetooth via dbus
+      - apparmor:unconfined
+    volumes:
+      # Create an .env file that sets the USERDIR environment variable.
+      - ./config/matter_server:/data/
+      # Required for Bluetooth via D-Bus
+      - /run/dbus:/run/dbus:ro
+    # If you adjust command line, make sure to pass the default CMD arguments too:
+    #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
+
+  # ================================== SAMBA ================================= #
+
+  delay:
+    image: alpine
+    command: sleep 30
+    healthcheck:
+      test: ["CMD", "true"]
+      start_period: 30s
+      interval: 1s
+      retries: 1
+
+  samba:
+    image: servercontainers/samba
+    container_name: samba
+    network_mode: bridge
+    privileged: true
+    depends_on:
+      delay:
+        condition: service_healthy
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - /var/run/dbus:/var/run/dbus # Required for BlueZ communication
+      - /media/pi/:/shares/data
+    environment:
+      ACCOUNT_smbuser: ${SAMBA_PASSWORD}
+      UID_smbuser: 1000
+      SAMBA_VOLUME_CONFIG_shared: >
+        [shared];
+        path = /shares/data;
+        writeable = yes;
+        force user = smbuser;
+        valid users = smbuser; 
+        guest ok = no;
+        browseable = yes;
+        read only = no;
+        fruit:time machine = yes
+
+        [timemachine];
+        path = /shares/data/tb-hdd;
+        writeable = yes;
+        force user = smbuser;
+        valid users = smbuser;
+        guest ok = no;
+        browseable = yes;
+        read only = no;
+        fruit:time machine = yes
+    restart: unless-stopped
