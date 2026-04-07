@@ -1,3 +1,3 @@
 #pragma once
 
-enum STANDARD_FILES { LOG_FILE };
+enum STANDARD_FILES { LOG_FILE, CONFIG_FILE };

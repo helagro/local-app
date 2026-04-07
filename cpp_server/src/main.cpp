@@ -1,6 +1,7 @@
 
 #include "config/env_variables.hpp"
 #include "utils/log.hpp"
+#include "vault/vault.hpp"
 
 /* ================================== MAIN ================================== */
 
@@ -12,10 +13,18 @@ int main() {
     return 1;
   }
 
-  EnvVariables* env = get_env_variables();
+  const EnvVariables *env = get_env_variables();
 
   app_log("Environment variable \"VAULT\":", ' ');
   app_log(env->vault, '\n', false);
+
+  const File config_file = get_file(CONFIG_FILE);
+
+  app_log("Config file path:", ' ');
+  app_log(config_file.get_path(), '\n', false);
+
+  app_log("Config file content:");
+  app_log(config_file.read().c_str());
 
   return 0;
 }
