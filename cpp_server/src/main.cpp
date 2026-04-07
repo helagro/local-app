@@ -1,7 +1,7 @@
 
 #include "config/env_variables.hpp"
+#include "config/json_config_handler.hpp"
 #include "utils/log.hpp"
-#include "vault/vault.hpp"
 
 /* ================================== MAIN ================================== */
 
@@ -18,13 +18,7 @@ int main() {
   app_log("Environment variable \"VAULT\":", ' ');
   app_log(env->vault, '\n', false);
 
-  const File config_file = get_file(CONFIG_FILE);
-
-  app_log("Config file path:", ' ');
-  app_log(config_file.get_path(), '\n', false);
-
-  app_log("Config file content:");
-  app_log(config_file.read().c_str());
+  load_config();
 
   return 0;
 }

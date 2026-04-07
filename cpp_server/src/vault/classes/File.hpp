@@ -10,7 +10,7 @@ public:
 
   const char *get_path() const;
 
-  std::string read() const;
+  std::optional<std::string> read() const;
 
 private:
   path file_path;
