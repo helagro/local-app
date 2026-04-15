@@ -1,6 +1,6 @@
 # ============================== STAGE 1 - BUILD ============================= #
 
-FROM gcc:13 AS builder
+FROM gcc:13-bookworm AS builder
 
 RUN apt-get update && apt-get install -y cmake
 
@@ -9,21 +9,30 @@ WORKDIR /app
 
 # Copy source code
 COPY . .
+RUN rm -r build/* || true
 
-# build ---------------------------------------------------------------------- #
-
-RUN cmake . 
-RUN make
+# Build
+RUN cmake -S . -B build
+RUN cmake --build build
 
 # =============================== STAGE 2 - RUN ============================== #
 
-FROM debian:bookworm-slim
+FROM node:25-bookworm
+
+ARG OBSIDIAN_EMAIL=""
+
+# install dependencies ------------------------------------------------------- #
+
+RUN npm install -g obsidian-headless
+# RUN ob login --email
+
+# setup executable ----------------------------------------------------------- #
 
 # Set working directory
 WORKDIR /app
 
 # Copy only the built binary from builder stage
-COPY --from=builder /app/main .
+COPY --from=builder /app/build/main .
 
 # (Optional) Make sure it's executable
 RUN chmod +x main

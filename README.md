@@ -10,4 +10,22 @@ Uses a Raspberry Pi B with a Environment Sensor HAT from Waveshare. The code tak
 
 - Public repository
 
+## Instructions
+
+### Cpp_server
+
+**Build c project manually example:**
+
+```zsh
+cmake -S . -B build
+cmake --build build
+```
+
+**Run dockerfile manually example:**
+
+```zsh
+docker run --rm -i -e VAULT=/vault -v $VAULT:/vault cppserv
+```
+
+
 ## To Do

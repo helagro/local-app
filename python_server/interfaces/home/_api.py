@@ -139,7 +139,9 @@ def _api(endpoint: str, method: str = 'get', data: Payload | None = None, log_re
     response = request(method, full_url, headers=headers, json=data)
 
     entity_id = data.get('entity_id', 'unknown') if data else 'unknown'
-    log(f"{method} TO {full_url} FOR {entity_id} YIELDED {response.status_code}")
+
+    if method != 'get':
+        log(f"{method} TO {full_url} FOR {entity_id} YIELDED {response.status_code}")
 
     if response.status_code in [200, 201, 204]:
         if response.content:

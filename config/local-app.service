@@ -16,7 +16,7 @@ StandardOutput=journal
 StandardError=journal
 
 # Pull latest code before starting
-ExecStartPre=/usr/bin/git -C /home/pi/Developer/local-app pull --ff-only
+ExecStartPre=/usr/bin/git -C /home/pi/Developer/local-app pull --ff-only || true
 
 # Run using the venv's python directly (no activate needed)
 ExecStart=/home/pi/Developer/local-app/python_server/.venv/bin/python -u .

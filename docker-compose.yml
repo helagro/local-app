@@ -21,6 +21,10 @@ services:
   cpp_server:
     build: ./cpp_server
     container_name: cpp_server
+    volumes:
+      - /dev/null:/vault # TODO - Just for testing
+    environment:
+      - VAULT=/vault
     ports:
       - "8008:8008"
     restart: unless-stopped
