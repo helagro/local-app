@@ -29,6 +29,10 @@ _AUTH_TOKEN = os.getenv("A75H")
 if not _AUTH_TOKEN:
     raise ValueError("AUTH_TOKEN environment variable is not set")
 
+# ================================= VARIABLES ================================ #
+
+last_is_away = None
+
 # ================================== GETTING ================================= #
 
 
@@ -59,6 +63,7 @@ def should_skip_tracking() -> bool:
 
 
 def _is_away() -> bool:
+    global last_is_away
     headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
 
     try:
@@ -73,10 +78,18 @@ def _is_away() -> bool:
             log('Stop because is away')
             stop_activity(track=False)
 
+        last_is_away = is_away
         return is_away
     except requests.exceptions.RequestException as e:
         log_to_server(f"/is_away - failed to check if away: {e}")
         return True
+
+
+def get_last_is_away() -> bool | None:
+    if last_is_away is None:
+        _is_away()
+
+    return last_is_away
 
 
 # ================================== POSTING ================================= #

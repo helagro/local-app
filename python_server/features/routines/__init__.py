@@ -174,7 +174,7 @@ def update_routines() -> None:
 
 _routines: dict[str, Routine] = {
     "night": Routine(name="night", time="01:30", function=_on_night),
-    "before_wake": Routine(name="before_wake", time="04:30", function=_on_before_wake),
+    "before_wake": Routine(name="before_wake", time="05:50", function=_on_before_wake),
     "after_wake": SyncedRoutine(name="after_wake", default_time="09:00", function=_on_morning),
     "reduce_temp": SyncedRoutine(name="lower_heating", default_time="16:00", function=_on_do_reduce_temp),
     "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),

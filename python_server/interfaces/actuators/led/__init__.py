@@ -18,7 +18,12 @@ class Lamp:
         self.led = LED(self.pin)
 
     def on(self):
+        from interfaces.api.server_app import get_last_is_away
         self.is_on = True
+
+        if get_last_is_away():
+            log(f"Not turning on LED on pin {self.pin} because is away")
+            return
 
         try:
             self.led.on()
