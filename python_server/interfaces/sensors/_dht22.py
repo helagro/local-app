@@ -1,7 +1,7 @@
 import time
 import adafruit_dht
 import board
-from interfaces.api.config import get_cashed
+from interfaces.api.config import get_cached
 
 _dht = adafruit_dht.DHT22(board.D22, use_pulseio=False)
 
@@ -9,7 +9,7 @@ MAX_ATTEMPTS = 10
 
 
 def read_temp() -> float:
-    cfg = get_cashed()
+    cfg = get_cached()
     TEMP_COMPENSATION = cfg.externalTempCompensation if cfg else 0.0
 
     for _ in range(MAX_ATTEMPTS):

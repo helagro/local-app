@@ -3,7 +3,7 @@ import subprocess
 import requests
 from features.activity import stop_activity
 from log import get_file_path, log
-from interfaces.api.config import get_cashed
+from interfaces.api.config import get_cached, sync_config
 
 # ============================== TRACKING VALUES ============================= #
 
@@ -29,10 +29,6 @@ _AUTH_TOKEN = os.getenv("A75H")
 if not _AUTH_TOKEN:
     raise ValueError("AUTH_TOKEN environment variable is not set")
 
-# ================================= VARIABLES ================================ #
-
-last_is_away = None
-
 # ================================== GETTING ================================= #
 
 
@@ -54,15 +50,22 @@ def get_routines() -> dict | None:
         return None
 
 
-def should_skip_tracking() -> bool:
-    config = get_cashed()
+def should_skip_tracking(use_cache=False) -> bool:
+    if use_cache:
+        config = get_cached()
+    else:
+        config = sync_config()
+
     if not config: return False
     if not config.doTrack: return False
 
-    return _is_away()
+    if use_cache:
+        return get_last_is_away()
+    else:
+        return is_away()
 
 
-def _is_away() -> bool:
+def is_away() -> bool:
     global last_is_away
     headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
 
@@ -85,11 +88,11 @@ def _is_away() -> bool:
         return True
 
 
-def get_last_is_away() -> bool | None:
+def get_last_is_away() -> bool:
     if last_is_away is None:
-        _is_away()
-
-    return last_is_away
+        return is_away()
+    else:
+        return last_is_away
 
 
 # ================================== POSTING ================================= #
@@ -121,3 +124,8 @@ def a(content: str, do_exec=True) -> None:
         log(f"Failed to send command, error: {result.stderr}")
     else:
         log(f"A: {content}, stdout: {result.stdout.strip()} stderr: {result.stderr.strip()}")
+
+
+# ================================= VARIABLES ================================ #
+
+last_is_away = is_away()

@@ -17,8 +17,6 @@ from log import log
 MAX_NIGHT_LIGHT = 0.2
 
 _voc: float | None = None
-_no_track_for_detach = should_skip_tracking()
-
 _detach_led = get_lamp('orange')
 _eve_led = get_lamp('red')
 
@@ -26,7 +24,7 @@ _eve_led = get_lamp('red')
 
 
 def _on_night() -> None:
-    if _no_track_for_detach: return
+    if should_skip_tracking(use_cache=True): return
 
     temp = read_temp(from_hat=False)
     if temp is not None:
@@ -38,7 +36,7 @@ def _on_night() -> None:
 
 
 def _on_before_wake() -> None:
-    if _no_track_for_detach:
+    if should_skip_tracking(use_cache=True):
         get_device('all').turn_off()
         return
 
@@ -52,18 +50,18 @@ def _on_before_wake() -> None:
 
 def _on_morning() -> None:
     log("routine - morning")
-    if _no_track_for_detach: return
+    if should_skip_tracking(use_cache=True): return
 
     read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))
 
 
 def _on_do_reduce_temp() -> None:
-    if should_skip_tracking(): return
+    if should_skip_tracking(use_cache=False): return
 
     temp = read_temp(from_hat=False)
     if temp is None: return
 
-    config = get_cashed()
+    config = get_cached()
     if not config: return
 
     temp_treshold: float = config.reduceHeatThreshold
@@ -75,9 +73,9 @@ def _on_do_reduce_temp() -> None:
 
 def _on_eve() -> None:
     update_routines()
-    if _no_track_for_detach: return
+    if should_skip_tracking(use_cache=True): return
 
-    config = get_cashed()
+    config = get_cached()
     if not config: return
 
     try:
@@ -90,8 +88,10 @@ def _on_eve() -> None:
 
 
 def _on_latest_dinner() -> None:
-    config = get_cashed()
-    if _no_track_for_detach or not config: return
+    if should_skip_tracking(use_cache=True): return
+
+    config = get_cached()
+    if not config: return
 
     for task in config.tasks["latestDinner"]:
         a(task)
@@ -101,7 +101,7 @@ def _on_detach():
     log("routine - detach")
     get_device('colored').color('eve')
 
-    if _no_track_for_detach: return
+    if should_skip_tracking(use_cache=True): return
 
     get_device('plant').toggle()
     time.sleep(0.2)
@@ -111,14 +111,13 @@ def _on_detach():
 
 
 def _on_full_detach() -> None:
-    global _no_track_for_detach, _voc
-    _no_track_for_detach = should_skip_tracking()
+    global _voc
 
-    get_device('colored').color('night')
-
-    if _no_track_for_detach:
+    if should_skip_tracking(use_cache=False):
         _voc = None
         return
+
+    get_device('colored').color('night')
 
     # Called here to maxmize chance that "away" has been tracked
     track_time_independents()
@@ -188,7 +187,7 @@ _routines: dict[str, Routine] = {
 
 
 def get_away_for_eve() -> bool:
-    return _no_track_for_detach
+    return should_skip_tracking(use_cache=True)
 
 
 def get_routines() -> dict[str, Routine]:

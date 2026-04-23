@@ -7,9 +7,9 @@ class Group:
     device_names: list[str]
 
     def __post_init__(self):
-        from interfaces.api.config import get_cashed
+        from interfaces.api.config import get_cached
 
-        config = get_cashed()
+        config = get_cached()
         if not config:
             raise Exception("Config not loaded")
 
@@ -53,8 +53,8 @@ class Group:
             api.brightness(id, level)
 
     def color(self, color: str | int):
-        from interfaces.api.config import get_cashed
-        config = get_cashed()
+        from interfaces.api.config import get_cached
+        config = get_cached()
 
         color_code = config.colors.get(color, color) if (config and color in config.colors) else color
 

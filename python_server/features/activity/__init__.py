@@ -1,6 +1,6 @@
 from datetime import datetime
 from features.activity._blink_timer import start_blink_timer, stop_blink_timer
-from interfaces.api.config import get_cashed
+from interfaces.api.config import get_cached
 from log import log
 from interfaces.api.time_tracking import stop_tracking_activity, track_activity
 from interfaces.actuators.led import get_lamp
@@ -57,7 +57,7 @@ def stop_activity(track=True):
 
 def start_break():
     global _break_thread
-    config = get_cashed()
+    config = get_cached()
 
     if _break_thread is not None:
         _break_thread.cancel()

@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, request, send_from_directory, abort
+from flask import Flask, jsonify, request, abort
 from log import log
-from interfaces.api.config import get_cashed
+from interfaces.api.config import get_cached
 from datetime import date
 from features.routines import get_away_for_eve, get_routine_strings, update_routines
+from interfaces.api.server_app import is_away
 from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as actions_bp
 from ._files import bp as files_bp
@@ -26,7 +27,7 @@ def all():
         "version": "1.0",
         "startup_date": startup_date,
         "away_for_eve": get_away_for_eve(),
-        "config": get_cashed(),
+        "config": get_cached(),
         "routines": get_routine_strings(),
         "readings": all_readings()
     })
@@ -46,6 +47,7 @@ def quit():
 
 @app.route('/sync')
 def sync():
+    is_away()
     sync_config()
     update_routines()
     return "ok"

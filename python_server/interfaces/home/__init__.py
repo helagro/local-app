@@ -6,8 +6,8 @@ import interfaces.home._api as api
 
 
 def exec_preset_by_name(name: str, state_mode: str | None = None):
-    from interfaces.api.config import get_cashed
-    config = get_cashed()
+    from interfaces.api.config import get_cached
+    config = get_cached()
     if not config:
         raise ValueError("No config found")
 
@@ -40,8 +40,8 @@ def _exec_preset(preset: Preset, state_mode: str | None):
 
         # Sets color
         if (color := config.get('color')) is not None:
-            from interfaces.api.config import get_cashed
-            config = get_cashed()
+            from interfaces.api.config import get_cached
+            config = get_cached()
 
             color_code = config.colors.get(color, color) if (config and color in config.colors) else color
             payload.update(api.get_color_dict(color_code))
@@ -69,8 +69,8 @@ def get_device(name: str) -> Group:
 
 
 def _get_groups() -> dict[str, list[str]]:
-    from interfaces.api.config import get_cashed
-    config = get_cashed()
+    from interfaces.api.config import get_cached
+    config = get_cached()
     if not config:
         raise ValueError("No config found")
 

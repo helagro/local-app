@@ -2,7 +2,7 @@ from datetime import datetime
 import time
 from interfaces.actuators.led import get_lamp
 from log import log
-from interfaces.api.config import get_cashed
+from interfaces.api.config import get_cached
 from interfaces.home import get_device
 import threading
 
@@ -32,7 +32,7 @@ def stop_blink_timer():
 
 
 def _blink_timer(alert_frequency=None):
-    config = get_cashed()
+    config = get_cached()
     if not config:
         log("No config found, skipping blink timer routine.")
         return
@@ -62,7 +62,7 @@ def _run_scheduled_alert(config):
 
 
 def _alert(duration):
-    config = get_cashed()
+    config = get_cached()
     if not config:
         log("No config found, skipping alert.")
         return False

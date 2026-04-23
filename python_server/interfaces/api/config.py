@@ -41,7 +41,7 @@ if not _CONFIG_URL:
 # functions ------------------------------------------------------------------ #
 
 
-def get_cashed() -> None | Config:
+def get_cached() -> None | Config:
     return _config
 
 
