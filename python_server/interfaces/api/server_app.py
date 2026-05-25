@@ -14,6 +14,7 @@ LIGHT_EVE = 'light_eve'
 LIGHT_NIGHT = 'light_night'
 LIGHT_BEFORE_WAKE = 'light_before_wake'
 LIGHT_DAWN = 'light_dawn'
+IR_DAWN = 'ir_dawn'
 
 TEMP_NIGHT = 'temp_night_indoor'
 TEMP_EARLY = 'temp_early_indoor'
@@ -78,7 +79,7 @@ def is_away() -> bool:
 
         is_away = response.text == '1'
         if is_away:
-            log('Stop because is away')
+            log('Stopped activities because is away')
             stop_activity(track=False)
 
         last_is_away = is_away

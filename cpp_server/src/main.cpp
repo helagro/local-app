@@ -20,7 +20,11 @@ int main() {
   app_log(env->vault, '\n', false);
 
   load_config();
-  start_server();
+
+  // app_log("Current logs:");
+  // std::string logs = get_logs_string();
+  // app_log(logs.c_str());
+  // start_server();
 
   return 0;
 }

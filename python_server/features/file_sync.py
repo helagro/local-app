@@ -8,6 +8,8 @@ folder_a = "/media/pi/tb-hdd/public"
 
 
 def sync_folders():
+    log("Starting folder sync...")
+
     # Make sure destination exists
     os.makedirs(HOSTED_FOLDER_PATH, exist_ok=True)
 

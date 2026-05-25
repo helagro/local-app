@@ -27,5 +27,15 @@ cmake --build build
 docker run --rm -i -e VAULT=/vault -v $VAULT:/vault cppserv
 ```
 
+## Python_server
+
+**Run project manually example:**
+
+```zsh
+source .venv/bin/activate
+source /home/pi/.dotfiles/scripts/secret/local-app.env
+python .
+```
+
 
 ## To Do
