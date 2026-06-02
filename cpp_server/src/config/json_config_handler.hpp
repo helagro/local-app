@@ -3,5 +3,7 @@
 #include "json_config.hpp"
 #include <nlohmann/json.hpp>
 
-void from_json(const nlohmann::json &j, JsonConfig &config);
+JsonConfig get_config();
 bool load_config();
+
+void from_json(const nlohmann::json &j, JsonConfig &config);

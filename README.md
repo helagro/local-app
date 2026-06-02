@@ -27,6 +27,12 @@ cmake --build build
 docker run --rm -i -e VAULT=/vault -v $VAULT:/vault cppserv
 ```
 
+** Build and run project:**
+
+```zsh
+cmake -S . -B build && cmake --build build && ./build/main
+```
+
 ## Python_server
 
 **Run project manually example:**

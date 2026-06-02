@@ -1,0 +1,56 @@
+[
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/api/python_server.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/api/python_server.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/api/python_server.cpp",
+  "output": "CMakeFiles/main.dir/src/api/python_server.cpp.o"
+},
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/config/env_variables.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/config/env_variables.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/config/env_variables.cpp",
+  "output": "CMakeFiles/main.dir/src/config/env_variables.cpp.o"
+},
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/config/json_config_handler.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/config/json_config_handler.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/config/json_config_handler.cpp",
+  "output": "CMakeFiles/main.dir/src/config/json_config_handler.cpp.o"
+},
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/main.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/main.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/main.cpp",
+  "output": "CMakeFiles/main.dir/src/main.cpp.o"
+},
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/server/server.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/server/server.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/server/server.cpp",
+  "output": "CMakeFiles/main.dir/src/server/server.cpp.o"
+},
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/utils/log.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/utils/log.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/utils/log.cpp",
+  "output": "CMakeFiles/main.dir/src/utils/log.cpp.o"
+},
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/vault/classes/File.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/vault/classes/File.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/vault/classes/File.cpp",
+  "output": "CMakeFiles/main.dir/src/vault/classes/File.cpp.o"
+},
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/vault/internal/path.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/vault/internal/path.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/vault/internal/path.cpp",
+  "output": "CMakeFiles/main.dir/src/vault/internal/path.cpp.o"
+},
+{
+  "directory": "/Users/h/Developer/local-app/build",
+  "command": "/usr/bin/clang++  -I/Users/h/Developer/local-app/cpp_server/include -I/Users/h/Developer/local-app/build/_deps/json-src/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/main.dir/src/vault/vault.cpp.o -c /Users/h/Developer/local-app/cpp_server/src/vault/vault.cpp",
+  "file": "/Users/h/Developer/local-app/cpp_server/src/vault/vault.cpp",
+  "output": "CMakeFiles/main.dir/src/vault/vault.cpp.o"
+}
+]

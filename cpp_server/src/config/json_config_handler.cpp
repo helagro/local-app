@@ -43,11 +43,19 @@ bool load_config() {
   config = j.get<JsonConfig>();
 
   app_log("Sync rate mins:", ' ');
-  app_log(std::to_string(config.sync_rate_mins).c_str(), '\n', false);
+  app_log(std::to_string(config.sync_rate_mins), '\n', false);
+
+  app_log("Python server URL:", ' ');
+  app_log(config.python_server_url, '\n', false);
 
   return true;
 }
 
+JsonConfig get_config() { return config; }
+
+/* ================================== UTILS ================================= */
+
 void from_json(const json &j, JsonConfig &config) {
   j.at("sync_rate_mins").get_to(config.sync_rate_mins);
+  j.at("python_server_url").get_to(config.python_server_url);
 }

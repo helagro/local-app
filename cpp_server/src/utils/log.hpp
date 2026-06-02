@@ -2,6 +2,8 @@
 
 #include <array>
 
+void app_log(std::string message, const char postfix = '\n',
+             const bool include_date = true);
 void app_log(const char *message, const char postfix = '\n',
              const bool include_date = true);
 

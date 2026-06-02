@@ -23,6 +23,8 @@ include(FetchContent)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
+find_package(CURL REQUIRED)
+
 # ============================= ADD EXECUTABLE ============================= #
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
@@ -34,3 +36,4 @@ target_sources(main PRIVATE ${SOURCES} ${HEADERS})
 target_include_directories(main PRIVATE include)
 
 target_link_libraries(main PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(main PRIVATE CURL::libcurl)

@@ -3,6 +3,7 @@
 #include <array>
 #include <cstdio>
 #include <ctime>
+#include <iostream>
 #include <string>
 
 #define LOGS_MAX 500
@@ -11,6 +12,10 @@ unsigned int log_index = 0;
 std::array<std::string, LOGS_MAX> logs;
 
 void log_vault(const char *message) { app_log(message); }
+
+void app_log(std::string message, const char postfix, const bool include_date) {
+  app_log(message.c_str(), postfix, include_date);
+}
 
 void app_log(const char *message, const char postfix, const bool include_date) {
   std::string log_entry;
@@ -25,7 +30,7 @@ void app_log(const char *message, const char postfix, const bool include_date) {
     log_entry =
         "[" + std::string(buffer) + "] " + std::string(message) + postfix;
   } else {
-    log_entry = message + postfix;
+    log_entry = std::string(message) + postfix;
   }
 
   printf("%s", log_entry.c_str());

@@ -1,3 +1,4 @@
+#include "../api/python_server.hpp"
 #include "../utils/log.hpp"
 #include "httplib.h"
 
@@ -8,6 +9,17 @@ void start_server() {
 
   svr.Get("/health", [](const httplib::Request &, httplib::Response &res) {
     res.set_content("ok", "text/plain");
+  });
+
+  svr.Get("/logs", [](const httplib::Request &, httplib::Response &res) {
+    std::string logs = get_logs_string();
+    res.set_content(logs, "text/plain");
+  });
+
+  svr.Get("/py/(.+)", [](const httplib::Request &req, httplib::Response &res) {
+    std::string response;
+    python_server_get("/" + req.matches[1].str(), &response);
+    res.set_content(response, "text/plain");
   });
 
   svr.set_error_handler([](const auto &req, auto &res) {

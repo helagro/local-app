@@ -1,17 +1,18 @@
 #include "env_variables.hpp"
 
+#include <cstdlib>
 #include <iostream>
 
 #include "../utils/log.hpp"
 
 namespace {
 
-EnvVariables* env;
+EnvVariables *env;
 
-}  // namespace
+} // namespace
 
 bool load_env_variables() {
-  char* vault = std::getenv("VAULT");
+  char *vault = std::getenv("VAULT");
   if (!vault) {
     app_log("Environment variable VAULT is not set.");
     return false;
@@ -22,4 +23,4 @@ bool load_env_variables() {
   return true;
 }
 
-EnvVariables* get_env_variables() { return env; }
+EnvVariables *get_env_variables() { return env; }
