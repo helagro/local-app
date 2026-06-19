@@ -2,7 +2,7 @@ from features.activity import start_activity, stop_activity, is_activity_running
 from flask import jsonify, Blueprint, request
 from interfaces.actuators.led import get_lamp
 from interfaces.api.time_tracking import track_activity, stop_tracking_activity
-from interfaces.home import exec_preset_by_name, get_device, get_devices_string
+from interfaces.home import exec_preset_by_name, get_device, get_devices_string, get_last_preset_name
 
 bp = Blueprint('actions', __name__)
 
@@ -59,6 +59,22 @@ def led(name: str):
     return "ok"
 
 
+@bp.route('/dev/<string:name>')
+def device(name: str):
+    device = get_device(name)
+
+    action = request.args.get('a', default='toggle').lower()
+
+    if action == 'on':
+        device.turn_on()
+    elif action == 'off':
+        device.turn_off()
+    else:
+        device.toggle()
+
+    return "ok"
+
+
 @bp.route('/dev/<string:name>/lvl/<int:level>')
 def level(name: str, level: int):
     device = get_device(name)
@@ -102,6 +118,15 @@ def toggle_group(rest: str):
             })
 
     return "ok"
+
+
+@bp.route('/last-preset')
+def get_last_preset():
+    preset = get_last_preset_name()
+    if not preset:
+        return 'NOT FOUND', 404
+
+    return preset
 
 
 @bp.route('/p/<string:name>')

@@ -4,8 +4,16 @@ from interfaces.home._preset import Preset
 from log import log
 import interfaces.home._api as api
 
+_last_preset_name: str | None = None
+
+
+def get_last_preset_name() -> str | None:
+    return _last_preset_name
+
 
 def exec_preset_by_name(name: str, state_mode: str | None = None):
+    global _last_preset_name
+
     from interfaces.api.config import get_cached
     config = get_cached()
     if not config:
@@ -18,6 +26,7 @@ def exec_preset_by_name(name: str, state_mode: str | None = None):
 
     log(f"Executing preset: {name} with mode: {state_mode}")
     _exec_preset(preset, state_mode)
+    _last_preset_name = name
 
 
 def _exec_preset(preset: Preset, state_mode: str | None):
