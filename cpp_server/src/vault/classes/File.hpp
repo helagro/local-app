@@ -12,6 +12,7 @@ public:
   const char *get_path() const;
 
   std::optional<std::string> read() const;
+  bool write(std::string content) const;
 
 private:
   path file_path;

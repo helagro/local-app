@@ -10,11 +10,16 @@ _work_lamp = get_lamp('yellow')
 _break_lamp = get_lamp('green')
 
 _running = False
+_blocking = False
 _break_thread = None
 
 
 def is_activity_running() -> bool:
     return _running
+
+
+def is_activity_blocking() -> bool:
+    return _blocking
 
 
 def toggle_activity(track=True):
@@ -24,10 +29,11 @@ def toggle_activity(track=True):
         start_activity(track=track)
 
 
-def start_activity(track=True, blink_frequency=None):
-    global _running, _break_thread
+def start_activity(track=True, blink_frequency=None, blocking=True):
+    global _running, _break_thread, _blocking
+    _blocking = blocking
     _running = True
-    log("Started study timer")
+    log("Started study timer. Blocking: %s Frequency: %s" % (blocking, blink_frequency))
 
     if _break_thread:
         _break_lamp.off()
@@ -35,6 +41,9 @@ def start_activity(track=True, blink_frequency=None):
         _break_thread = None
 
     _work_lamp.on()
+    if not blocking:
+        _break_lamp.on()
+
     start_blink_timer(blink_frequency)
 
     if track:
@@ -42,11 +51,13 @@ def start_activity(track=True, blink_frequency=None):
 
 
 def stop_activity(track=True):
-    global _running
+    global _running, _blocking
     _running = False
+    _blocking = False
     log("Stopped timer")
 
     _work_lamp.off()
+    _break_lamp.off()
     stop_blink_timer()
 
     if track:

@@ -1,34 +1,8 @@
-from features.activity import start_activity, stop_activity, is_activity_running
-from flask import jsonify, Blueprint, request
+from flask import Blueprint, request
 from interfaces.actuators.led import get_lamp
-from interfaces.api.time_tracking import track_activity, stop_tracking_activity
 from interfaces.home import exec_preset_by_name, get_device, get_devices_string, get_last_preset_name
 
 bp = Blueprint('actions', __name__)
-
-
-@bp.route('/start')
-def start():
-    alert_frequency = request.args.get('alert_frequency', default=None, type=float)
-
-    start_activity(track=False, blink_frequency=alert_frequency)
-    return "ok"
-
-
-@bp.route('/stop')
-def stop():
-    stop_activity(track=False)
-    return "ok"
-
-
-@bp.route('/toggle')
-def toggle():
-    if is_activity_running():
-        stop_tracking_activity()
-    else:
-        track_activity()
-
-    return "ok"
 
 
 @bp.route('/log-test')
@@ -36,11 +10,6 @@ def log_test():
     from interfaces.api.server_app import log_to_server
     log_to_server("Test log from /log-test endpoint")
     return "ok"
-
-
-@bp.route('/is-running')
-def is_running_route():
-    return jsonify({"is_running": is_activity_running()})
 
 
 @bp.route('/led/<string:name>')

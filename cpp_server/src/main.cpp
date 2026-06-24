@@ -1,6 +1,7 @@
 
 #include "config/env_variables.hpp"
 #include "config/json_config_handler.hpp"
+#include "features/status/status.hpp"
 #include "server/server.h"
 #include "utils/log.hpp"
 #include <iostream>
@@ -25,6 +26,9 @@ int main() {
   app_log("Current logs:");
   std::string logs = get_logs_string();
   app_log(logs.c_str());
+
+  write_status();
+
   start_server();
 
   return 0;

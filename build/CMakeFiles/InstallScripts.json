@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/h/Developer/local-app/build/cmake_install.cmake",
-		"/Users/h/Developer/local-app/build/_deps/json-build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

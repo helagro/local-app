@@ -6,6 +6,7 @@ from features.routines import get_away_for_eve, get_routine_strings, update_rout
 from interfaces.api.server_app import is_away
 from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as actions_bp
+from ._activity import bp as activity_bp
 from ._files import bp as files_bp
 from os import _exit
 from interfaces.api.config import sync_config
@@ -16,6 +17,7 @@ startup_date = date.today()
 app = Flask(__name__)
 app.register_blueprint(readings_bp, url_prefix='/sens')
 app.register_blueprint(files_bp, url_prefix='/files')
+app.register_blueprint(activity_bp)
 app.register_blueprint(actions_bp)
 
 # ================================== ROUTES ================================== #
@@ -87,7 +89,12 @@ def before_request_func():
         return
 
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
-    log(f"REQ TO {request.path} FROM {ip}")
+    params = request.args.to_dict()
+
+    if params:
+        log(f"REQ TO {request.path} FROM {ip} WITH PARAMS {params}")
+    else:
+        log(f"REQ TO {request.path} FROM {ip}")
 
 
 # ================================== CONTROL ================================= #

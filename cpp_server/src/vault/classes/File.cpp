@@ -22,3 +22,12 @@ std::optional<std::string> File::read() const {
 
   return buffer.str();
 }
+
+bool File::write(std::string content) const {
+  std::ofstream file(file_path);
+  if (!file) {
+    return false;
+  }
+  file << content;
+  return true;
+}
