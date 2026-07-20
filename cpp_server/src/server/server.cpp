@@ -4,7 +4,7 @@
 
 using namespace httplib;
 
-void start_server() {
+void run_server() {
   Server svr;
 
   svr.Get("/health", [](const httplib::Request &, httplib::Response &res) {

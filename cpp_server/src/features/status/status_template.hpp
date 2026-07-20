@@ -3,4 +3,5 @@
 
 struct Status {
   std::string message;
+  std::string timestamp;
 };

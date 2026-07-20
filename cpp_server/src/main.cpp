@@ -5,6 +5,7 @@
 #include "server/server.h"
 #include "utils/log.hpp"
 #include <iostream>
+#include <thread>
 
 /* ================================== MAIN ================================== */
 
@@ -27,9 +28,12 @@ int main() {
   std::string logs = get_logs_string();
   app_log(logs.c_str());
 
-  write_status();
+  std::thread server_thread(run_server);
 
-  start_server();
+  while (true) {
+    std::this_thread::sleep_for(std::chrono::seconds(15));
+    write_status();
+  }
 
   return 0;
 }

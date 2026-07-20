@@ -85,7 +85,7 @@ def restart():
 
 @app.before_request
 def before_request_func():
-    if request.path in ['/health', '/is-running']:
+    if request.path in ['/health', '/is-running', '/is-blocking']:
         return
 
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
