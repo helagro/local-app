@@ -2,6 +2,7 @@
 #include "constants.hpp"
 #include "internal/path.hpp"
 #include <filesystem>
+#include <list>
 
 /* =============================== NAMESPACES =============================== */
 
@@ -23,4 +24,22 @@ File get_file(std::string relative_path) {
   const path file_path = get_vault_file(relative_path);
 
   return get_file(file_path);
+}
+
+std::list<File> get_files(std::string relative_folder_path) {
+  const path file_path = get_vault_file(relative_folder_path);
+
+  std::filesystem::directory_iterator iterator(file_path);
+  std::list<File> files;
+
+  for (const auto &entry : iterator) {
+    if (!entry.is_regular_file()) {
+      continue;
+    }
+
+    const path file_path = entry.path();
+    files.push_back(File(file_path));
+  }
+
+  return files;
 }

@@ -74,6 +74,12 @@ void from_json(const json &j, JsonConfig &config) {
   j.at("feature_toggle").at("scheduled_sync").get_to(config.feature_toggle.scheduled_sync);
   j.at("feature_toggle").at("sync_logs").get_to(config.feature_toggle.sync_logs);
   j.at("feature_toggle").at("file_shell").get_to(config.feature_toggle.file_shell);
+  j.at("feature_toggle").at("log_trimmer").get_to(config.feature_toggle.log_trimmer);
 
   j.at("vault_path").at("file_shell").get_to(config.vault_path.file_shell);
+  j.at("vault_path").at("trimmable_logs").get_to(config.vault_path.trimmable_logs);
+
+  j.at("trim_option").at("trim_from").get_to(config.trim_option.trim_from);
+  j.at("trim_option").at("trim_to").get_to(config.trim_option.trim_to);
+  j.at("trim_option").at("trim_frequency").get_to(config.trim_option.trim_frequency);
 }

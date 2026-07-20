@@ -2,6 +2,7 @@
 #include "config/env_variables.hpp"
 #include "config/json_config_handler.hpp"
 #include "features/file_shell/file_shell.hpp"
+#include "features/log_trimmer/log_trimmer.hpp"
 #include "features/status/status.hpp"
 #include "server/server.h"
 #include "utils/log.hpp"
@@ -52,13 +53,23 @@ int main() {
   /* main loop ---------------------------------------------------------------- */
 
   JsonConfig config = get_config();
+  unsigned long loop_count = 0;
+
   while (config.feature_toggle.master_switch) {
     if (config.feature_toggle.scheduled_sync) {
+
       if (config.feature_toggle.file_shell) {
         try {
           run_file_shell();
         } catch (const std::exception &e) {
           app_log(std::string("Error in file shell: ") + e.what());
+        }
+      }
+
+      if (config.feature_toggle.log_trimmer) {
+        const unsigned int trim_frequency = config.trim_option.trim_frequency;
+        if (trim_frequency > 0 && loop_count % trim_frequency == 0) {
+          trim_logs();
         }
       }
 
@@ -78,6 +89,7 @@ int main() {
 
     load_config();
     config = get_config();
+    loop_count++;
   }
 
   /* exiting ------------------------------------------------------------------ */
