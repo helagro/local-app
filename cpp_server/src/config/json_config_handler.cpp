@@ -69,7 +69,11 @@ JsonConfig get_config() { return config; }
 void from_json(const json &j, JsonConfig &config) {
   j.at("sync_rate_mins").get_to(config.sync_rate_mins);
   j.at("python_server_url").get_to(config.python_server_url);
+
   j.at("feature_toggle").at("master_switch").get_to(config.feature_toggle.master_switch);
   j.at("feature_toggle").at("scheduled_sync").get_to(config.feature_toggle.scheduled_sync);
   j.at("feature_toggle").at("sync_logs").get_to(config.feature_toggle.sync_logs);
+  j.at("feature_toggle").at("file_shell").get_to(config.feature_toggle.file_shell);
+
+  j.at("vault_path").at("file_shell").get_to(config.vault_path.file_shell);
 }

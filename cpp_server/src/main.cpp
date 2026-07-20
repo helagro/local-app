@@ -1,6 +1,7 @@
 
 #include "config/env_variables.hpp"
 #include "config/json_config_handler.hpp"
+#include "features/file_shell/file_shell.hpp"
 #include "features/status/status.hpp"
 #include "server/server.h"
 #include "utils/log.hpp"
@@ -48,9 +49,19 @@ int main() {
 
   std::thread server_thread(run_server);
 
+  /* main loop ---------------------------------------------------------------- */
+
   JsonConfig config = get_config();
   while (config.feature_toggle.master_switch) {
     if (config.feature_toggle.scheduled_sync) {
+      if (config.feature_toggle.file_shell) {
+        try {
+          run_file_shell();
+        } catch (const std::exception &e) {
+          app_log(std::string("Error in file shell: ") + e.what());
+        }
+      }
+
       write_status();
     } else {
       app_log("Scheduled sync is disabled");
@@ -68,6 +79,8 @@ int main() {
     load_config();
     config = get_config();
   }
+
+  /* exiting ------------------------------------------------------------------ */
 
   const std::string master_switch_status = config.feature_toggle.master_switch ? "ON" : "OFF";
   app_log("Master switch is: " + master_switch_status);

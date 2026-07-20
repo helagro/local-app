@@ -4,14 +4,11 @@
 
 /* ================================ CONSTANTS =============================== */
 
-const path log_path_from_vault =
-    path("_") / path("local app") / path("logs.md");
+const path log_path_from_vault = path("_") / path("local app") / path("logs.md");
 
-const path config_path_from_vault =
-    path("_") / path("local app") / path("config.md");
+const path config_path_from_vault = path("_") / path("local app") / path("config.md");
 
-const path status_path_from_vault =
-    path("_") / path("local app") / path("status.md");
+const path status_path_from_vault = path("_") / path("local app") / path("status.md");
 
 /* ================================ FUNCTIONS =============================== */
 
@@ -28,4 +25,9 @@ path get_standard_file(STANDARD_FILES file) {
   default:
     throw std::invalid_argument("Invalid STANDARD_FILES value");
   }
+}
+
+path get_vault_file(std::string relative_path) {
+  const path vault_path = path(getenv("VAULT"));
+  return vault_path / relative_path;
 }

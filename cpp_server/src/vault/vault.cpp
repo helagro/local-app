@@ -18,3 +18,9 @@ File get_file(STANDARD_FILES std_file) {
 
   return get_file(file_path);
 }
+
+File get_file(std::string relative_path) {
+  const path file_path = get_vault_file(relative_path);
+
+  return get_file(file_path);
+}
