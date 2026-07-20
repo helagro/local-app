@@ -13,9 +13,7 @@ std::array<std::string, LOGS_MAX> logs;
 
 void log_vault(const char *message) { app_log(message); }
 
-void app_log(std::string message, const char postfix, const bool include_date) {
-  app_log(message.c_str(), postfix, include_date);
-}
+void app_log(std::string message, const char postfix, const bool include_date) { app_log(message.c_str(), postfix, include_date); }
 
 void app_log(const char *message, const char postfix, const bool include_date) {
   std::string log_entry;
@@ -25,10 +23,9 @@ void app_log(const char *message, const char postfix, const bool include_date) {
     std::tm *tm_ptr = std::localtime(&t);
 
     char buffer[50];
-    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", tm_ptr);
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_ptr);
 
-    log_entry =
-        "[" + std::string(buffer) + "] " + std::string(message) + postfix;
+    log_entry = "[" + std::string(buffer) + "] " + std::string(message) + postfix;
   } else {
     log_entry = std::string(message) + postfix;
   }

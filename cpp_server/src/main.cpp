@@ -4,8 +4,30 @@
 #include "features/status/status.hpp"
 #include "server/server.h"
 #include "utils/log.hpp"
+#include "vault/classes/File.hpp"
+#include "vault/constants.hpp"
+#include "vault/vault.hpp"
 #include <iostream>
 #include <thread>
+
+namespace {
+void write_logs() {
+  const JsonConfig config = get_config();
+  if (!config.feature_toggle.sync_logs) {
+    app_log("Syncing logs is disabled");
+    return;
+  }
+
+  const File logs_file(get_file(LOG_FILE));
+
+  const std::string logs_string = "```c\n" + get_logs_string() + "```\n";
+  const bool write_success = logs_file.write(logs_string);
+
+  if (!write_success) {
+    app_log("Failed to write logs to file.");
+  }
+}
+} // namespace
 
 /* ================================== MAIN ================================== */
 
@@ -22,18 +44,36 @@ int main() {
   app_log("Environment variable \"VAULT\":", ' ');
   app_log(env->vault, '\n', false);
 
-  load_config();
-
-  app_log("Current logs:");
-  std::string logs = get_logs_string();
-  app_log(logs.c_str());
+  load_config(true);
 
   std::thread server_thread(run_server);
 
-  while (true) {
-    std::this_thread::sleep_for(std::chrono::seconds(15));
-    write_status();
+  JsonConfig config = get_config();
+  while (config.feature_toggle.master_switch) {
+    if (config.feature_toggle.scheduled_sync) {
+      write_status();
+    } else {
+      app_log("Scheduled sync is disabled");
+    }
+
+    write_logs();
+
+    const unsigned int sync_rate_mins = config.sync_rate_mins > 0 ? config.sync_rate_mins : 1;
+    std::this_thread::sleep_for(std::chrono::minutes(sync_rate_mins));
+
+    if (config.feature_toggle.scheduled_sync) {
+      app_log("", '\n', false);
+    }
+
+    load_config();
+    config = get_config();
   }
+
+  const std::string master_switch_status = config.feature_toggle.master_switch ? "ON" : "OFF";
+  app_log("Master switch is: " + master_switch_status);
+  app_log("Exiting application");
+
+  write_logs();
 
   return 0;
 }
