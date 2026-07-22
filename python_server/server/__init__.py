@@ -3,7 +3,7 @@ from log import log
 from interfaces.api.config import get_cached
 from datetime import date
 from features.routines import get_away_for_eve, get_routine_strings, update_routines
-from interfaces.api.server_app import is_away
+from interfaces.api.server_app import is_away, get_note_sync_changes
 from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as actions_bp
 from ._activity import bp as activity_bp
@@ -78,6 +78,15 @@ def restart():
         log(f"Restart command error: {err}")
         abort(500, description=f"Restart command error: {err}")
     return "Restarting..."
+
+
+@app.route('/note-sync/changes')
+def note_sync_changes():
+    changes = get_note_sync_changes()
+    if changes is None:
+        abort(500, description="Failed to fetch note sync changes")
+
+    return jsonify(changes)
 
 
 # ================================ MIDDLEWARE ================================ #

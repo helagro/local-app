@@ -25,12 +25,29 @@ _TOOLS_URL = os.getenv("TOOLS_URL")
 if not _TOOLS_URL:
     raise ValueError("TOOLS_URL environment variable is not set")
 _ROUTINE_ENDPOINT = f"{_TOOLS_URL}/routines"
+_NOTE_SYNC_CHANGES_ENDPOINT = f"{_TOOLS_URL}/note-sync/changes"
 
 _AUTH_TOKEN = os.getenv("A75H")
 if not _AUTH_TOKEN:
     raise ValueError("AUTH_TOKEN environment variable is not set")
 
 # ================================== GETTING ================================= #
+
+
+def get_note_sync_changes() -> list[list[str]] | None:
+    headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
+
+    try:
+        response = requests.get(
+            f"{_NOTE_SYNC_CHANGES_ENDPOINT}",
+            headers=headers,
+        )
+        response.raise_for_status()
+
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        log_to_server(f"Failed to fetch note sync changes: {e}")
+        return None
 
 
 def get_routines() -> dict | None:
