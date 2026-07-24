@@ -16,7 +16,7 @@ void trim_logs() {
 
   std::list<File> files = get_files(logs_path);
 
-  for (const File &file : files) {
+  for (File &file : files) {
     const std::optional<std::string> read_result = file.read();
 
     if (!read_result.has_value()) {

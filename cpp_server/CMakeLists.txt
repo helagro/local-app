@@ -1,6 +1,6 @@
 # ============================ PROJECT SETTINGS ============================ #
 
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.30)
 cmake_policy(SET CMP0135 NEW)
 project(cpp_server)
 
@@ -33,7 +33,7 @@ file(GLOB_RECURSE HEADERS "src/*.hpp")
 add_executable(main)
 
 target_sources(main PRIVATE ${SOURCES} ${HEADERS})
-target_include_directories(main PRIVATE include)
+target_include_directories(main PRIVATE src)
 
 target_link_libraries(main PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(main PRIVATE CURL::libcurl)

@@ -26,7 +26,7 @@ std::string extract_config_json(const std::string &s) {
 } // namespace
 
 bool load_config(const bool verbose) {
-  const File config_file = get_file(CONFIG_FILE);
+  File config_file = get_file(CONFIG_FILE);
 
   if (verbose) {
     app_log("Config file path:", '"');

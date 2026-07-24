@@ -9,10 +9,10 @@ class File {
 public:
   File(const path file_path);
 
-  const char *get_path() const;
+  std::string get_path();
 
-  std::optional<std::string> read() const;
-  bool write(std::string content) const;
+  std::optional<std::string> read();
+  const bool write(std::string content) const;
 
 private:
   path file_path;

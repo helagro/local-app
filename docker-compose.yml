@@ -20,7 +20,8 @@ services:
     build: ./cpp_server
     container_name: cpp_server
     volumes:
-      - /dev/null:/vault # TODO - Just for testing
+      - /media/pi/tb-hdd/vault:/vault
+      - ./cpp_server/.env:/.env
     environment:
       - VAULT=/vault
     ports:

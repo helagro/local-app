@@ -54,7 +54,7 @@ std::string get_status_json(const int indent = -1) {
 }
 
 bool write_status() {
-  const File status_file(get_file(STATUS_FILE));
+  File status_file(get_file(STATUS_FILE));
 
   const std::string status_json = get_status_json(1);
 

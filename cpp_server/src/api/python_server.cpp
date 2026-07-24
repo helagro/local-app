@@ -9,11 +9,11 @@ size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
   return size * nmemb;
 }
 
-void python_server_get(std::string path, std::string *response) {
+bool python_server_get(std::string path, std::string *response) {
   CURL *curl = curl_easy_init();
 
   if (!curl) {
-    return;
+    return false;
   }
 
   const JsonConfig config = get_config();
@@ -33,4 +33,6 @@ void python_server_get(std::string path, std::string *response) {
   }
 
   curl_easy_cleanup(curl);
+
+  return res == CURLE_OK;
 }

@@ -5,9 +5,9 @@
 
 File::File(const path file_path) : file_path(file_path) {}
 
-const char *File::get_path() const { return file_path.c_str(); }
+std::string File::get_path() { return file_path; }
 
-std::optional<std::string> File::read() const {
+std::optional<std::string> File::read() {
   std::ifstream file(file_path);
   if (!file) {
     return std::nullopt;
@@ -23,7 +23,7 @@ std::optional<std::string> File::read() const {
   return buffer.str();
 }
 
-bool File::write(std::string content) const {
+const bool File::write(std::string content) const {
   std::ofstream file(file_path);
   if (!file) {
     return false;

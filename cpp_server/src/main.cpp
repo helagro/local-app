@@ -56,6 +56,8 @@ int main() {
   unsigned long loop_count = 0;
 
   while (config.feature_toggle.master_switch) {
+    sync_vault();
+
     if (config.feature_toggle.scheduled_sync) {
 
       if (config.feature_toggle.file_shell) {

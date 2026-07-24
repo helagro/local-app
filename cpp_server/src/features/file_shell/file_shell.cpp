@@ -4,6 +4,7 @@
 #include "../../utils/log.hpp"
 #include "../../vault/classes/File.hpp"
 #include "../../vault/vault.hpp"
+#include "internal/unsynced_commands.hpp"
 #include <algorithm>
 
 namespace {
@@ -14,6 +15,14 @@ File get_shell_file() {
   return get_file(file_shell_file_path);
 }
 
+void clear_shell_file(File shell_file) {
+  const bool write_success = shell_file.write("\tLoc do\n----\n");
+
+  if (!write_success) {
+    throw std::runtime_error("Failed to clear file shell file");
+  }
+}
+
 std::string get_file_shell_content(File shell_file) {
   const std::optional<std::string> shell_file_content = shell_file.read();
 
@@ -21,15 +30,9 @@ std::string get_file_shell_content(File shell_file) {
     throw std::runtime_error("Failed to read file shell file");
   }
 
+  get_unsynced_file_shell_content(shell_file);
+
   return shell_file_content.value();
-}
-
-void clear_shell_file(File shell_file) {
-  const bool write_success = shell_file.write("\tLoc do\n----\n");
-
-  if (!write_success) {
-    throw std::runtime_error("Failed to clear file shell file");
-  }
 }
 
 void run_command(std::string command) {
