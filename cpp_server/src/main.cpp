@@ -81,6 +81,7 @@ int main() {
     }
 
     write_logs();
+    sync_vault();
 
     const unsigned int sync_rate_mins = config.sync_rate_mins > 0 ? config.sync_rate_mins : 1;
     std::this_thread::sleep_for(std::chrono::minutes(sync_rate_mins));

@@ -1,24 +1,20 @@
 services:
-  # myapp:
-  #   image: 3henrikl/local-app
-  #   container_name: local-app
-  #   ports:
-  #     - "8004:8004"
-  #   stdin_open: true    # equivalent to -i (interactive)
-  #   tty: true           # equivalent to -t (pseudo-TTY)
 
-  # watchtower:
-  #   image: containrrr/watchtower
-  #   restart: unless-stopped
-  #   privileged: true
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - /home/h/.docker/config.json:/config.json
-  #   command: --interval 3600 --label-enable --cleanup --stop-timeout 30s
+  watchtower:
+    image: containrrr/watchtower
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/h/.docker/config.json:/config.json
+    command: --interval 3600 --label-enable --cleanup --stop-timeout 30s
 
   cpp_server:
-    build: ./cpp_server
-    container_name: cpp_server
+    # build: ./cpp_server
+    image: 3henrikl/local-app
+    container_name: local-app
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - /media/pi/tb-hdd/vault:/vault
       - ./cpp_server/.env:/.env

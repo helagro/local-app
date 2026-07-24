@@ -18,11 +18,11 @@ RUN cmake --build build
 # =============================== STAGE 2 - RUN ============================== #
 
 FROM node:26-trixie
+ENV TZ=Europe/Stockholm
 
 # install dependencies ------------------------------------------------------- #
 
 RUN npm install -g obsidian-headless
-# RUN ob login --email
 
 # setup executable ----------------------------------------------------------- #
 

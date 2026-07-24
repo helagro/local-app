@@ -2,7 +2,7 @@
 
 source /.env
 
-ob login --email $OBSIDIAN_EMAIL --password $OBSIDIAN_PASSWORD --mfa $OBSIDIAN_MFA
+ob login --email $OBSIDIAN_EMAIL --password $OBSIDIAN_PASSWORD
 ob sync-setup \
   --vault $OBSIDIAN_VAULT \
   --path /vault \

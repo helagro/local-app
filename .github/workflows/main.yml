@@ -4,7 +4,7 @@ name: Build and Publish Docker Image
 on:
   push:
     branches:
-      - mainDISABLED # TODO - remove this
+      - main
   pull_request:
     branches:
       - main
@@ -33,7 +33,9 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./cpp_server
+          platforms: linux/arm64
+          file: ./cpp_server/Dockerfile
           push: true
           arguments: |
             BUILD_TIME=${{ github.event.head_commit.timestamp }}
