@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source /.env
+export BUILD_TIME=$(cat /build_time.txt)
 
 ob login --email $OBSIDIAN_EMAIL --password $OBSIDIAN_PASSWORD
 ob sync-setup \

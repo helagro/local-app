@@ -20,6 +20,8 @@ RUN cmake --build build
 FROM node:26-trixie
 ENV TZ=Europe/Stockholm
 
+RUN date -Iseconds > /build_time.txt
+
 # install dependencies ------------------------------------------------------- #
 
 RUN npm install -g obsidian-headless

@@ -28,7 +28,8 @@ void to_json(json &j, const Status &status) {
            {"timestamp", status.timestamp},
            {"first_timestamp", status.first_timestamp},
            {"sync_logs", status.sync_logs},
-           {"python_server_health", status.python_server_health}};
+           {"python_server_health", status.python_server_health},
+           {"build_time", status.build_time}};
 }
 
 /* general functions -------------------------------------------------------- */
@@ -40,9 +41,12 @@ std::string get_status_json(const int indent = -1) {
   }
 
   Status status;
+
+  // Populate status fields
   status.message = "OK";
   status.first_timestamp = first_timestamp;
   get_timestamp(&status.timestamp);
+  status.build_time = getenv("BUILD_TIME");
 
   // Add python server health
   python_server_get("/health", &status.python_server_health);

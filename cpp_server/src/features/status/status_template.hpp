@@ -6,6 +6,7 @@ struct Status {
   std::string timestamp;
   std::string first_timestamp;
   std::string python_server_health;
+  std::string build_time;
 
   bool sync_logs;
 };

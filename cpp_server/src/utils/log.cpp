@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-#define LOGS_MAX 500
+#define LOGS_MAX 750
 
 unsigned int log_index = 0;
 std::array<std::string, LOGS_MAX> logs;

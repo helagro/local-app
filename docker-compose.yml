@@ -6,13 +6,13 @@ services:
     privileged: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/h/.docker/config.json:/config.json
+      - ~/.docker/config.json:/config.json
     command: --interval 3600 --label-enable --cleanup --stop-timeout 30s
 
   cpp_server:
     # build: ./cpp_server
     image: 3henrikl/local-app
-    container_name: local-app
+    container_name: local-ap~
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
