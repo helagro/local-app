@@ -1,9 +1,9 @@
-#include "../../api/python_server.hpp"
-#include "../../config/json_config_handler.hpp"
-#include "../../vault/classes/File.hpp"
-#include "../../vault/constants.hpp"
-#include "../../vault/vault.hpp"
+#include "api/python_server.hpp"
+#include "config/json_config_handler.hpp"
 #include "status_template.hpp"
+#include "vault/classes/File.hpp"
+#include "vault/constants.hpp"
+#include "vault/vault.hpp"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;

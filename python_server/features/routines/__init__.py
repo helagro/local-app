@@ -6,7 +6,7 @@ from interfaces.api.config import sync_config
 from interfaces.api.server_app import HUM, IR_DAWN, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
 import schedule
 import time
-from features.routines._routine import Routine, SyncedRoutine
+from features.routines._routine import Routine, SyncedRoutine, last_routine
 from interfaces.sensors import *
 from threading import Thread
 from typing import cast
@@ -21,6 +21,11 @@ _detach_led = get_lamp('orange')
 _eve_led = get_lamp('red')
 
 # ------------------------- ROUTINES ------------------------ #
+
+
+def _on_rotate_two():
+    get_lamp('red').off()
+    get_lamp('orange').off()
 
 
 def _on_night() -> None:
@@ -138,6 +143,13 @@ def _on_bedtime():
     get_lamp('green').off()
 
 
+def _on_rotate_one():
+    if should_skip_tracking(use_cache=True): return
+
+    get_lamp('red').on()
+    get_lamp('orange').on()
+
+
 # -------------------------- OTHER ------------------------- #
 
 
@@ -184,6 +196,8 @@ _routines: dict[str, Routine] = {
     "detach": SyncedRoutine(name="detach", default_time="21:00", function=_on_detach),
     "full_detach": SyncedRoutine(name="full_detach", default_time="21:30", function=_on_full_detach),
     "bed_time": SyncedRoutine(name="bed_time", default_time="22:00", function=_on_bedtime),
+    "rotate_one": SyncedRoutine(name="rotate_one", default_time="00:00", function=_on_rotate_one),
+    "rotate_two": SyncedRoutine(name="rotate_two", default_time="02:00", function=_on_rotate_two),
 }
 
 # -------------------------- GETTERS ------------------------- #
@@ -199,6 +213,10 @@ def get_routines() -> dict[str, Routine]:
 
 def get_routine_strings() -> list[str]:
     return [repr(routine) for routine in _routines.values()]
+
+
+def get_last_routine() -> str | None:
+    return last_routine
 
 
 # --------------------------- START -------------------------- #

@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, abort
 from log import log
 from interfaces.api.config import get_cached
 from datetime import date
-from features.routines import get_away_for_eve, get_routine_strings, update_routines
+from features.routines import get_away_for_eve, get_last_routine, get_routine_strings, update_routines
 from interfaces.api.server_app import is_away, get_note_sync_changes
 from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as actions_bp
@@ -39,6 +39,11 @@ def all():
 def logs():
     from log import get_logs
     return jsonify({"logs": get_logs()})
+
+
+@app.route('/last-routine')
+def last_routine():
+    return get_last_routine() or "none"
 
 
 @app.route('/quit')

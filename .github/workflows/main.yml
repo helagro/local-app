@@ -5,9 +5,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "cpp_server/**"
   pull_request:
     branches:
       - main
+    paths:
+      - "cpp_server/**"
 
 jobs:
   build-and-push:

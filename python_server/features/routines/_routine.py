@@ -5,6 +5,8 @@ from interfaces.api.server_app import get_routines
 from collections.abc import Callable
 import schedule
 
+last_routine: str | None = None
+
 
 class Routine:
     job: Any = None
@@ -13,13 +15,19 @@ class Routine:
         self.name = name
         self.time = time
         self._function = function
-        self.job = schedule.every().day.at(self.time).do(function)
+        self.job = schedule.every().day.at(self.time).do(self._function)
 
     def update(self) -> None:
         log(f"Skipped update for local routine {self.name}")
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(name={self.name!r}, time={self.time!r})"
+
+    def _execute(self) -> None:
+        global last_routine
+
+        self._function()
+        last_routine = self.name
 
 
 class SyncedRoutine(Routine):
