@@ -12,7 +12,7 @@ services:
   cpp_server:
     # build: ./cpp_server
     image: 3henrikl/local-app
-    container_name: local-ap~
+    container_name: local-app
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
@@ -22,7 +22,10 @@ services:
       - VAULT=/vault
     ports:
       - "8008:8008"
-    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1h
 
   # =============================== SMART HOME =============================== #
 

@@ -99,6 +99,7 @@ int main() {
   app_log("Exiting application");
 
   write_logs();
+  server_thread.join();
 
   return 0;
 }
