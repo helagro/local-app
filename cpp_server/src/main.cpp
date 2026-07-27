@@ -1,4 +1,5 @@
 
+#include "api/python_server/python_server.hpp"
 #include "config/env_variables.hpp"
 #include "config/json_config_handler.hpp"
 #include "features/file_shell/file_shell.hpp"
@@ -61,11 +62,7 @@ int main() {
     if (config.feature_toggle.scheduled_sync) {
 
       if (config.feature_toggle.file_shell) {
-        try {
-          run_file_shell();
-        } catch (const std::exception &e) {
-          app_log(std::string("Error in file shell: ") + e.what());
-        }
+        run_file_shell();
       }
 
       if (config.feature_toggle.log_trimmer) {

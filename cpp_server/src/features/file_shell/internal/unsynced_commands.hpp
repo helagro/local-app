@@ -1,5 +1,7 @@
 #pragma once
+
 #include "vault/classes/File.hpp"
+#include <functional>
 #include <string>
 
-std::string get_unsynced_file_shell_content(File shell_file);
+void run_unsynced_commands(File shell_file, std::function<void(std::string)> run_command);

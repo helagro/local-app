@@ -144,6 +144,18 @@ def a(content: str, do_exec=True) -> None:
         log(f"A: {content}, stdout: {result.stdout.strip()} stderr: {result.stderr.strip()}")
 
 
+def complete(id: str) -> None:
+    headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
+    body = {"id": id}
+
+    try:
+        response = requests.post(f"{_TOOLS_URL}/note-sync/complete", headers=headers, json=body)
+        response.raise_for_status()
+        log(f"/changes/complete - completed id: {id}")
+    except requests.exceptions.RequestException as e:
+        log_to_server(f"/changes/complete - failed to complete change: {e}")
+
+
 # ================================= VARIABLES ================================ #
 
 last_is_away = is_away()

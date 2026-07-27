@@ -1,4 +1,4 @@
-#include "../api/python_server.hpp"
+#include "../api/python_server/python_server.hpp"
 #include "../utils/log.hpp"
 #include "httplib.h"
 
@@ -7,9 +7,7 @@ using namespace httplib;
 void run_server() {
   Server svr;
 
-  svr.Get("/health", [](const httplib::Request &, httplib::Response &res) {
-    res.set_content("ok", "text/plain");
-  });
+  svr.Get("/health", [](const httplib::Request &, httplib::Response &res) { res.set_content("ok", "text/plain"); });
 
   svr.Get("/logs", [](const httplib::Request &, httplib::Response &res) {
     std::string logs = get_logs_string();

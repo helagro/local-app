@@ -1,6 +1,8 @@
-#include "api/python_server.hpp"
+#include "api/python_server/python_server.hpp"
+#include "config/env_variables.hpp"
 #include "config/json_config_handler.hpp"
 #include "status_template.hpp"
+#include "utils/log.hpp"
 #include "vault/classes/File.hpp"
 #include "vault/constants.hpp"
 #include "vault/vault.hpp"
@@ -46,7 +48,7 @@ std::string get_status_json(const int indent = -1) {
   status.message = "OK";
   status.first_timestamp = first_timestamp;
   get_timestamp(&status.timestamp);
-  status.build_time = getenv("BUILD_TIME");
+  status.build_time = get_env_variables()->build_time;
 
   // Add python server health
   python_server_get("/health", &status.python_server_health);
@@ -58,9 +60,14 @@ std::string get_status_json(const int indent = -1) {
 }
 
 bool write_status() {
-  File status_file(get_file(STATUS_FILE));
+  try {
+    File status_file(get_file(STATUS_FILE));
 
-  const std::string status_json = get_status_json(1);
+    const std::string status_json = get_status_json(1);
 
-  return status_file.write("```json\n" + status_json + "\n```");
+    return status_file.write("```json\n" + status_json + "\n```");
+  } catch (const std::exception &e) {
+    app_log(std::string("Error writing status: ") + e.what());
+    return false;
+  }
 }

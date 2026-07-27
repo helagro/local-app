@@ -13,7 +13,7 @@ const path status_path_from_vault = path("_") / path("local app") / path("status
 /* ================================ FUNCTIONS =============================== */
 
 path get_standard_file(STANDARD_FILES file) {
-  const path vault_path = path(getenv("VAULT"));
+  const path vault_path = path(get_env_variables()->vault);
 
   switch (file) {
   case LOG_FILE:
@@ -28,6 +28,6 @@ path get_standard_file(STANDARD_FILES file) {
 }
 
 path get_vault_file(std::string relative_path) {
-  const path vault_path = path(getenv("VAULT"));
+  const path vault_path = path(get_env_variables()->vault);
   return vault_path / relative_path;
 }

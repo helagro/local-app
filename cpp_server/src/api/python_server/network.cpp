@@ -1,5 +1,5 @@
-#include "../config/json_config_handler.hpp"
-#include "../utils/log.hpp"
+#include "config/json_config_handler.hpp"
+#include "utils/log.hpp"
 #include <curl/curl.h>
 #include <iostream>
 #include <string>

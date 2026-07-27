@@ -11,9 +11,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ================================== SET FLAGS ================================= #
 
-
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+endif()
+
+# ================================== DEBUG ================================= #
+
+set(CMAKE_BUILD_TYPE Debug)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address)
 endif()
 
 # =============================== ADD LIBRARIES ============================== #

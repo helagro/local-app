@@ -18,7 +18,12 @@ bool load_env_variables() {
     return false;
   }
 
-  env = new EnvVariables(vault);
+  char *build_time = std::getenv("BUILD_TIME");
+  if (!build_time) {
+    build_time = "unknown";
+  }
+
+  env = new EnvVariables(vault, build_time);
 
   return true;
 }
