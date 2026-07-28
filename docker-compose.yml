@@ -18,6 +18,7 @@ services:
     volumes:
       - /media/pi/tb-hdd/vault:/vault
       - ./cpp_server/.env:/.env
+      - /tmp/local_app:/tmp/local_app
     environment:
       - VAULT=/vault
     ports:

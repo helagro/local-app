@@ -31,7 +31,8 @@ void to_json(json &j, const Status &status) {
            {"first_timestamp", status.first_timestamp},
            {"sync_logs", status.sync_logs},
            {"python_server_health", status.python_server_health},
-           {"build_time", status.build_time}};
+           {"build_time", status.build_time},
+           {"plant_state", status.plant_state}};
 }
 
 /* general functions -------------------------------------------------------- */
@@ -52,6 +53,7 @@ std::string get_status_json(const int indent = -1) {
 
   // Add python server health
   python_server_get("/health", &status.python_server_health);
+  python_server_get("/dev/plant/state", &status.plant_state);
 
   status.sync_logs = get_config().feature_toggle.sync_logs;
 

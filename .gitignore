@@ -54,3 +54,4 @@ Temporary Items
 nohup.out
 build/
 .env
+*.sock

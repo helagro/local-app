@@ -28,46 +28,6 @@ def led(name: str):
     return "ok"
 
 
-@bp.route('/dev/<string:name>')
-def device(name: str):
-    device = get_device(name)
-
-    action = request.args.get('a', default='toggle').lower()
-
-    if action == 'on':
-        device.turn_on()
-    elif action == 'off':
-        device.turn_off()
-    else:
-        device.toggle()
-
-    return "ok"
-
-
-@bp.route('/dev/<string:name>/lvl/<int:level>')
-def level(name: str, level: int):
-    device = get_device(name)
-    device.level(level)
-
-    return "ok"
-
-
-@bp.route('/dev/<string:name>/color/<string:color>')
-def color(name: str, color: str):
-    device = get_device(name)
-    device.color(color)
-
-    return "ok"
-
-
-@bp.route('/dev/<string:name>/color/<int:color>')
-def color_int(name: str, color: int):
-    device = get_device(name)
-    device.color(color)
-
-    return "ok"
-
-
 @bp.route('/t/<path:rest>')
 def toggle_group(rest: str):
     names = rest.split('/')

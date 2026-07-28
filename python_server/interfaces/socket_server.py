@@ -1,10 +1,12 @@
 import socket
 import os
 import struct
+from pathlib import Path
 import log
 from interfaces.api.server_app import complete
 
-SOCKET_PATH = "/tmp/local_app.sock"
+SOCKET_FOLDER = "/tmp/local_app"
+SOCKET_PATH = f"{SOCKET_FOLDER}/local_app.sock"
 
 
 def start_socket_server():
@@ -17,6 +19,8 @@ def _listen_on_socket():
         os.unlink(SOCKET_PATH)
     except FileNotFoundError:
         pass
+
+    Path(SOCKET_FOLDER).mkdir(parents=True, exist_ok=True)
 
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
         server.bind(SOCKET_PATH)

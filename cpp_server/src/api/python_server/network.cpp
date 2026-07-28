@@ -26,9 +26,9 @@ bool python_server_get(std::string path, std::string *response) {
   const CURLcode res = curl_easy_perform(curl);
 
   if (res == CURLE_OK) {
-    app_log("Successful GET request to \"" + full_url + "\"");
+    app_log("Successful GET request to " + full_url);
   } else {
-    app_log("Failed GET request to \"" + full_url + "\": " + curl_easy_strerror(res));
+    app_log("Failed GET request to " + full_url + ": " + curl_easy_strerror(res));
     std::cerr << curl_easy_strerror(res) << '\n';
   }
 

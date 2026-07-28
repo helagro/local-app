@@ -8,6 +8,10 @@ import schedule
 last_routine: str | None = None
 
 
+def get_last_routine() -> str | None:
+    return last_routine
+
+
 class Routine:
     job: Any = None
 
@@ -15,7 +19,7 @@ class Routine:
         self.name = name
         self.time = time
         self._function = function
-        self.job = schedule.every().day.at(self.time).do(self._function)
+        self.job = schedule.every().day.at(self.time).do(self._execute)
 
     def update(self) -> None:
         log(f"Skipped update for local routine {self.name}")

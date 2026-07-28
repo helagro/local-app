@@ -28,6 +28,10 @@ void run_server() {
     res.set_content(buf, "text/html");
   });
 
-  app_log("Starting server on port 8008...");
-  svr.listen("0.0.0.0", 8008);
+  try {
+    app_log("Starting server on port 8008...");
+    svr.listen("0.0.0.0", 8008);
+  } catch (const std::exception &e) {
+    app_log(std::string("Server error: ") + e.what());
+  }
 }

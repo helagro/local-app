@@ -7,6 +7,7 @@ from interfaces.api.server_app import is_away, get_note_sync_changes
 from ._readings import all_readings, bp as readings_bp
 from ._actions import bp as actions_bp
 from ._activity import bp as activity_bp
+from ._device import bp as device_bp
 from ._files import bp as files_bp
 from os import _exit
 from interfaces.api.config import sync_config
@@ -17,6 +18,7 @@ startup_date = date.today()
 app = Flask(__name__)
 app.register_blueprint(readings_bp, url_prefix='/sens')
 app.register_blueprint(files_bp, url_prefix='/files')
+app.register_blueprint(device_bp, url_prefix='/dev')
 app.register_blueprint(activity_bp)
 app.register_blueprint(actions_bp)
 

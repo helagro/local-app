@@ -6,7 +6,7 @@ from interfaces.api.config import sync_config
 from interfaces.api.server_app import HUM, IR_DAWN, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
 import schedule
 import time
-from features.routines._routine import Routine, SyncedRoutine, last_routine
+from features.routines._routine import Routine, SyncedRoutine, get_last_routine
 from interfaces.sensors import *
 from threading import Thread
 from typing import cast
@@ -213,10 +213,6 @@ def get_routines() -> dict[str, Routine]:
 
 def get_routine_strings() -> list[str]:
     return [repr(routine) for routine in _routines.values()]
-
-
-def get_last_routine() -> str | None:
-    return last_routine
 
 
 # --------------------------- START -------------------------- #

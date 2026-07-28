@@ -2,6 +2,7 @@
 #include "utils/log.hpp"
 #include <cstdint>
 #include <cstring>
+#include <filesystem>
 #include <iostream>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -20,9 +21,11 @@ bool open_socket() {
     return false;
   }
 
+  std::filesystem::create_directories("/tmp/local_app");
+
   sockaddr_un addr{};
   addr.sun_family = AF_UNIX;
-  std::strcpy(addr.sun_path, "/tmp/local_app.sock");
+  std::strcpy(addr.sun_path, "/tmp/local_app/local_app.sock");
 
   if (connect(sock, (sockaddr *)&addr, sizeof(addr)) == -1) {
     perror("connect");
