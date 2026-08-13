@@ -69,7 +69,6 @@ JsonConfig get_config() { return config; }
 void from_json(const json &j, JsonConfig &config) {
   j.at("sync_rate_mins").get_to(config.sync_rate_mins);
   j.at("python_server_url").get_to(config.python_server_url);
-  j.at("content_sorter_label").get_to(config.content_sorter_label);
 
   j.at("feature_toggle").at("master_switch").get_to(config.feature_toggle.master_switch);
   j.at("feature_toggle").at("scheduled_sync").get_to(config.feature_toggle.scheduled_sync);

@@ -26,7 +26,6 @@ struct JsonConfig {
 
   unsigned int sync_rate_mins;
   std::string python_server_url;
-  std::string content_sorter_label;
 
   FeatureToggle feature_toggle;
   VaultPath vault_path;

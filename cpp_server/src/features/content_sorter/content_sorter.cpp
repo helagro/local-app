@@ -8,10 +8,12 @@
 #define PREFIX_LENGTH 6 // Length of "- [ ] "
 
 namespace {
+enum class Priority { High, Medium, Low, Invalid };
 
-std::string sort_label;
-
-enum class Priority { High, Medium, Low };
+struct InboxItem {
+  std::string line;
+  Priority priority;
+};
 
 bool get_destinations(size_t &high_end, size_t &medium_end, size_t &low_end, std::string &note_str) {
   const size_t high_start = note_str.find("## High\n");
@@ -38,65 +40,51 @@ bool get_destinations(size_t &high_end, size_t &medium_end, size_t &low_end, std
   return true;
 }
 
-bool get_inbox(const std::string &note_str, std::list<std::string> &items) {
+Priority get_priority(const std::string &item) {
+  if (item.substr(PREFIX_LENGTH, 2) == "**") {
+    return Priority::High;
+  } else if (item.substr(PREFIX_LENGTH, 1) == "*") {
+    return Priority::Low;
+  } else if (item.substr(PREFIX_LENGTH, 1) == "=") {
+    return Priority::Medium;
+  } else {
+    return Priority::Invalid;
+  }
+}
+
+bool get_inbox(std::string &note_str, std::list<InboxItem> &items) {
   const size_t inbox_start = note_str.find("## In\n");
   if (inbox_start == std::string::npos) {
     return false;
   }
 
-  size_t command_line_end = inbox_start;
+  size_t command_line_start = inbox_start;
 
   while (true) {
-    const size_t command_line_start = note_str.find("- [ ] ", command_line_end);
+    command_line_start = note_str.find("- [ ] ", command_line_start);
     if (command_line_start == std::string::npos) {
-      return false;
+      return items.size() > 0;
     }
 
-    const size_t command_start = command_line_start;
-    command_line_end = note_str.find('\n', command_start);
+    const size_t command_line_end = note_str.find('\n', command_line_start);
 
     // If note does not end with newline
     if (command_line_end == std::string::npos) {
       return false;
     }
 
-    const std::string line = note_str.substr(command_start, command_line_end - command_start);
+    const std::string line = note_str.substr(command_line_start, command_line_end - command_line_start);
+    const Priority priority = get_priority(line);
 
-    // If line is the end label
-    if (line.substr(PREFIX_LENGTH, sort_label.length()) == sort_label) {
-      return true;
+    if (priority == Priority::Invalid) {
+      command_line_start = command_line_end + 1;
+    } else {
+      items.push_back({line, priority});
+      note_str.erase(command_line_start, command_line_end - command_line_start + 1);
     }
-
-    items.push_back(line);
   }
 
   return false;
-}
-
-Priority get_priority(const std::string &item) {
-  if (item.substr(PREFIX_LENGTH, 2) == "**") {
-    return Priority::High;
-  } else if (item.substr(PREFIX_LENGTH, 1) == "*") {
-    return Priority::Low;
-  } else {
-    return Priority::Medium;
-  }
-}
-
-bool get_inbox_range(const std::string &note_str, size_t &inbox_start, size_t &inbox_end) {
-  const size_t inbox_label_start = note_str.find("## In\n");
-
-  if (inbox_label_start == std::string::npos) {
-    return false;
-  }
-  inbox_start = inbox_label_start + 6; // Length of "## In\n"
-
-  inbox_end = note_str.find(sort_label, inbox_start) - PREFIX_LENGTH;
-  if (inbox_end == std::string::npos) {
-    return false;
-  }
-
-  return true;
 }
 
 // TODO - Improve performance by calculating updated positions
@@ -108,47 +96,46 @@ void sort_note(File note) {
   }
   std::string note_str = note_content.value();
 
-  std::list<std::string> inbox;
+  std::list<InboxItem> inbox;
   if (!get_inbox(note_str, inbox)) {
     return;
   }
 
-  for (std::string &item : inbox) {
-    app_log("Sorting line: \"" + item + "\" in note: \"" + note.get_path() + "\"");
-    const Priority priority = get_priority(item);
+  for (const InboxItem &item : inbox) {
+    app_log("Sorting line: \"" + item.line + "\" in note: \"" + note.get_path() + "\"");
 
     size_t high_end, medium_end, low_end;
     if (!get_destinations(high_end, medium_end, low_end, note_str)) {
       return;
     }
 
-    std::string processed_item;
-    std::remove_copy(item.begin(), item.end(), std::back_inserter(processed_item), '*');
+    std::string item_tmp;
+    std::remove_copy(item.line.begin(), item.line.end(), std::back_inserter(item_tmp), '*');
+    std::string item_tmp2;
+    std::remove_copy(item_tmp.begin(), item_tmp.end(), std::back_inserter(item_tmp2), '=');
 
-    switch (priority) {
+    switch (item.priority) {
     case Priority::High:
-      note_str.insert(high_end, processed_item + "\n");
+      note_str.insert(high_end, item_tmp2 + "\n");
       break;
     case Priority::Medium:
-      note_str.insert(medium_end, processed_item + "\n");
+      note_str.insert(medium_end, item_tmp2 + "\n");
       break;
     case Priority::Low:
-      note_str.insert(low_end, processed_item + "\n");
+      note_str.insert(low_end, item_tmp2 + "\n");
       break;
+    case Priority::Invalid:
+      app_log("Invalid priority for line: \"" + item.line + "\" in note: \"" + note.get_path() + "\"");
+      return;
     }
   }
 
-  size_t inbox_start, inbox_end;
-  if (get_inbox_range(note_str, inbox_start, inbox_end)) {
-    note_str.erase(inbox_start, inbox_end - inbox_start);
-    note.write(note_str);
-  }
+  note.write(note_str);
 }
 } // namespace
 
 void sort_content() {
   const JsonConfig config = get_config();
-  sort_label = config.content_sorter_label;
 
   try {
     std::list<File> notes = get_files(config.vault_path.sortable_notes, true);
