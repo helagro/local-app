@@ -20,17 +20,20 @@ bool get_destinations(size_t &high_end, size_t &medium_end, size_t &low_end, std
   }
   high_end = high_start + 8; // Length of "## High\n"
 
-  const size_t medium_start = note_str.find("## Mid\n", high_start);
-  if (medium_start == std::string::npos) {
-    return false;
-  }
-  medium_end = medium_start + 7; // Length of "## Mid\n"
+  const size_t medium_start = note_str.find("## Mid\n", high_end);
+  const bool medium_found = (medium_start != std::string::npos);
 
-  const size_t low_start = note_str.find("## Low\n", medium_start);
+  const size_t low_start = note_str.find("## Low\n", medium_found ? medium_start : high_end);
   if (low_start == std::string::npos) {
     return false;
   }
   low_end = low_start + 7; // Length of "## Low\n"
+
+  if (medium_found) {
+    medium_end = medium_start + 7; // Length of "## Mid\n"
+  } else {
+    medium_end = low_end;
+  }
 
   return true;
 }
@@ -119,15 +122,18 @@ void sort_note(File note) {
       return;
     }
 
+    std::string processed_item;
+    std::remove_copy(item.begin(), item.end(), std::back_inserter(processed_item), '*');
+
     switch (priority) {
     case Priority::High:
-      note_str.insert(high_end, "- [ ] " + item.substr(PREFIX_LENGTH + 2, item.length() - PREFIX_LENGTH - 4) + "\n");
+      note_str.insert(high_end, processed_item + "\n");
       break;
     case Priority::Medium:
-      note_str.insert(medium_end, item + "\n");
+      note_str.insert(medium_end, processed_item + "\n");
       break;
     case Priority::Low:
-      note_str.insert(low_end, "- [ ] " + item.substr(PREFIX_LENGTH + 1, item.length() - PREFIX_LENGTH - 2) + "\n");
+      note_str.insert(low_end, processed_item + "\n");
       break;
     }
   }
