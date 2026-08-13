@@ -17,7 +17,7 @@ File get_shell_file() {
 }
 
 void run_command(std::string command) {
-  replace(command.begin(), command.end(), ' ', '/');
+  command.replace(command.begin(), command.end(), ' ', '/');
 
   std::string response;
   python_server_get("/" + command, &response);

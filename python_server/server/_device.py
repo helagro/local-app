@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from interfaces.home import exec_preset_by_name, get_device, get_devices_string, get_last_preset_name
 
-bp = Blueprint('actions', __name__)
+bp = Blueprint('device', __name__)
 
 
 @bp.route('/<string:name>')
@@ -31,7 +31,7 @@ def level(name: str, level: int):
 @bp.route('/<string:name>/state')
 def state(name: str):
     device = get_device(name)
-    return device.is_some_on()
+    return "on" if device.is_some_on() else "off"
 
 
 # =================================== COLOR ================================== #

@@ -69,15 +69,18 @@ JsonConfig get_config() { return config; }
 void from_json(const json &j, JsonConfig &config) {
   j.at("sync_rate_mins").get_to(config.sync_rate_mins);
   j.at("python_server_url").get_to(config.python_server_url);
+  j.at("content_sorter_label").get_to(config.content_sorter_label);
 
   j.at("feature_toggle").at("master_switch").get_to(config.feature_toggle.master_switch);
   j.at("feature_toggle").at("scheduled_sync").get_to(config.feature_toggle.scheduled_sync);
   j.at("feature_toggle").at("sync_logs").get_to(config.feature_toggle.sync_logs);
   j.at("feature_toggle").at("file_shell").get_to(config.feature_toggle.file_shell);
   j.at("feature_toggle").at("log_trimmer").get_to(config.feature_toggle.log_trimmer);
+  j.at("feature_toggle").at("content_sorter").get_to(config.feature_toggle.content_sorter);
 
   j.at("vault_path").at("file_shell").get_to(config.vault_path.file_shell);
   j.at("vault_path").at("trimmable_logs").get_to(config.vault_path.trimmable_logs);
+  j.at("vault_path").at("sortable_notes").get_to(config.vault_path.sortable_notes);
 
   j.at("trim_option").at("trim_from").get_to(config.trim_option.trim_from);
   j.at("trim_option").at("trim_to").get_to(config.trim_option.trim_to);

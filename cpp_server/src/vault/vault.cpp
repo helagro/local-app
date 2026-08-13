@@ -26,13 +26,19 @@ File get_file(std::string relative_path) {
   return get_file(file_path);
 }
 
-std::list<File> get_files(std::string relative_folder_path) {
+std::list<File> get_files(std::string relative_folder_path, bool recursive) {
   const path file_path = get_vault_file(relative_folder_path);
 
   std::filesystem::directory_iterator iterator(file_path);
   std::list<File> files;
 
   for (const auto &entry : iterator) {
+    if (entry.is_directory() && recursive) {
+      const std::string sub_folder_path = entry.path().string();
+      const std::list<File> sub_folder_files = get_files(sub_folder_path, recursive);
+      files.insert(files.end(), sub_folder_files.begin(), sub_folder_files.end());
+    }
+
     if (!entry.is_regular_file()) {
       continue;
     }

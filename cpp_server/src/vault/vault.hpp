@@ -7,5 +7,5 @@
 
 File get_file(STANDARD_FILES std_file);
 File get_file(std::string relative_path);
-std::list<File> get_files(std::string relative_folder_path);
+std::list<File> get_files(std::string relative_folder_path, bool recursive = false);
 void sync_vault();

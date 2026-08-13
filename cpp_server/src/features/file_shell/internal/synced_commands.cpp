@@ -16,7 +16,7 @@ void clear_shell_file(File shell_file) {
   }
 }
 
-std::string get_file_shell_content(File shell_file) {
+std::string get_note_content(File shell_file) {
   const std::optional<std::string> shell_file_content = shell_file.read();
 
   if (!shell_file_content.has_value()) {
@@ -28,7 +28,7 @@ std::string get_file_shell_content(File shell_file) {
 } // namespace
 
 void run_synced_commands(const File shell_file, std::function<void(const std::string &)> run_command) {
-  const std::string shell_file_content_str = get_file_shell_content(shell_file);
+  const std::string shell_file_content_str = get_note_content(shell_file);
   clear_shell_file(shell_file);
 
   size_t command_line_end = 0;

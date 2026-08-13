@@ -2,18 +2,18 @@ blinker==1.9.0
 certifi==2024.8.30
 charset-normalizer==3.4.0
 click==8.1.7
-idna==3.10
+idna==3.15
 itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.2
-urllib3==2.6.3
+urllib3==2.7.0
 Werkzeug==3.1.6
-setuptools==78.1.1
+setuptools==83.0.0
 
 # Definetelly needed
 requests==2.33.0
 Flask==3.1.3
-python-dotenv==1.0.1
+python-dotenv==1.2.2
 typing-extensions
 adafruit-circuitpython-dht
 schedule==1.2.2

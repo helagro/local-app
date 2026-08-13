@@ -3,7 +3,6 @@ from features.file_sync import sync_folders
 from interfaces.actuators.led import get_lamp
 from interfaces.home import get_device
 from interfaces.api.config import sync_config
-from interfaces.api.server_app import HUM, IR_DAWN, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, TEMP_NIGHT, a, should_skip_tracking, log_to_server
 import schedule
 import time
 from features.routines._routine import Routine, SyncedRoutine, get_last_routine
@@ -11,6 +10,9 @@ from interfaces.sensors import *
 from threading import Thread
 from typing import cast
 from log import log
+from interfaces.api.server_app import HUM, \
+    IR_DAWN, LIGHT_BEFORE_WAKE, LIGHT_DAWN, LIGHT_EVE, LIGHT_NIGHT, PRESSURE, TEMP_EARLY, \
+    TEMP_NIGHT, a, should_skip_tracking, log_to_server
 
 # ------------------------- VARIABLES ------------------------ #
 

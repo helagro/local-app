@@ -2,6 +2,7 @@
 #include "api/python_server/python_server.hpp"
 #include "config/env_variables.hpp"
 #include "config/json_config_handler.hpp"
+#include "features/content_sorter/content_sorter.hpp"
 #include "features/file_shell/file_shell.hpp"
 #include "features/log_trimmer/log_trimmer.hpp"
 #include "features/status/status.hpp"
@@ -72,6 +73,10 @@ int main() {
         }
       }
 
+      if (config.feature_toggle.content_sorter) {
+        sort_content();
+      }
+
       write_status();
     } else {
       app_log("Scheduled sync is disabled");
@@ -87,7 +92,13 @@ int main() {
       app_log("", '\n', false);
     }
 
-    load_config();
+    try {
+      load_config();
+    } catch (const std::exception &e) {
+      app_log("Failed to reload config file.");
+      app_log(e.what());
+    }
+
     config = get_config();
     loop_count++;
   }
