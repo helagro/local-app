@@ -2,6 +2,7 @@
 #include "api/python_server/python_server.hpp"
 #include "utils/log.hpp"
 #include <algorithm>
+#include <stdexcept>
 #include <string>
 
 void run_command(std::string command) {
@@ -12,6 +13,8 @@ void run_command(std::string command) {
   }
 
   if (command.length() > 2 && command[0] == '+') {
+    std::replace(command.begin(), command.end(), ':', '#');
+
     python_server_socket("ADD " + command.substr(1));
   } else {
     std::replace(command.begin(), command.end(), ' ', '/');

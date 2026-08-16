@@ -6,6 +6,7 @@
 #include "vault/classes/File.hpp"
 #include "vault/vault.hpp"
 #include <algorithm>
+#include <stdexcept>
 
 namespace {
 
