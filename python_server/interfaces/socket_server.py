@@ -4,6 +4,7 @@ import struct
 from pathlib import Path
 import log
 from interfaces.api.server_app import complete
+from interfaces.api.server_app import a
 
 SOCKET_FOLDER = "/tmp/local_app"
 SOCKET_PATH = f"{SOCKET_FOLDER}/local_app.sock"
@@ -66,4 +67,11 @@ def _recv_exact(sockobj, size) -> bytes:
 def _handle_message(message: str):
     log.log("Received message: " + message)
 
-    complete(message)
+    if message.startswith("COMPLETE "):
+        # Remove "COMPLETE " prefix
+        complete(message[9:])
+    elif message.startswith("ADD "):
+        # Remove "ADD " prefix
+        a(message[4:])
+    else:
+        log.log("Unknown message type: " + message)

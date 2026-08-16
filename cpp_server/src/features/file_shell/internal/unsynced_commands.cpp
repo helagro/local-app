@@ -1,5 +1,6 @@
 #include "unsynced_commands.hpp"
 #include "api/python_server/python_server.hpp"
+#include "utils/actions.hpp"
 #include "utils/log.hpp"
 #include <nlohmann/json.hpp>
 
@@ -26,7 +27,7 @@ std::string get_shell_file_name(File shell_file) {
 }
 } // namespace
 
-void run_unsynced_commands(File shell_file, std::function<void(std::string)> run_command) {
+void run_unsynced_commands(File shell_file) {
   const std::string shell_file_name = get_shell_file_name(shell_file);
   const std::string shell_file_hashtag = "#" + shell_file_name;
 
@@ -55,7 +56,7 @@ void run_unsynced_commands(File shell_file, std::function<void(std::string)> run
       app_log("Unsynced change: " + change_content);
 
       run_command(change_content);
-      python_server_socket(id);
+      python_server_socket("COMPLETE " + id);
     }
   }
 }

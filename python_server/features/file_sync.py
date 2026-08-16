@@ -13,9 +13,9 @@ def sync_folders():
     # Make sure destination exists
     os.makedirs(HOSTED_FOLDER_PATH, exist_ok=True)
 
-    # 1️⃣ Build sets of filenames (ignore directories if you want)
-    files_a = set(f for f in _get_all_files(folder_a) if os.path.isfile(os.path.join(folder_a, f)))
-    files_b = set(f for f in _get_all_files(HOSTED_FOLDER_PATH) if os.path.isfile(os.path.join(HOSTED_FOLDER_PATH, f)))
+    # 1️⃣ Build sets of filenames
+    files_a = set(f for f in _get_all_files(folder_a))
+    files_b = set(f for f in _get_all_files(HOSTED_FOLDER_PATH))
 
     # 2️⃣ Copy missing files from A → B
     for f in files_a - files_b:

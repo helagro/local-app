@@ -1,6 +1,7 @@
 #include "api/python_server/python_server.hpp"
 #include "config/json_config_handler.hpp"
 #include "unsynced_commands.hpp"
+#include "utils/actions.hpp"
 #include "utils/log.hpp"
 #include "vault/classes/File.hpp"
 #include "vault/vault.hpp"
@@ -27,7 +28,7 @@ std::string get_note_content(File shell_file) {
 }
 } // namespace
 
-void run_synced_commands(const File shell_file, std::function<void(const std::string &)> run_command) {
+void run_synced_commands(const File shell_file) {
   const std::string shell_file_content_str = get_note_content(shell_file);
   clear_shell_file(shell_file);
 

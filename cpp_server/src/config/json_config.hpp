@@ -10,12 +10,14 @@ struct JsonConfig {
     bool file_shell;
     bool log_trimmer;
     bool content_sorter;
+    bool scheduled_commands;
   };
 
   struct VaultPath {
     std::string file_shell;
     std::string trimmable_logs;
     std::string sortable_notes;
+    std::string scheduled_commands;
   };
 
   struct TrimOption {

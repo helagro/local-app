@@ -27,8 +27,6 @@ class Config:
     groups: Dict[str, List[str]] = field(default_factory=dict)
     presets: Dict[str, Preset] = field(default_factory=dict)
 
-    tasks: Dict[Literal['eve', 'latestDinner'], List[str]] = field(default_factory=dict)
-
 
 # variables ------------------------------------------------------------------ #
 

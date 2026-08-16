@@ -3,7 +3,7 @@ from flask import send_from_directory, abort, Blueprint, redirect, url_for, json
 from random import choice
 from log import log
 
-HOSTED_FOLDER_PATH = '/media/pi/16_GB_USB/public'
+HOSTED_FOLDER_PATH = '/media/pi/500_gb_usb/public'
 
 bp = Blueprint('files', __name__)
 

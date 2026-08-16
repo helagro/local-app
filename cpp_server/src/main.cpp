@@ -5,6 +5,7 @@
 #include "features/content_sorter/content_sorter.hpp"
 #include "features/file_shell/file_shell.hpp"
 #include "features/log_trimmer/log_trimmer.hpp"
+#include "features/scheduled/scheduled.hpp"
 #include "features/status/status.hpp"
 #include "server/server.h"
 #include "utils/log.hpp"
@@ -75,6 +76,10 @@ int main() {
 
       if (config.feature_toggle.content_sorter) {
         sort_content();
+      }
+
+      if (config.feature_toggle.scheduled_commands) {
+        run_scheduled();
       }
 
       write_status();

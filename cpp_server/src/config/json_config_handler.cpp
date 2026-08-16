@@ -76,10 +76,12 @@ void from_json(const json &j, JsonConfig &config) {
   j.at("feature_toggle").at("file_shell").get_to(config.feature_toggle.file_shell);
   j.at("feature_toggle").at("log_trimmer").get_to(config.feature_toggle.log_trimmer);
   j.at("feature_toggle").at("content_sorter").get_to(config.feature_toggle.content_sorter);
+  j.at("feature_toggle").at("scheduled_commands").get_to(config.feature_toggle.scheduled_commands);
 
   j.at("vault_path").at("file_shell").get_to(config.vault_path.file_shell);
   j.at("vault_path").at("trimmable_logs").get_to(config.vault_path.trimmable_logs);
   j.at("vault_path").at("sortable_notes").get_to(config.vault_path.sortable_notes);
+  j.at("vault_path").at("scheduled_commands").get_to(config.vault_path.scheduled_commands);
 
   j.at("trim_option").at("trim_from").get_to(config.trim_option.trim_from);
   j.at("trim_option").at("trim_to").get_to(config.trim_option.trim_to);

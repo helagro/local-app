@@ -93,19 +93,6 @@ def _on_eve() -> None:
     except Exception as e:
         log_to_server(f"Error during /sync-folders in eve routine: {e}")
 
-    for task in config.tasks["eve"]:
-        a(task)
-
-
-def _on_latest_dinner() -> None:
-    if should_skip_tracking(use_cache=True): return
-
-    config = get_cached()
-    if not config: return
-
-    for task in config.tasks["latestDinner"]:
-        a(task)
-
 
 def _on_detach():
     log("routine - detach")
@@ -194,7 +181,6 @@ _routines: dict[str, Routine] = {
     "after_wake": SyncedRoutine(name="after_wake", default_time="09:00", function=_on_morning),
     "reduce_temp": SyncedRoutine(name="lower_heating", default_time="16:00", function=_on_do_reduce_temp),
     "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
-    "latest_dinner": SyncedRoutine(name="latest_dinner", default_time="20:00", function=_on_latest_dinner),
     "detach": SyncedRoutine(name="detach", default_time="21:00", function=_on_detach),
     "full_detach": SyncedRoutine(name="full_detach", default_time="21:30", function=_on_full_detach),
     "bed_time": SyncedRoutine(name="bed_time", default_time="22:00", function=_on_bedtime),
