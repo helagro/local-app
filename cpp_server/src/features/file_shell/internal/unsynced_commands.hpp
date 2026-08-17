@@ -4,4 +4,4 @@
 #include <functional>
 #include <string>
 
-void run_unsynced_commands(File shell_file);
+std::string run_unsynced_commands(File shell_file);

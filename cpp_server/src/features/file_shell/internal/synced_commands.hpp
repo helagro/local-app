@@ -3,4 +3,4 @@
 #include "vault/classes/File.hpp"
 #include <functional>
 
-void run_synced_commands(const File shell_file);
+std::string run_synced_commands(const File shell_file);

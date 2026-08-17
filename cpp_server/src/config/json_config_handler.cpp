@@ -73,17 +73,19 @@ void from_json(const json &j, JsonConfig &config) {
   j.at("feature_toggle").at("master_switch").get_to(config.feature_toggle.master_switch);
   j.at("feature_toggle").at("scheduled_sync").get_to(config.feature_toggle.scheduled_sync);
   j.at("feature_toggle").at("sync_logs").get_to(config.feature_toggle.sync_logs);
-  j.at("feature_toggle").at("file_shell").get_to(config.feature_toggle.file_shell);
   j.at("feature_toggle").at("log_trimmer").get_to(config.feature_toggle.log_trimmer);
   j.at("feature_toggle").at("content_sorter").get_to(config.feature_toggle.content_sorter);
   j.at("feature_toggle").at("scheduled_commands").get_to(config.feature_toggle.scheduled_commands);
   j.at("feature_toggle").at("content_filter").get_to(config.feature_toggle.content_filter);
+  j.at("feature_toggle").at("file_shell").get_to(config.feature_toggle.file_shell);
 
-  j.at("vault_path").at("file_shell").get_to(config.vault_path.file_shell);
   j.at("vault_path").at("trimmable_logs").get_to(config.vault_path.trimmable_logs);
   j.at("vault_path").at("sortable_notes").get_to(config.vault_path.sortable_notes);
   j.at("vault_path").at("scheduled_commands").get_to(config.vault_path.scheduled_commands);
   j.at("vault_path").at("filtered_notes").get_to(config.vault_path.filtered_notes);
+
+  j.at("vault_path").at("file_shell").get_to(config.vault_path.file_shell);
+  j.at("vault_path").at("file_shell_output").get_to(config.vault_path.file_shell_output);
 
   j.at("trim_option").at("trim_from").get_to(config.trim_option.trim_from);
   j.at("trim_option").at("trim_to").get_to(config.trim_option.trim_to);

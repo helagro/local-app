@@ -47,7 +47,6 @@ bool process_line(u_short current_hour, const std::string &content, size_t &head
       throw std::runtime_error("Failed to find command in scheduled file");
     }
 
-    app_log("Running scheduled command: " + command);
     run_command(command);
 
     head = command_end;

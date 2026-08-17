@@ -29,10 +29,11 @@ std::string get_note_content(File shell_file) {
 }
 } // namespace
 
-void run_synced_commands(const File shell_file) {
+std::string run_synced_commands(const File shell_file) {
   const std::string shell_file_content_str = get_note_content(shell_file);
   clear_shell_file(shell_file);
 
+  std::string response = "";
   size_t command_line_end = 0;
 
   while (true) {
@@ -40,7 +41,7 @@ void run_synced_commands(const File shell_file) {
     if (command_line_start == std::string::npos) {
       if (command_line_end == 0) {
         app_log("No commands found in file shell");
-        return;
+        return response;
       } else {
         break;
       }
@@ -55,6 +56,8 @@ void run_synced_commands(const File shell_file) {
     const std::string command = shell_file_content_str.substr(command_start, command_line_end - command_start);
     app_log("Command line: \"" + command + "\"");
 
-    run_command(command);
+    response = run_command(command);
   }
+
+  return response;
 }

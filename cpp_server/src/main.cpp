@@ -33,6 +33,17 @@ void write_logs() {
     app_log("Failed to write logs to file.");
   }
 }
+
+std::chrono::minutes get_sync_rate(JsonConfig &config) {
+  const unsigned int sync_rate_mins = config.sync_rate_mins > 0 ? config.sync_rate_mins : 1;
+
+  const std::time_t t = std::time(nullptr);
+  const std::tm *tm_ptr = std::localtime(&t);
+  const u_short current_hour = tm_ptr->tm_hour;
+  const bool is_night = current_hour > 22 || current_hour < 7;
+
+  return std::chrono::minutes(is_night ? sync_rate_mins * 2 : sync_rate_mins);
+}
 } // namespace
 
 /* ================================== MAIN ================================== */
@@ -95,8 +106,7 @@ int main() {
     write_logs();
     sync_vault();
 
-    const unsigned int sync_rate_mins = config.sync_rate_mins > 0 ? config.sync_rate_mins : 1;
-    std::this_thread::sleep_for(std::chrono::minutes(sync_rate_mins));
+    std::this_thread::sleep_for(get_sync_rate(config));
 
     if (config.feature_toggle.scheduled_sync) {
       app_log("", '\n', false);

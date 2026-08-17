@@ -7,6 +7,19 @@
 #include <string>
 
 namespace {
+
+size_t count_lines(const std::string &content) {
+  size_t line_count = 0;
+
+  size_t line_pos = content.find("\n- [ ] ");
+  while (line_pos != std::string::npos) {
+    line_count++;
+    line_pos = content.find("\n- [ ] ", line_pos + 7);
+  }
+
+  return line_count;
+}
+
 void filter_file(File &file) {
   app_log("Filtering content in file:", ' ');
   app_log(file.get_path(), '\n', false);
@@ -17,7 +30,7 @@ void filter_file(File &file) {
     return;
   }
   std::string content = file_read_res.value();
-  const size_t content_line_count = std::count(content.begin(), content.end(), '\n') + 1;
+  const size_t content_line_count = count_lines(content);
   bool content_changed = false;
 
   size_t tag = content.find("^max_");

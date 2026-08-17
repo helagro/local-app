@@ -7,22 +7,19 @@
 #include "vault/vault.hpp"
 #include <algorithm>
 
-namespace {
-File get_scheduling_file() {
-  const JsonConfig config = get_config();
-  const std::string file_shell_file_path = config.vault_path.file_shell;
-
-  return get_file(file_shell_file_path);
-}
-
-} // namespace
-
 void run_file_shell() {
   try {
-    const File shell_file = get_scheduling_file();
+    const JsonConfig config = get_config();
+    const std::string file_shell_file_path = config.vault_path.file_shell;
+    const std::string file_shell_output_path = config.vault_path.file_shell_output;
 
-    run_unsynced_commands(shell_file);
-    run_synced_commands(shell_file);
+    const File shell_file = get_file(file_shell_file_path);
+    const File shell_output_file = get_file(file_shell_output_path);
+
+    std::string shell_output = run_unsynced_commands(shell_file);
+    shell_output += run_synced_commands(shell_file);
+    shell_output_file.write(shell_output);
+
   } catch (const std::exception &e) {
     app_log(std::string("Error in file shell: ") + e.what());
   }

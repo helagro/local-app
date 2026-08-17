@@ -27,16 +27,17 @@ std::string get_shell_file_name(File shell_file) {
 }
 } // namespace
 
-void run_unsynced_commands(File shell_file) {
+std::string run_unsynced_commands(File shell_file) {
   const std::string shell_file_name = get_shell_file_name(shell_file);
   const std::string shell_file_hashtag = "#" + shell_file_name;
 
   std::string unsynced_changes_str;
   bool changes_req_success = python_server_get("/note-sync/changes", &unsynced_changes_str);
+  std::string response = "";
 
   if (!changes_req_success) {
     app_log("Failed to fetch unsynced changes");
-    return;
+    return response;
   }
 
   json unsynced_changes = json::parse(unsynced_changes_str);
@@ -55,8 +56,10 @@ void run_unsynced_commands(File shell_file) {
 
       app_log("Unsynced change: " + change_content);
 
-      run_command(change_content);
+      response = run_command(change_content);
       python_server_socket("COMPLETE " + id);
     }
   }
+
+  return response;
 }

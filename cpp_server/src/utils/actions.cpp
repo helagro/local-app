@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-void run_command(std::string command) {
+std::string run_command(std::string command) {
   std::string response = "No response recorded";
 
   if (command.empty()) {
@@ -24,4 +24,5 @@ void run_command(std::string command) {
   }
 
   app_log("Command: " + command + " | Response: " + response);
+  return response;
 }
