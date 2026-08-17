@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from interfaces.home import exec_preset_by_name, get_device, get_devices_string, get_last_preset_name
+from interfaces.home import get_device
 
 bp = Blueprint('device', __name__)
 

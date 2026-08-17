@@ -23,6 +23,7 @@ app.register_blueprint(activity_bp)
 app.register_blueprint(actions_bp)
 
 # ================================== ROUTES ================================== #
+# Please note that all routes accept GET requests due to convenience, despite the many reasons against it
 
 
 @app.route('/')
@@ -48,13 +49,13 @@ def last_routine():
     return get_last_routine() or "none"
 
 
-@app.route('/quit')
+@app.route('/quit', methods=['GET', 'POST'])
 def quit():
     log("Shutting down server...")
     _exit(0)
 
 
-@app.route('/sync')
+@app.route('/sync', methods=['GET', 'POST'])
 def sync():
     is_away()
     sync_config()
@@ -67,7 +68,7 @@ def health():
     return "ok"
 
 
-@app.route('/shutdown')
+@app.route('/shutdown', methods=['GET', 'POST'])
 def shutdown():
     log("Shutting down system...")
     err = os_shutdown()
@@ -77,7 +78,7 @@ def shutdown():
     return "Shutting down..."
 
 
-@app.route('/restart')
+@app.route('/restart', methods=['GET', 'POST'])
 def restart():
     log("Restarting system...")
     err = os_restart()

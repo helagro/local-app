@@ -1,8 +1,11 @@
 from flask import Blueprint, request
 from interfaces.actuators.led import get_lamp
+import schedule
 from interfaces.home import exec_preset_by_name, get_device, get_devices_string, get_last_preset_name
+import log
 
 bp = Blueprint('actions', __name__)
+alarm_job = None
 
 
 @bp.route('/log-test')
@@ -64,3 +67,38 @@ def preset(name: str):
 
     exec_preset_by_name(name, state_mode=state_mode)
     return "ok"
+
+
+@bp.route('/alarm')
+def alarm():
+    global alarm_job
+
+    time = request.args.get('t')
+    if not time:
+        return 'Missing time argument', 400
+
+    if alarm_job:
+        schedule.cancel_job(alarm_job)
+
+    alarm_job = schedule.every().day.at(time).do(run_alarm)
+
+    log_statement = f'Scheduled alarm for {time}'
+    log.log(log_statement)
+    return log_statement
+
+
+@bp.route('/alarm/cancel')
+def cancel_alarm():
+    if alarm_job:
+        schedule.cancel_job(alarm_job)
+
+    return 'Canceled alarm'
+
+
+# ================================== HELPERS ================================= #
+
+
+def run_alarm():
+    get_device('alarm').turn_on()
+
+    return schedule.CancelJob
