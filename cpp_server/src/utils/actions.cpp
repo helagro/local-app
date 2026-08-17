@@ -19,6 +19,7 @@ void run_command(std::string command) {
   } else {
     std::replace(command.begin(), command.end(), ' ', '/');
 
+    response = "";
     python_server_get("/" + command, &response);
   }
 

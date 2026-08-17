@@ -2,6 +2,7 @@
 #include "api/python_server/python_server.hpp"
 #include "config/env_variables.hpp"
 #include "config/json_config_handler.hpp"
+#include "features/content_filter/content_filter.hpp"
 #include "features/content_sorter/content_sorter.hpp"
 #include "features/file_shell/file_shell.hpp"
 #include "features/log_trimmer/log_trimmer.hpp"
@@ -80,6 +81,10 @@ int main() {
 
       if (config.feature_toggle.scheduled_commands) {
         run_scheduled();
+      }
+
+      if (config.feature_toggle.content_filter) {
+        filter_content();
       }
 
       write_status();

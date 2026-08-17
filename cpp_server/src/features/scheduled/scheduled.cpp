@@ -86,7 +86,10 @@ void run_scheduled() {
       const bool should_remove = process_line(current_hour, content, head);
       if (should_remove) {
         content.erase(line_start, head - line_start);
-        file.write(content);
+
+        if (!file.write(content)) {
+          app_log("Failed to write updated content to " + file.get_path() + ".");
+        }
         head = line_start;
       }
     }

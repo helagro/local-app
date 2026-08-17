@@ -58,14 +58,10 @@ bool get_inbox(std::string &note_str, std::list<InboxItem> &items) {
     return false;
   }
 
-  size_t command_line_start = inbox_start;
+  size_t command_line_start = note_str.find("- [ ] ", inbox_start);
+  ;
 
-  while (true) {
-    command_line_start = note_str.find("- [ ] ", command_line_start);
-    if (command_line_start == std::string::npos) {
-      return items.size() > 0;
-    }
-
+  while (command_line_start != std::string::npos) {
     const size_t command_line_end = note_str.find('\n', command_line_start);
 
     // If note does not end with newline
@@ -82,9 +78,11 @@ bool get_inbox(std::string &note_str, std::list<InboxItem> &items) {
       items.push_back({line, priority});
       note_str.erase(command_line_start, command_line_end - command_line_start + 1);
     }
+
+    command_line_start = note_str.find("- [ ] ", command_line_start);
   }
 
-  return false;
+  return items.size() > 0;
 }
 
 // TODO - Improve performance by calculating updated positions
@@ -130,7 +128,9 @@ void sort_note(File note) {
     }
   }
 
-  note.write(note_str);
+  if (!note.write(note_str)) {
+    app_log("Failed to write sorted content to " + note.get_path() + ".");
+  }
 }
 } // namespace
 

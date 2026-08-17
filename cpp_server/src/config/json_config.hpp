@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 #include <string>
 
 struct JsonConfig {
@@ -11,6 +12,7 @@ struct JsonConfig {
     bool log_trimmer;
     bool content_sorter;
     bool scheduled_commands;
+    bool content_filter;
   };
 
   struct VaultPath {
@@ -18,6 +20,7 @@ struct JsonConfig {
     std::string trimmable_logs;
     std::string sortable_notes;
     std::string scheduled_commands;
+    std::list<std::string> filtered_notes;
   };
 
   struct TrimOption {
