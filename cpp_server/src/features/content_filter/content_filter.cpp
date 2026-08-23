@@ -21,9 +21,6 @@ size_t count_lines(const std::string &content) {
 }
 
 void filter_file(File &file) {
-  app_log("Filtering content in file:", ' ');
-  app_log(file.get_path(), '\n', false);
-
   const std::optional<std::string> file_read_res = file.read();
   if (!file_read_res) {
     app_log("Failed to read file " + file.get_path() + ".");

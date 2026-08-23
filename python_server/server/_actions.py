@@ -75,7 +75,7 @@ def alarm():
 
     time = request.args.get('t')
     if not time:
-        return 'Missing time argument', 400
+        return 'Missing "t" argument', 400
 
     if alarm_job:
         schedule.cancel_job(alarm_job)

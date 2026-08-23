@@ -21,6 +21,8 @@ def sync_folders():
     for f in files_a - files_b:
         src = os.path.join(folder_a, f)
         dst = os.path.join(HOSTED_FOLDER_PATH, f)
+
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
         shutil.copy2(src, dst)
         log(f"Copied: {f}")
 
@@ -29,6 +31,13 @@ def sync_folders():
         dst = os.path.join(HOSTED_FOLDER_PATH, f)
         os.remove(dst)
         log(f"Deleted: {f}")
+
+    # 4️⃣ Repeat the same process for directories
+    empty_dirs_b = set(d for d in _get_all_empty_dirs(HOSTED_FOLDER_PATH))
+    for d in empty_dirs_b:
+        dst = os.path.join(HOSTED_FOLDER_PATH, d)
+        os.rmdir(dst)
+        log(f"Deleted empty directory: {d}")
 
     log("Sync complete.")
 
@@ -41,3 +50,14 @@ def _get_all_files(folder):
             rel_path = os.path.relpath(os.path.join(root, f), folder)
             file_list.add(rel_path)
     return file_list
+
+
+def _get_all_empty_dirs(folder):
+    dir_list = set()
+    for root, dirs, files in os.walk(folder):
+        for d in dirs:
+            dir_path = os.path.join(root, d)
+            if not os.listdir(dir_path):  # Check if directory is empty
+                rel_path = os.path.relpath(dir_path, folder)
+                dir_list.add(rel_path)
+    return dir_list

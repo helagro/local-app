@@ -50,12 +50,18 @@ bool python_server_socket(std::string message) {
   ssize_t bytes_sent = send(sock, &message_length, sizeof(message_length), 0);
   if (bytes_sent == -1) {
     app_log("Failed to send socket message length");
+
+    close(sock);
+    is_open = false;
     return false;
   }
 
   bytes_sent = send(sock, message.c_str(), message.length(), 0);
   if (bytes_sent == -1) {
     app_log("Failed to send socket message");
+
+    close(sock);
+    is_open = false;
     return false;
   }
 
