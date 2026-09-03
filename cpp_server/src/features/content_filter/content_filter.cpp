@@ -12,7 +12,9 @@ size_t count_lines(const std::string &content) {
   size_t line_count = 0;
 
   size_t line_pos = content.find("\n- [ ] ");
-  while (line_pos != std::string::npos) {
+  size_t bottom_pos = content.find("## Low");
+
+  while (line_pos != std::string::npos && (bottom_pos == std::string::npos || line_pos < bottom_pos)) {
     line_count++;
     line_pos = content.find("\n- [ ] ", line_pos + 7);
   }

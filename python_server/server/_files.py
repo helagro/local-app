@@ -27,7 +27,7 @@ def random_file(filename):
     return redirect(url_for('files.files', filename=get_random_file_url(filename)))
 
 
-@bp.route("/", defaults={"filename": ""})
+@bp.route("/", defaults={"filename": ""}, strict_slashes=False)
 @bp.route('/<path:filename>')
 def files(filename):
     if os.path.isdir(HOSTED_FOLDER_PATH):

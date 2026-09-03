@@ -55,8 +55,8 @@ def _on_before_wake() -> None:
     Thread(target=read_avg_light, args=(callback, ), kwargs={'max': MAX_NIGHT_LIGHT}).start()
 
 
-def _on_morning() -> None:
-    log("routine - morning")
+def _on_day() -> None:
+    log("routine - day")
     if should_skip_tracking(use_cache=True): return
 
     read_avg_light(lambda x: a(f"{LIGHT_DAWN} {x} s #u"))
@@ -178,7 +178,7 @@ def update_routines() -> None:
 _routines: dict[str, Routine] = {
     "night": Routine(name="night", time="01:30", function=_on_night),
     "before_wake": Routine(name="before_wake", time="05:50", function=_on_before_wake),
-    "after_wake": SyncedRoutine(name="after_wake", default_time="09:00", function=_on_morning),
+    "lunch": SyncedRoutine(name="lunch", default_time="09:00", function=_on_day),
     "reduce_temp": SyncedRoutine(name="lower_heating", default_time="16:00", function=_on_do_reduce_temp),
     "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
     "detach": SyncedRoutine(name="detach", default_time="21:00", function=_on_detach),
