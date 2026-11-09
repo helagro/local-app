@@ -180,7 +180,7 @@ _routines: dict[str, Routine] = {
     "before_wake": Routine(name="before_wake", time="05:50", function=_on_before_wake),
     "lunch": SyncedRoutine(name="lunch", default_time="09:00", function=_on_day),
     "reduce_temp": SyncedRoutine(name="lower_heating", default_time="16:00", function=_on_do_reduce_temp),
-    "eve": SyncedRoutine(name="on_eve", default_time="18:00", function=_on_eve),
+    "eve": SyncedRoutine(name="dinner", default_time="18:00", function=_on_eve),
     "detach": SyncedRoutine(name="detach", default_time="21:00", function=_on_detach),
     "full_detach": SyncedRoutine(name="full_detach", default_time="21:30", function=_on_full_detach),
     "bed_time": SyncedRoutine(name="bed_time", default_time="22:00", function=_on_bedtime),

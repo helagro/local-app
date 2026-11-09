@@ -49,7 +49,7 @@ bool process_line(u_short current_hour, const std::string &content, size_t &head
 
     run_command(command);
 
-    head = command_end;
+    head = command_end + 1;
     return should_remove;
   } else {
     head = hour_end;
