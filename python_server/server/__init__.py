@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, abort
 from log import log
-from interfaces.api.config import get_cached
+from config import get_cached
 from datetime import date
 from features.routines import get_away_for_eve, get_last_routine, get_routine_strings, update_routines
 from interfaces.api.server_app import is_away, get_note_sync_changes
@@ -10,7 +10,7 @@ from ._activity import bp as activity_bp
 from ._device import bp as device_bp
 from ._files import bp as files_bp
 from os import _exit
-from interfaces.api.config import sync_config
+from config import sync_config
 from interfaces.os import shutdown as os_shutdown, restart as os_restart
 
 startup_date = date.today()

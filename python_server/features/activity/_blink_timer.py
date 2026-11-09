@@ -2,7 +2,7 @@ from datetime import datetime
 import time
 from interfaces.actuators.led import get_lamp
 from log import log
-from interfaces.api.config import get_cached
+from config import get_cached
 from interfaces.home import get_device
 import threading
 

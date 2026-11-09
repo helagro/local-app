@@ -7,13 +7,13 @@ class Group:
     device_names: list[str]
 
     def __post_init__(self):
-        from interfaces.api.config import get_cached
+        from config import get_cached
 
         config = get_cached()
         if not config:
             raise Exception("Config not loaded")
 
-        self.device_ids: list[str] = [config.devices[name] for name in self.device_names]
+        self.device_ids: list[str] = [config.home.devices[name] for name in self.device_names]
 
     # getters -------------------------------------------------------------------- #
 
@@ -53,10 +53,10 @@ class Group:
             api.brightness(id, level)
 
     def color(self, color: str | int):
-        from interfaces.api.config import get_cached
+        from config import get_cached
         config = get_cached()
 
-        color_code = config.colors.get(color, color) if (config and color in config.colors) else color
+        color_code = config.home.colors.get(color, color) if (config and color in config.home.colors) else color
 
         for id in self.device_ids:
             api.color(id, color_code)

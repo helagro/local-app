@@ -1,5 +1,5 @@
 from interfaces.actuators.led import get_lamp
-from interfaces.api.config import sync_config
+from config import sync_config
 from interfaces import socket_server
 import server
 import threading

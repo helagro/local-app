@@ -1,6 +1,6 @@
 from datetime import datetime
 from features.activity._blink_timer import start_blink_timer, stop_blink_timer
-from interfaces.api.config import get_cached
+from config import get_cached
 from log import log
 from interfaces.api.time_tracking import stop_tracking_activity, track_activity
 from interfaces.actuators.led import get_lamp

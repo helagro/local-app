@@ -2,7 +2,7 @@ from features.routines._api import sync_routine_times
 from features.file_sync import sync_folders
 from interfaces.actuators.led import get_lamp
 from interfaces.home import get_device
-from interfaces.api.config import sync_config
+from config import sync_config
 import schedule
 import time
 from interfaces.sensors import *
@@ -74,7 +74,7 @@ def _on_do_reduce_temp() -> None:
     config = get_cached()
     if not config: return
 
-    temp_treshold: float = config.reduceHeatThreshold
+    temp_treshold: float = config.home.reduceHeatThreshold
     is_summer_weather: float = config.isSummerWeather
 
     if not is_summer_weather and cast(float, temp) > cast(float, temp_treshold):
@@ -151,13 +151,15 @@ def track_time_independents():
     if pressure is not None:
         a(f"{PRESSURE} {round(pressure)} s #u")
 
-    # NOTE - Must be called last, interfers with other sensors
-    _voc = read_voc()
-    if _voc is not None:
-        a(f"voc {_voc} s #u")
+    config = get_cached()
+    if config and config.sensor.trackVoc:
+        # NOTE - Must be called last, interfers with other sensors
+        _voc = read_voc()
+        if _voc is not None:
+            a(f"voc {_voc} s #u")
 
-        if _voc > 100:
-            a(f"#b open window - voc ({_voc} > 100)")
+            if _voc > 100:
+                a(f"#b open window - voc ({_voc} > 100)")
 
 
 def update_routines() -> None:

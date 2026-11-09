@@ -1,6 +1,6 @@
 import json
 from interfaces.home._device import Group
-from interfaces.home._preset import Preset
+from config import Preset
 from log import log
 import interfaces.home._api as api
 
@@ -14,12 +14,12 @@ def get_last_preset_name() -> str | None:
 def exec_preset_by_name(name: str, state_mode: str | None = None):
     global _last_preset_name
 
-    from interfaces.api.config import get_cached
+    from config import get_cached
     config = get_cached()
     if not config:
         raise ValueError("No config found")
 
-    presets: dict[str, Preset] = config.presets
+    presets: dict[str, Preset] = config.home.presets
     preset = presets.get(name)
     if not preset:
         raise ValueError(f"Preset '{name}' not found in config")
@@ -49,10 +49,10 @@ def _exec_preset(preset: Preset, state_mode: str | None):
 
         # Sets color
         if (color := config.get('color')) is not None:
-            from interfaces.api.config import get_cached
+            from config import get_cached
             config = get_cached()
 
-            color_code = config.colors.get(color, color) if (config and color in config.colors) else color
+            color_code = config.home.colors.get(color, color) if (config and color in config.home.colors) else color
             payload.update(api.get_color_dict(color_code))
 
         # Sends a turn on command first if parameters require it
@@ -78,13 +78,13 @@ def get_device(name: str) -> Group:
 
 
 def _get_groups() -> dict[str, list[str]]:
-    from interfaces.api.config import get_cached
+    from config import get_cached
     config = get_cached()
     if not config:
         raise ValueError("No config found")
 
-    groups: dict[str, list[str]] = config.groups
-    devices = config.devices
+    groups: dict[str, list[str]] = config.home.groups
+    devices = config.home.devices
 
     for device_name, _ in devices.items():
         groups[device_name] = [device_name]

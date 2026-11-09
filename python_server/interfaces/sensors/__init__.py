@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 import time
 from typing import Callable
-from interfaces.api.config import get_cached
+from config import get_cached
 from log import log
 
 sys.path.append(os.path.dirname(__file__))
@@ -13,7 +13,7 @@ sys.path.append(os.path.dirname(__file__))
 load_dotenv()
 
 cfg = get_cached()
-TEMP_COMPENSATION = cfg.tempCompensation if cfg else 0.0
+TEMP_COMPENSATION = cfg.sensor.tempCompensation if cfg else 0.0
 del cfg
 
 # ----------------------- SETUP SENSORS ---------------------- #

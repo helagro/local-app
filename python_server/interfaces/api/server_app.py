@@ -3,7 +3,7 @@ import subprocess
 import requests
 from features.activity import stop_activity
 from log import get_file_path, log
-from interfaces.api.config import get_cached, sync_config
+from config import get_cached, sync_config
 
 # ============================== TRACKING VALUES ============================= #
 
@@ -75,7 +75,7 @@ def should_skip_tracking(use_cache=False) -> bool:
         config = sync_config()
 
     if not config: return False
-    if not config.doTrack: return False
+    if not config.sensor.doTrack: return False
 
     if use_cache:
         return get_last_is_away()

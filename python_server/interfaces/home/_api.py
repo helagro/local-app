@@ -6,6 +6,8 @@ from typing import Literal, TypedDict
 from requests import request
 import os
 
+from config import get_cached
+
 try:
     from log import log
 except ImportError:
@@ -31,7 +33,6 @@ class Payload(TypedDict, total=False):
 
 # ================================= VARIABLES ================================ #
 
-url = 'http://' + (os.getenv('LOCAL_SERVER_IP') or 'localhost') + ':8123/api'
 token = os.getenv('HOME_ASSISTANT_TOKEN')
 
 # ================================== GETTERS ================================= #
@@ -135,7 +136,7 @@ def _request(endpoint: str, method: str = 'get', data: Payload | None = None, lo
         'Content-Type': 'application/json',
     }
 
-    full_url = url + endpoint
+    full_url = get_cached().home.homeAssistantPath + endpoint
 
     try:
         response = request(method, full_url, headers=headers, json=data, timeout=5)
