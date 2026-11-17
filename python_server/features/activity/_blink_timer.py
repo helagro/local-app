@@ -90,5 +90,5 @@ def _alert(duration):
     end_time = time.time()
     device.toggle_individually()
 
-    log(f"{duration} alert ran for {end_time - start_time:.2f} seconds")
+    log(f"blink timer: {duration} alert ran for {end_time - start_time:.2f} seconds")
     return True

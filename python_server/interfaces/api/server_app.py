@@ -1,4 +1,5 @@
 import os
+import platform
 import subprocess
 import requests
 from features.activity import stop_activity
@@ -133,15 +134,15 @@ def a(content: str, do_exec=True) -> None:
         log(f"Would have added: {content}")
         return
 
-    script_path = os.path.expanduser('~/.dotfiles/scripts/path/task/a.sh')
-    env = os.environ.copy()
-    env["A75H"] = _AUTH_TOKEN or ""
-    result = subprocess.run([script_path, content], capture_output=True, text=True, env=env)
+    headers = {"Authorization": f"Bearer {_AUTH_TOKEN}"}
+    body = {"content": content, "origin": "local-app", "platform": platform.system()}
 
-    if result.returncode != 0:
-        log(f"Failed to send command, error: {result.stderr}")
-    else:
-        log(f"A: {content}, stdout: {result.stdout.strip()} stderr: {result.stderr.strip()}")
+    try:
+        response = requests.post(f"{_TOOLS_URL}/td-app", headers=headers, json=body)
+        response.raise_for_status()
+        log(f"Added to server-app: {content}")
+    except requests.exceptions.RequestException as e:
+        log(f"Failed to add to server-app: {e}")
 
 
 def complete(id: str) -> None:
